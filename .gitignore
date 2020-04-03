@@ -149,3 +149,5 @@ gradle-app.setting
 # End of https://www.gitignore.io/api/maven,gradle,kotlin,intellij
 /Twilio.iml
 /.idea/
+**/*.iml
+twilio.properties

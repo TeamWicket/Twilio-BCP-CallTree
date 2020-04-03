@@ -3,7 +3,7 @@ package org.wicket.calltree;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "org.wicket.calltree")
 public class CalltreeApplication {
 
     public static void main(String[] args) {
