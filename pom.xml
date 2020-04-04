@@ -5,6 +5,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>calltree-core</module>
+        <module>calltree-commons</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -126,10 +127,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
