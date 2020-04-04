@@ -5,6 +5,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>calltree-core</module>
+        <module>calltree-commons</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
