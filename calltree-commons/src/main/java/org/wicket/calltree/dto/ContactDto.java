@@ -19,6 +19,7 @@ public class ContactDto {
     private Long id;
     private String firstName;
     private String lastName;
+    private String phoneNumber;
     private Role role;
     private List<CallingOption> callingOption;
     private Long pointOfContactId;

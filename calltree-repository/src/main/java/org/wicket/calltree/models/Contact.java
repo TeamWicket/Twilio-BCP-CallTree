@@ -34,6 +34,10 @@ public class Contact {
     private String lastName;
 
     @NotNull
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Role role;
 
