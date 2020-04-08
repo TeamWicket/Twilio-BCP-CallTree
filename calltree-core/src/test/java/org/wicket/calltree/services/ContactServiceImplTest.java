@@ -51,6 +51,7 @@ class ContactServiceImplTest {
         contactDto.setLastName("Contact");
         contactDto.setPhoneNumber("+222");
         contactDto.setRole(Role.REPORTER);
+        contactDto.setPointOfContactId(55L);
     }
 
     @Test
@@ -91,6 +92,15 @@ class ContactServiceImplTest {
         contactService.saveOrUpdate(this.contactDto);
 
         assertEquals(77L, savedContact.getId());
+    }
+
+    @Test
+    void testSaveContact_NonChampionWithNullPointOfContact_WillThrowException() {
+        ContactDto dto = new ContactDto();
+        dto.setFirstName("test exception");
+        dto.setRole(Role.LEADER);
+
+        assertThrows(ContactException.class, () -> contactService.saveOrUpdate(dto));
     }
 
     @Test

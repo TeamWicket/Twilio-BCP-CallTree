@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import org.wicket.calltree.enums.CallingOption;
 import org.wicket.calltree.enums.Role;
 
+import javax.annotation.Nullable;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -16,11 +19,25 @@ import java.util.List;
 @AllArgsConstructor
 public class ContactDto {
 
+    @Nullable
     private Long id;
+
+    @NotNull
     private String firstName;
+
+    @NotNull
     private String lastName;
+
+    @NotNull
     private String phoneNumber;
+
+    @NotNull
     private Role role;
+
+    @NotNull
+    @Size(min = 1)
     private List<CallingOption> callingOption;
+
+    @Nullable
     private Long pointOfContactId;
 }

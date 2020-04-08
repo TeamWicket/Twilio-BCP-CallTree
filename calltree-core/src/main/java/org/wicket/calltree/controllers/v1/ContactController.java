@@ -30,18 +30,18 @@ public class ContactController {
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeContact(@RequestBody ContactDto contactDto) {
+    public void removeContact(@RequestBody @Valid ContactDto contactDto) {
         contactService.deleteContact(contactDto.getId());
     }
 
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public ContactDto saveContact(@RequestBody ContactDto contactDto) {
+    public ContactDto saveContact(@RequestBody @Valid ContactDto contactDto) {
         return contactService.saveOrUpdate(contactDto);
     }
 
     @PutMapping("/update")
-    public ContactDto updateContact(@RequestBody ContactDto contactDto) {
+    public ContactDto updateContact(@RequestBody @Valid ContactDto contactDto) {
         return contactService.saveOrUpdate(contactDto);
     }
 }
