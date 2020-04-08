@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.wicket.calltree.enums.CallingOption;
 import org.wicket.calltree.enums.Role;
+import org.wicket.calltree.validators.NotNullForNonChampion;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
@@ -17,6 +18,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@NotNullForNonChampion(fieldName = "role", fieldValue = Role.CHAMPION, dependFieldName = "pointOfContactId")
 public class ContactDto {
 
     @Nullable
@@ -38,6 +40,5 @@ public class ContactDto {
     @Size(min = 1)
     private List<CallingOption> callingOption;
 
-    @Nullable
     private Long pointOfContactId;
 }

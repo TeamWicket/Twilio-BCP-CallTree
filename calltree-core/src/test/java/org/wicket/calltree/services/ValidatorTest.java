@@ -1,0 +1,67 @@
+package org.wicket.calltree.services;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.wicket.calltree.dto.ContactDto;
+import org.wicket.calltree.enums.CallingOption;
+import org.wicket.calltree.enums.Role;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.List;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * @author Alessandro Arosio - 08/04/2020 20:36
+ */
+public class ValidatorTest {
+
+    private Validator validator;
+    private ContactDto dto;
+
+    @BeforeEach
+    void setUp() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+
+        dto = new ContactDto();
+        dto.setFirstName("Alessandro");
+        dto.setLastName("Arosio");
+        dto.setPhoneNumber("+124");
+        dto.setCallingOption(List.of(CallingOption.SMS));
+    }
+
+    @Test
+    void testChampion_null_POI_return_Success() {
+        dto.setRole(Role.CHAMPION);
+        Set<ConstraintViolation<ContactDto>> violations = validator.validate(dto);
+        assertThat(violations).isEmpty();
+    }
+
+    @Test
+    void testChampion_with_POI_return_Failure() {
+        dto.setRole(Role.CHAMPION);
+        dto.setPointOfContactId(2L);
+        Set<ConstraintViolation<ContactDto>> violations = validator.validate(dto);
+        assertThat(violations).hasSize(1);
+    }
+
+    @Test
+    void testAnnotationManager_with_POI_return_Success() {
+        dto.setRole(Role.MANAGER);
+        dto.setPointOfContactId(3L);
+        Set<ConstraintViolation<ContactDto>> violations = validator.validate(dto);
+        assertThat(violations).isEmpty();
+    }
+
+    @Test
+    void testAnnotationManager_null_POI_return_Failure() {
+        dto.setRole(Role.MANAGER);
+        Set<ConstraintViolation<ContactDto>> violations = validator.validate(dto);
+        assertThat(violations).hasSize(1);
+    }
+}
