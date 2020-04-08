@@ -16,5 +16,5 @@ public interface ContactService {
 
     List<ContactDto> getAllContacts();
 
-    ContactDto getContact(ContactDto contactDto);
+    ContactDto getContact(Long id);
 }

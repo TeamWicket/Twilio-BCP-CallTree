@@ -34,9 +34,17 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public ContactDto saveOrUpdate(ContactDto contactDto) {
-        Contact contact = mapper.dtoToContact(contactDto);
-        Contact persistedContact = repository.save(contact);
-        return mapper.contactToDto(persistedContact);
+        Optional<Contact> contact = repository.findById(contactDto.getId());
+
+        if (contact.isPresent()) {
+            Contact contactToUpdate = mapper.dtoToContact(contactDto);
+            Contact updatedContact = repository.save(contactToUpdate);
+            return mapper.contactToDto(updatedContact);
+        }
+        Contact newContact = mapper.dtoToContact(contactDto);
+        Contact savedContact = repository.save(newContact);
+
+        return mapper.contactToDto(savedContact);
     }
 
     @Override
@@ -53,9 +61,9 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public ContactDto getContact(ContactDto contactDto) {
-        Optional<Contact> contact = repository.findById(contactDto.getId());
+    public ContactDto getContact(Long id) {
+        Optional<Contact> contact = repository.findById(id);
         return contact.map(mapper::contactToDto)
-                .orElseThrow(() -> new ContactException("Contact not found wit ID: " + contactDto.getId()));
+                .orElseThrow(() -> new ContactException("Contact not found wit ID: " + id));
     }
 }

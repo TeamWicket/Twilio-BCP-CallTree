@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.wicket.calltree.dto.ContactDto;
 import org.wicket.calltree.services.ContactService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -17,9 +18,9 @@ import java.util.List;
 public class ContactController {
     private final ContactService contactService;
 
-    @PostMapping
-    public ContactDto fetchContact(@RequestBody ContactDto contactDto) {
-        return contactService.getContact(contactDto);
+    @GetMapping("/{id}")
+    public ContactDto fetchContact(@PathVariable @Valid Long id) {
+        return contactService.getContact(id);
     }
 
     @GetMapping("/all")
