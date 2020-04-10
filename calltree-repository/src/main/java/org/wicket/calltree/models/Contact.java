@@ -42,7 +42,7 @@ public class Contact {
     private Role role;
 
     @NotNull
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<CallingOption> callingOption;
 
     @Nullable

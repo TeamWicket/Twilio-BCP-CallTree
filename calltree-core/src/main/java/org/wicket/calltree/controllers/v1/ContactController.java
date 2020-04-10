@@ -34,13 +34,13 @@ public class ContactController {
         contactService.deleteContact(contactDto.getId());
     }
 
-    @PostMapping("/new")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ContactDto saveContact(@RequestBody @Valid ContactDto contactDto) {
         return contactService.saveOrUpdate(contactDto);
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public ContactDto updateContact(@RequestBody @Valid ContactDto contactDto) {
         return contactService.saveOrUpdate(contactDto);
     }

@@ -3,7 +3,6 @@ package org.wicket.calltree.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.wicket.calltree.dto.ContactDto;
-import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.exceptions.ContactException;
 import org.wicket.calltree.mappers.ContactMapper;
 import org.wicket.calltree.models.Contact;
@@ -35,15 +34,17 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public ContactDto saveOrUpdate(ContactDto contactDto) {
-        Optional<Contact> contact = repository.findById(contactDto.getId());
+        Optional<Contact> contact = Optional.empty();
+
+        if (contactDto.getId() != null) {
+            contact = repository.findById(contactDto.getId());
+        }
 
         if (contact.isPresent()) {
-            pointOfContactValidator(contactDto);
             Contact contactToUpdate = mapper.dtoToContact(contactDto);
             Contact updatedContact = repository.save(contactToUpdate);
             return mapper.contactToDto(updatedContact);
         }
-        pointOfContactValidator(contactDto);
         Contact newContact = mapper.dtoToContact(contactDto);
         Contact savedContact = repository.save(newContact);
 
@@ -68,11 +69,5 @@ public class ContactServiceImpl implements ContactService {
         Optional<Contact> contact = repository.findById(id);
         return contact.map(mapper::contactToDto)
                 .orElseThrow(() -> new ContactException("Contact not found wit ID: " + id));
-    }
-
-    private void pointOfContactValidator(ContactDto dto) {
-        if (dto.getRole() != Role.CHAMPION && dto.getPointOfContactId() == null) {
-            throw new ContactException("Point of Contact is required for non-champions roles");
-        }
     }
 }
