@@ -1,8 +1,5 @@
 package org.wicket.calltree.controllers.v1
 
-import com.google.common.collect.ImmutableList
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.wicket.calltree.dto.ContactDto
