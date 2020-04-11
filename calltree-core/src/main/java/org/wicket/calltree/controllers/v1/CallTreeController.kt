@@ -1,20 +1,23 @@
 package org.wicket.calltree.controllers.v1
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.*
+import org.wicket.calltree.model.BcpStartRequest
+import org.wicket.calltree.services.CallTreeService
+import javax.validation.Valid
 
 /**
  * @author Alessandro Arosio - 11/04/2020 13:14
  */
 @RestController
 @RequestMapping("/api/v1/calltree")
-class CallTreeController {
+class CallTreeController(private val service: CallTreeService) {
 
   @PostMapping
-  fun initiateCalls() {
+  @ResponseStatus(HttpStatus.OK)
+  fun initiateCalls(@RequestBody @Valid bcpStartRequest: BcpStartRequest) {
     // placeholder
+    service.initiateCalls(bcpStartRequest)
   }
 
   @GetMapping
