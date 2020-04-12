@@ -3,11 +3,13 @@ package org.wicket.calltree.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.wicket.calltree.dto.ContactDto;
+import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.exceptions.ContactException;
 import org.wicket.calltree.mappers.ContactMapper;
 import org.wicket.calltree.models.Contact;
 import org.wicket.calltree.repository.ContactRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -69,5 +71,37 @@ public class ContactServiceImpl implements ContactService {
         Optional<Contact> contact = repository.findById(id);
         return contact.map(mapper::contactToDto)
                 .orElseThrow(() -> new ContactException("Contact not found wit ID: " + id));
+    }
+
+    @Override
+    public List<ContactDto> getAllSelectedRole(Role role) {
+        List<Contact> results = repository.findAllByRoleEquals(role);
+        return results.stream()
+                .map(mapper::contactToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ContactDto> getCalltreeUntilRole(Role role) {
+        switch (role) {
+            case CHAMPION:
+                return Collections.emptyList();
+            case MANAGER:
+                return repository.findAllByRoleEquals(role).stream()
+                        .map(mapper::contactToDto)
+                        .collect(Collectors.toList());
+            case LEADER:
+                return repository.findAll().stream()
+                        .filter(c -> (c.getRole().equals(Role.MANAGER) || (c.getRole().equals(Role.LEADER))))
+                        .map(mapper::contactToDto)
+                        .collect(Collectors.toList());
+            case REPORTER:
+                return repository.findAll().stream()
+                        .filter(contact -> !contact.getRole().equals(Role.CHAMPION))
+                        .map(mapper::contactToDto)
+                        .collect(Collectors.toList());
+            default:
+                throw new ContactException("Unrecognised role: " + role.name());
+        }
     }
 }

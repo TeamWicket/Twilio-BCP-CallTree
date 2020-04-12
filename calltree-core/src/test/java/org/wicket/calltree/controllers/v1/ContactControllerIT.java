@@ -180,4 +180,30 @@ class ContactControllerIT {
 
         assertEquals(3, contactService.getAllContacts().size());
     }
+
+    @Test
+    @Order(7)
+    void testFetchContactsOfOneRole_ReturnsListOfSameRole() throws Exception {
+        System.out.println("FETCH BY ROLE");
+
+        mvc.perform(
+                get(API_ROOT + "/role/manager")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+    @Test
+    @Order(8)
+    void testFetchTreeUntilRole_ReturnsListOfContacts_UntilSelectedRole() throws Exception {
+        System.out.println("FETCH tree");
+
+        mvc.perform(
+                get(API_ROOT + "/tree/leader")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].role", equalTo(Role.MANAGER.toString())))
+                .andExpect(jsonPath("$[1].role", equalTo(Role.LEADER.toString())));
+    }
 }

@@ -1,6 +1,7 @@
 package org.wicket.calltree.services;
 
 import org.wicket.calltree.dto.ContactDto;
+import org.wicket.calltree.enums.Role;
 
 import java.util.List;
 
@@ -17,4 +18,8 @@ public interface ContactService {
     List<ContactDto> getAllContacts();
 
     ContactDto getContact(Long id);
+
+    List<ContactDto> getAllSelectedRole(Role role);
+
+    List<ContactDto> getCalltreeUntilRole(Role role);
 }

@@ -3,6 +3,7 @@ package org.wicket.calltree.controllers.v1
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.wicket.calltree.dto.ContactDto
+import org.wicket.calltree.enums.Role
 import org.wicket.calltree.services.ContactService
 import javax.validation.Valid
 
@@ -21,6 +22,16 @@ class ContactController(private val contactService: ContactService) {
   @GetMapping("/{id}")
   fun fetchContact(@PathVariable @Valid id: Long) : ContactDto {
     return contactService.getContact(id)
+  }
+
+  @GetMapping("/role/{role}")
+  fun fetchContactsOfOneRole(@PathVariable role: String) : List<ContactDto> {
+    return contactService.getAllSelectedRole(Role.valueOf(role.toUpperCase()))
+  }
+
+  @GetMapping("/tree/{role}")
+  fun fetchTreeUntilRole(@PathVariable role: String) : List<ContactDto> {
+    return contactService.getCalltreeUntilRole(Role.valueOf(role.toUpperCase()))
   }
 
   @DeleteMapping
