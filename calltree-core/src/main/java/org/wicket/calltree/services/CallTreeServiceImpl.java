@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.wicket.calltree.dto.Response;
-import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.model.BcpStartRequest;
 import org.wicket.calltree.model.Recipient;
 import org.wicket.calltree.service.TwilioService;
@@ -28,8 +27,7 @@ public class CallTreeServiceImpl implements CallTreeService {
     @NotNull
     @Override
     public List<Response> initiateCalls(@NotNull BcpStartRequest bcpStartRequest) {
-        List<Recipient> recipientList = contactService.getAllContacts().stream()
-                .filter(c -> !c.getRole().equals(Role.CHAMPION))
+        List<Recipient> recipientList = contactService.getCalltreeUntilRole(bcpStartRequest.getToRoles()).stream()
                 .map(c -> new Recipient(new PhoneNumber(c.getPhoneNumber()), bcpStartRequest.getText()))
                 .collect(Collectors.toList());
 
