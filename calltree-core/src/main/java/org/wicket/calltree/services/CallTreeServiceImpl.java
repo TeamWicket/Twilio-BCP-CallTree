@@ -13,6 +13,7 @@ import org.wicket.calltree.model.Recipient;
 import org.wicket.calltree.service.TwilioService;
 import org.wicket.calltree.services.utils.MessageMapper;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,6 +66,7 @@ public class CallTreeServiceImpl implements CallTreeService {
         inboundSmsDto.setBody(chunks[10].replace("Body=", ""));
         inboundSmsDto.setFromCountry(chunks[11].replace("FromCountry=", ""));
         inboundSmsDto.setFrom(chunks[18].replace("From=%2B", "+"));
+        inboundSmsDto.setTimestamp(ZonedDateTime.now().toString());
 
         return inboundSmsDto;
     }

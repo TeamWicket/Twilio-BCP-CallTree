@@ -22,4 +22,5 @@ public class InboundSmsDto {
     private String body;
     private String fromCountry;
     private String from;
+    private String timestamp;
 }
