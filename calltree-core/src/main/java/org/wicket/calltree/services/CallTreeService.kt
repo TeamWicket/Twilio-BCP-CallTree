@@ -8,4 +8,6 @@ import org.wicket.calltree.model.BcpStartRequest
  */
 interface CallTreeService {
   fun initiateCalls(bcpStartRequest: BcpStartRequest) : List<Response>
+
+  fun replyToSms(body: String) : String
 }

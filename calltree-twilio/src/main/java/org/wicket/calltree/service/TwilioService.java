@@ -10,4 +10,6 @@ import java.util.List;
  */
 public interface TwilioService {
     List<Message> sendSms(List<Recipient> recipients);
+
+    String replyToReceivedSms();
 }
