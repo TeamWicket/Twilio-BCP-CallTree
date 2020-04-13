@@ -7,6 +7,7 @@ import com.twilio.twiml.messaging.Body;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.wicket.calltree.dto.InboundSmsDto;
 import org.wicket.calltree.model.Recipient;
 
 import java.util.List;
@@ -40,9 +41,7 @@ public class TwilioServiceImpl implements TwilioService {
     }
 
     @Override
-    public String replyToReceivedSms() {
-//        post("/sms", (req, res) -> {
-//            res.type("application/xml");
+    public String replyToReceivedSms(InboundSmsDto inboundSmsDto) {
             Body body = new Body
                     .Builder("The Robots are coming! Head for the hills!")
                     .build();
@@ -54,6 +53,5 @@ public class TwilioServiceImpl implements TwilioService {
                     .build();
             log.info("TwiML to xml: {}", twiml.toXml());
             return twiml.toXml();
-//        });
     }
 }
