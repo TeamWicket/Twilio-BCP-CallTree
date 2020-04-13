@@ -45,7 +45,7 @@ public class CallTreeServiceImpl implements CallTreeService {
     @Override
     public String replyToSms(@NotNull String body) {
         InboundSmsDto inboundSmsDto = smsParser(body);
-        ContactDto contactDto = contactService.fetchContactByPhoneNumber(inboundSmsDto.getFrom());
+        ContactDto contactDto = contactService.fetchContactByPhoneNumber(inboundSmsDto.getFromContactNumber());
         ContactDto manager = contactService.getContact(contactDto.getPointOfContactId());
         String reply = buildReply(contactDto, manager);
 
@@ -65,7 +65,7 @@ public class CallTreeServiceImpl implements CallTreeService {
         inboundSmsDto.setSmsStatus(chunks[8].replace("SmsStatus=", ""));
         inboundSmsDto.setBody(chunks[10].replace("Body=", ""));
         inboundSmsDto.setFromCountry(chunks[11].replace("FromCountry=", ""));
-        inboundSmsDto.setFrom(chunks[18].replace("From=%2B", "+"));
+        inboundSmsDto.setFromContactNumber(chunks[18].replace("From=%2B", "+"));
         inboundSmsDto.setTimestamp(ZonedDateTime.now().toString());
 
         return inboundSmsDto;

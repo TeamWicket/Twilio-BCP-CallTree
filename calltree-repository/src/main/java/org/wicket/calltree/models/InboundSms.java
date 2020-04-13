@@ -35,9 +35,9 @@ public class InboundSms {
     @Column(name = "from_country")
     private String fromCountry;
 
-    @Column(name = "from")
+    @Column(name = "from_contact_number")
     @NotNull
-    private String from;
+    private String fromContactNumber;
 
     @Column(name = "timestamp")
     @NotNull

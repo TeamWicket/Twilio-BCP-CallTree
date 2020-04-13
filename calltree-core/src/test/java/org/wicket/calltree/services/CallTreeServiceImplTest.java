@@ -36,7 +36,7 @@ class CallTreeServiceImplTest {
         InboundSmsDto inboundSmsDto = callTreeService.smsParser(BODY);
 
         assertThat(inboundSmsDto.getBody()).isNotNull();
-        assertThat(inboundSmsDto.getFrom()).isNotNull();
+        assertThat(inboundSmsDto.getFromContactNumber()).isNotNull();
         assertThat(inboundSmsDto.getFromCountry()).isNotNull();
         assertThat(inboundSmsDto.getSmsStatus()).isNotNull();
 
@@ -44,6 +44,6 @@ class CallTreeServiceImplTest {
         assertEquals("received", inboundSmsDto.getSmsStatus());
         assertEquals("3", inboundSmsDto.getBody());
         assertEquals("GB", inboundSmsDto.getFromCountry());
-        assertEquals("+441234", inboundSmsDto.getFrom());
+        assertEquals("+441234", inboundSmsDto.getFromContactNumber());
     }
 }
