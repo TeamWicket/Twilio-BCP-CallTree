@@ -52,7 +52,7 @@ public class Bootstrap {
         contactFour.setFirstName("John");
         contactFour.setLastName("Vlissides");
         contactFour.setCallingOption(List.of(CallingOption.SMS, CallingOption.WHATSAPP));
-        contactFour.setPhoneNumber("+789");
+        contactFour.setPhoneNumber("+444");
         contactFour.setRole(Role.REPORTER);
         contactFour.setPointOfContactId(3L);
 

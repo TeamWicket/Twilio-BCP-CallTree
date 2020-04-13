@@ -22,4 +22,6 @@ public interface ContactService {
     List<ContactDto> getAllSelectedRole(Role role);
 
     List<ContactDto> getCalltreeUntilRole(Role role);
+
+    ContactDto fetchContactByPhoneNumber(String string);
 }

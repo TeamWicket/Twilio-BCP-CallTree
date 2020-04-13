@@ -5,6 +5,7 @@ import com.twilio.type.PhoneNumber;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+import org.wicket.calltree.dto.ContactDto;
 import org.wicket.calltree.dto.InboundSmsDto;
 import org.wicket.calltree.dto.Response;
 import org.wicket.calltree.model.BcpStartRequest;
@@ -43,7 +44,11 @@ public class CallTreeServiceImpl implements CallTreeService {
     @Override
     public String replyToSms(@NotNull String body) {
         InboundSmsDto inboundSmsDto = smsParser(body);
-        return twilioService.replyToReceivedSms(inboundSmsDto);
+        ContactDto contactDto = contactService.fetchContactByPhoneNumber(inboundSmsDto.getFrom());
+        ContactDto manager = contactService.getContact(contactDto.getPointOfContactId());
+        String reply = buildReply(contactDto, manager);
+
+        return twilioService.replyToReceivedSms(reply);
     }
 
     protected InboundSmsDto smsParser(String body) {
@@ -62,5 +67,22 @@ public class CallTreeServiceImpl implements CallTreeService {
         inboundSmsDto.setFrom(chunks[18].replace("From=%2B", "+"));
 
         return inboundSmsDto;
+    }
+
+    private String buildReply(ContactDto contact, ContactDto manager) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Hi ");
+        sb.append(contact.getFirstName());
+        sb.append(" ");
+        sb.append(contact.getLastName());
+        sb.append(", ");
+        sb.append("if you have any further query, please contact your manager ");
+        sb.append(manager.getFirstName());
+        sb.append(" ");
+        sb.append(manager.getLastName());
+        sb.append(" at ");
+        sb.append(manager.getPhoneNumber());
+
+        return sb.toString();
     }
 }

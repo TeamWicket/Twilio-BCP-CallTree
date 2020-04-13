@@ -104,4 +104,10 @@ public class ContactServiceImpl implements ContactService {
                 throw new ContactException("Unrecognised role: " + role.name());
         }
     }
+
+    @Override
+    public ContactDto fetchContactByPhoneNumber(String string) {
+        Optional<Contact> contact = repository.findByPhoneNumber(string);
+        return mapper.contactToDto(contact.orElseThrow(ContactException::new));
+    }
 }
