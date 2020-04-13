@@ -47,4 +47,7 @@ public class Contact {
 
     @Nullable
     private Long pointOfContactId;
+
+    @Version
+    private Long version;
 }
