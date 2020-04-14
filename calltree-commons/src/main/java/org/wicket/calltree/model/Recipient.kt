@@ -6,5 +6,5 @@ import com.twilio.type.PhoneNumber
  * @author Alessandro Arosio - 11/04/2020 14:07
  */
 data class Recipient(val receiver: PhoneNumber, val message: String) {
-  val sender: PhoneNumber = PhoneNumber("+441315103184")
+  val sender: PhoneNumber = PhoneNumber("+447380328921")
 }
