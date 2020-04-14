@@ -6,7 +6,11 @@ import org.wicket.calltree.dto.ContactDto;
 import org.wicket.calltree.enums.CallingOption;
 import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.mappers.ContactMapper;
+import org.wicket.calltree.models.InboundSms;
+import org.wicket.calltree.models.OutboundSms;
 import org.wicket.calltree.repository.ContactRepository;
+import org.wicket.calltree.repository.InboundSmsRepository;
+import org.wicket.calltree.repository.OutBoundSmsRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -20,6 +24,8 @@ import java.util.stream.Collectors;
 public class Bootstrap {
     private final ContactRepository contactRepository;
     private final ContactMapper mapper;
+    private final InboundSmsRepository inboundRepo;
+    private final OutBoundSmsRepository outboundRepo;
 
     @PostConstruct
     private void populateDatabase() {
@@ -60,5 +66,23 @@ public class Bootstrap {
                 .stream()
                 .map(mapper::dtoToContact)
                 .collect(Collectors.toList()));
+
+        InboundSms inbound = new InboundSms();
+        inbound.setBody("Hello!");
+        inbound.setFromContactNumber("+444");
+        inbound.setFromCountry("GB");
+        inbound.setSmsStatus("received");
+        inbound.setTimestamp("2020-04-14T19:44:50.851113+01:00[Europe/London]");
+
+        inboundRepo.save(inbound);
+
+        OutboundSms outbound = new OutboundSms();
+        outbound.setBody("testing sms persistence");
+        outbound.setDateCreated("14 April 2020 at 18:43:25 UTC");
+        outbound.setToNumber("+444");
+        outbound.setStatus("queued");
+
+        outboundRepo.save(outbound);
+
     }
 }
