@@ -31,6 +31,10 @@ public class OutboundSms {
     @Column(name = "date_sent")
     private String dateSent;
 
+    @Column(name = "body")
+    @NotNull
+    private String body;
+
     @Column(name = "from_number")
     private String fromNumber;
 

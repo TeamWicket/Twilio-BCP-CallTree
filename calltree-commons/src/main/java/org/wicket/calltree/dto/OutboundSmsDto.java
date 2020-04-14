@@ -21,6 +21,9 @@ public class OutboundSmsDto {
     @NotNull
     private String dateCreated;
 
+    @NotNull
+    private String body;
+
     private String dateUpdated;
 
     private String dateSent;
