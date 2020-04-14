@@ -1,6 +1,7 @@
 package org.wicket.calltree.controllers.v1
 
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import org.wicket.calltree.model.BcpStartRequest
 import org.wicket.calltree.services.CallTreeService
@@ -16,12 +17,16 @@ class CallTreeController(private val service: CallTreeService) {
   @PostMapping
   @ResponseStatus(HttpStatus.OK)
   fun initiateCalls(@RequestBody @Valid bcpStartRequest: BcpStartRequest) {
-    // placeholder
     service.initiateCalls(bcpStartRequest)
   }
 
   @GetMapping
   fun getStats() {
     // placeholder
+  }
+
+  @PostMapping("/twilio", produces = [MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE])
+  fun replyToIncomingSms(@RequestBody body: String): String {
+    return service.replyToSms(body)
   }
 }
