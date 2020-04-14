@@ -26,6 +26,7 @@ public class CallTreeServiceImpl implements CallTreeService {
     private final TwilioService twilioService;
     private final MessageMapper mapper;
     private final ContactService contactService;
+    private final SmsService smsService;
 
     @NotNull
     @Override
@@ -36,9 +37,13 @@ public class CallTreeServiceImpl implements CallTreeService {
 
         List<Message> messages = twilioService.sendSms(recipientList);
 
-        return messages.stream()
+        List<Response> responses = messages.stream()
                 .map(mapper::messageToResponse)
                 .collect(Collectors.toList());
+
+        smsService.saveOutboundSms(responses);
+
+        return responses;
     }
 
     @NotNull
@@ -48,6 +53,8 @@ public class CallTreeServiceImpl implements CallTreeService {
         ContactDto contactDto = contactService.fetchContactByPhoneNumber(inboundSmsDto.getFromContactNumber());
         ContactDto manager = contactService.getContact(contactDto.getPointOfContactId());
         String reply = buildReply(contactDto, manager);
+
+        smsService.saveInboundSms(inboundSmsDto);
 
         return twilioService.replyToReceivedSms(reply);
     }
