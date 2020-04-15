@@ -34,7 +34,7 @@ public class Contact {
     private String lastName;
 
     @NotNull
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
     @NotNull
@@ -47,4 +47,7 @@ public class Contact {
 
     @Nullable
     private Long pointOfContactId;
+
+    @Version
+    private Long version;
 }

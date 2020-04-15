@@ -1,11 +1,10 @@
 package org.wicket.calltree.controllers.v1
 
-import com.google.common.collect.ImmutableList
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.jpa.domain.AbstractPersistable_.id
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.wicket.calltree.dto.ContactDto
+import org.wicket.calltree.enums.Role
 import org.wicket.calltree.services.ContactService
 import javax.validation.Valid
 
@@ -17,28 +16,45 @@ import javax.validation.Valid
 class ContactController(private val contactService: ContactService) {
 
   @GetMapping("/all")
+  @Operation(summary = "Fetch all contacts")
   fun fetchAllContacts() : List<ContactDto> {
     return contactService.allContacts
   }
 
   @GetMapping("/{id}")
+  @Operation(summary = "Fetch single contact by ID")
   fun fetchContact(@PathVariable @Valid id: Long) : ContactDto {
     return contactService.getContact(id)
   }
 
+  @GetMapping("/role/{role}")
+  @Operation(summary = "Fetch all contacts belonging to specific ROLE")
+  fun fetchContactsOfOneRole(@PathVariable role: String) : List<ContactDto> {
+    return contactService.getAllSelectedRole(Role.valueOf(role.toUpperCase()))
+  }
+
+  @GetMapping("/tree/{role}")
+  @Operation(summary = "Fetch all contacts from MANAGERS to selected ROLE")
+  fun fetchTreeUntilRole(@PathVariable role: String) : List<ContactDto> {
+    return contactService.getCalltreeUntilRole(Role.valueOf(role.toUpperCase()))
+  }
+
   @DeleteMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @Operation(summary = "Remove contact")
   fun removeContact(@RequestBody @Valid contactDto: ContactDto) {
     contactService.deleteContact(contactDto.id)
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @Operation(summary = "Save contact")
   fun saveContact(@RequestBody @Valid contactDto: ContactDto) : ContactDto {
     return contactService.saveOrUpdate(contactDto)
   }
 
   @PutMapping
+  @Operation(summary = "Update contact")
   fun updateContact(@RequestBody @Valid contactDto: ContactDto) : ContactDto {
     return contactService.saveOrUpdate(contactDto)
   }
