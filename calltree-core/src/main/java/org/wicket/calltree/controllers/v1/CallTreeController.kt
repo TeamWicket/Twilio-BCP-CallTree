@@ -16,14 +16,14 @@ import javax.validation.Valid
 @RequestMapping("/api/v1/calltree")
 class CallTreeController(private val service: CallTreeService) {
 
-  @PostMapping
+  @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
   @ResponseStatus(HttpStatus.OK)
   @Operation(summary = "Initiate BCP calls")
   fun initiateCalls(@RequestBody @Valid bcpStartRequest: BcpStartRequest) {
     service.initiateCalls(bcpStartRequest)
   }
 
-  @GetMapping
+  @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
   @Operation(summary = "Calculate stats")
   fun getStats() {
     // placeholder
