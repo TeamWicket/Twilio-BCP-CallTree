@@ -46,6 +46,11 @@ public class OutboundSms {
     @Column(name = "status")
     private String status;
 
+    @ManyToOne
+    @JoinColumn(name = "bcp_event_id")
+    @NotNull
+    private BcpEvent bcpEvent;
+
     @Version
     private Long version;
 }

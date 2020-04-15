@@ -36,5 +36,8 @@ public class OutboundSmsDto {
     @NotNull
     private String status;
 
+    @NotNull
+    private BcpEventDto bcpEvent;
+
     private Long version;
 }

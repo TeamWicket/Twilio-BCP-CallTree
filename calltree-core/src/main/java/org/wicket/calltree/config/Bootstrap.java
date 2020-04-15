@@ -6,8 +6,10 @@ import org.wicket.calltree.dto.ContactDto;
 import org.wicket.calltree.enums.CallingOption;
 import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.mappers.ContactMapper;
+import org.wicket.calltree.models.BcpEvent;
 import org.wicket.calltree.models.InboundSms;
 import org.wicket.calltree.models.OutboundSms;
+import org.wicket.calltree.repository.BcpEventRepository;
 import org.wicket.calltree.repository.ContactRepository;
 import org.wicket.calltree.repository.InboundSmsRepository;
 import org.wicket.calltree.repository.OutBoundSmsRepository;
@@ -26,6 +28,7 @@ public class Bootstrap {
     private final ContactMapper mapper;
     private final InboundSmsRepository inboundRepo;
     private final OutBoundSmsRepository outboundRepo;
+    private final BcpEventRepository bcpEventRepository;
 
     @PostConstruct
     private void populateDatabase() {
@@ -67,12 +70,16 @@ public class Bootstrap {
                 .map(mapper::dtoToContact)
                 .collect(Collectors.toList()));
 
+        BcpEvent bcpEvent = new BcpEvent(null, "TEST-EVENT", "14 April 2020 at 18:43:25 UTC", null);
+        BcpEvent persistedEvent = bcpEventRepository.save(bcpEvent);
+
         InboundSms inbound = new InboundSms();
         inbound.setBody("Hello!");
         inbound.setFromContactNumber("+444");
         inbound.setFromCountry("GB");
         inbound.setSmsStatus("received");
         inbound.setTimestamp("2020-04-14T19:44:50.851113+01:00[Europe/London]");
+        inbound.setBcpEvent(persistedEvent);
 
         inboundRepo.save(inbound);
 
@@ -81,6 +88,7 @@ public class Bootstrap {
         outbound.setDateCreated("14 April 2020 at 18:43:25 UTC");
         outbound.setToNumber("+444");
         outbound.setStatus("queued");
+        outbound.setBcpEvent(persistedEvent);
 
         outboundRepo.save(outbound);
 

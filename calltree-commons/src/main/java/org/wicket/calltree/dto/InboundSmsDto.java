@@ -36,6 +36,9 @@ public class InboundSmsDto {
     private String fromContactNumber;
 
     @NotNull
+    private BcpEventDto bcpEvent;
+
+    @NotNull
     private String timestamp;
 
     private Long version;

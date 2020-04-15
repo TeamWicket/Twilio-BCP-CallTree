@@ -1,6 +1,7 @@
 package org.wicket.calltree.repository
 
 import org.springframework.data.jpa.repository.JpaRepository
+import org.wicket.calltree.models.BcpEvent
 import org.wicket.calltree.models.InboundSms
 import org.wicket.calltree.models.OutboundSms
 
@@ -11,3 +12,5 @@ import org.wicket.calltree.models.OutboundSms
 interface InboundSmsRepository: JpaRepository<InboundSms, Long>
 
 interface OutBoundSmsRepository: JpaRepository<OutboundSms, Long>
+
+interface BcpEventRepository: JpaRepository<BcpEvent, Long>
