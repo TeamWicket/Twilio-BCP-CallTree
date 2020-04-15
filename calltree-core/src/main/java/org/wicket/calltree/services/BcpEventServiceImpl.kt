@@ -20,4 +20,9 @@ class BcpEventServiceImpl(private val bcpEventRepo: BcpEventRepository,
   override fun getEventById(id: Long): BcpEventDto {
     TODO("Not yet implemented")
   }
+
+  override fun saveEvent(eventDto: BcpEventDto): BcpEventDto {
+    val persistedEvent = bcpEventRepo.save(bcpEventMapper.dtoToEntity(eventDto))
+    return bcpEventMapper.entityToDto(persistedEvent)
+  }
 }

@@ -13,4 +13,6 @@ interface BcpEventService {
 
   fun getEventById(id: Long) : BcpEventDto
 
+  fun saveEvent(eventDto: BcpEventDto) : BcpEventDto
+
 }

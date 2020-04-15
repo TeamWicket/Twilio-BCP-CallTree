@@ -1,10 +1,10 @@
 package org.wicket.calltree.services;
 
-import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+import org.wicket.calltree.dto.BcpEventDto;
 import org.wicket.calltree.dto.ContactDto;
 import org.wicket.calltree.dto.InboundSmsDto;
 import org.wicket.calltree.dto.Response;
@@ -27,18 +27,25 @@ public class CallTreeServiceImpl implements CallTreeService {
     private final MessageMapper mapper;
     private final ContactService contactService;
     private final SmsService smsService;
+    private final BcpEventService bcpEventService;
 
     @NotNull
     @Override
     public List<Response> initiateCalls(@NotNull BcpStartRequest bcpStartRequest) {
-        List<Recipient> recipientList = contactService.getCalltreeUntilRole(bcpStartRequest.getToRoles()).stream()
+        BcpEventDto event = saveNewEvent(bcpStartRequest);
+
+        var recipientList = contactService.getCalltreeUntilRole(bcpStartRequest.getToRoles()).stream()
                 .map(c -> new Recipient(new PhoneNumber(c.getPhoneNumber()), bcpStartRequest.getText()))
                 .collect(Collectors.toList());
 
-        List<Message> messages = twilioService.sendSms(recipientList);
+        var messages = twilioService.sendSms(recipientList);
 
-        List<Response> responses = messages.stream()
-                .map(mapper::messageToResponse)
+        var responses = messages.stream()
+                .map(v -> {
+                    Response response = mapper.messageToResponse(v);
+                    response.setBcpEvent(event);
+                    return response;
+                })
                 .collect(Collectors.toList());
 
         smsService.saveOutboundSms(responses);
@@ -93,5 +100,10 @@ public class CallTreeServiceImpl implements CallTreeService {
         sb.append(manager.getPhoneNumber());
 
         return sb.toString();
+    }
+
+    private BcpEventDto saveNewEvent(BcpStartRequest request) {
+        var event = new BcpEventDto(null, request.getEventName(), request.getTimestamp(), null);
+        return bcpEventService.saveEvent(event);
     }
 }
