@@ -15,6 +15,7 @@ import org.wicket.calltree.repository.InboundSmsRepository;
 import org.wicket.calltree.repository.OutBoundSmsRepository;
 
 import javax.annotation.PostConstruct;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,8 @@ public class Bootstrap {
     private final InboundSmsRepository inboundRepo;
     private final OutBoundSmsRepository outboundRepo;
     private final BcpEventRepository bcpEventRepository;
+
+    private static final String TWILIO_NUMBER = "+0132456";
 
     @PostConstruct
     private void populateDatabase() {
@@ -70,12 +73,14 @@ public class Bootstrap {
                 .map(mapper::dtoToContact)
                 .collect(Collectors.toList()));
 
-        BcpEvent bcpEvent = new BcpEvent(null, "TEST-EVENT", "14 April 2020 at 18:43:25 UTC", null);
+        BcpEvent bcpEvent = new BcpEvent(null, "TEST-EVENT",
+                ZonedDateTime.parse("2020-04-16T20:35:06.000Z"), TWILIO_NUMBER, null);
         BcpEvent persistedEvent = bcpEventRepository.save(bcpEvent);
 
         InboundSms inbound = new InboundSms();
         inbound.setBody("Hello!");
         inbound.setFromContactNumber("+444");
+        inbound.setToTwilioNumber(TWILIO_NUMBER);
         inbound.setFromCountry("GB");
         inbound.setSmsStatus("received");
         inbound.setTimestamp("2020-04-14T19:44:50.851113+01:00[Europe/London]");

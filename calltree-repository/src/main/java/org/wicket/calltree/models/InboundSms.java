@@ -43,6 +43,10 @@ public class InboundSms {
     @NotNull
     private String timestamp;
 
+    @Column(name = "to_twilio_number")
+    @NotNull
+    private String toTwilioNumber;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "bcp_event_id")
     @NotNull

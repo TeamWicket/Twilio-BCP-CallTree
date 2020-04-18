@@ -36,6 +36,9 @@ public class InboundSmsDto {
     private String fromContactNumber;
 
     @NotNull
+    private String toTwilioNumber;
+
+    @NotNull
     private BcpEventDto bcpEvent;
 
     @NotNull

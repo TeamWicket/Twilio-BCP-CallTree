@@ -10,4 +10,6 @@ interface CallTreeService {
   fun initiateCalls(bcpStartRequest: BcpStartRequest) : List<Response>
 
   fun replyToSms(body: String) : String
+
+  fun fetchTwilioNumbers(): List<String>
 }

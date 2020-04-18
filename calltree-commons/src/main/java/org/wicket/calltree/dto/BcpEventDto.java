@@ -27,6 +27,10 @@ public class BcpEventDto {
     @NotBlank
     private String timestamp = ZonedDateTime.now().toString();
 
+    @NotNull
+    @NotBlank
+    private String twilioNumber;
+
     @Nullable
     private Long version;
 }

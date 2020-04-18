@@ -32,8 +32,12 @@ public class BcpEvent {
 
     @Column(name = "timestamp")
     @Nullable
+    private ZonedDateTime timestamp = ZonedDateTime.now();
+
+    @Column(name = "twilio_number")
+    @NotNull
     @NotBlank
-    private String timestamp = ZonedDateTime.now().toString();
+    private String twilioNumber;
 
     @Version
     private Long version;

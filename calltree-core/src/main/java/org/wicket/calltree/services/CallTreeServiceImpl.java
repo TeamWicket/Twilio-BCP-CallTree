@@ -66,6 +66,12 @@ public class CallTreeServiceImpl implements CallTreeService {
         return twilioService.replyToReceivedSms(reply);
     }
 
+    @NotNull
+    @Override
+    public List<String> fetchTwilioNumbers() {
+        return twilioService.getTwilioNumbers();
+    }
+
     protected InboundSmsDto smsParser(String body) {
         if (body == null) {
             throw new RuntimeException("body of incoming sms is null");
@@ -79,6 +85,7 @@ public class CallTreeServiceImpl implements CallTreeService {
         inboundSmsDto.setSmsStatus(chunks[8].replace("SmsStatus=", ""));
         inboundSmsDto.setBody(chunks[10].replace("Body=", ""));
         inboundSmsDto.setFromCountry(chunks[11].replace("FromCountry=", ""));
+        inboundSmsDto.setToTwilioNumber(chunks[12].replace("To=%2B", "+"));
         inboundSmsDto.setFromContactNumber(chunks[18].replace("From=%2B", "+"));
         inboundSmsDto.setTimestamp(ZonedDateTime.now().toString());
 
@@ -103,7 +110,8 @@ public class CallTreeServiceImpl implements CallTreeService {
     }
 
     private BcpEventDto saveNewEvent(BcpStartRequest request) {
-        var event = new BcpEventDto(null, request.getEventName(), request.getTimestamp(), null);
+        var event = new BcpEventDto(null, request.getEventName(),
+                null, request.getTwilioNumber(), null);
         return bcpEventService.saveEvent(event);
     }
 }

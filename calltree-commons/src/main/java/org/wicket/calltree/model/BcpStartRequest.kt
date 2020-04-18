@@ -9,4 +9,5 @@ import java.time.ZonedDateTime
 data class BcpStartRequest(val text: String,
                            val toRoles: Role = Role.REPORTER,
                            val eventName: String,
-                           val timestamp: String? = ZonedDateTime.now().toString())
+                           val twilioNumber: String,
+                           val timestamp: ZonedDateTime = ZonedDateTime.now())
