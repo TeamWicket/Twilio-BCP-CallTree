@@ -2,6 +2,7 @@ package org.wicket.calltree.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.wicket.calltree.dto.ContactDto;
 import org.wicket.calltree.enums.CallingOption;
 import org.wicket.calltree.enums.Role;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
  */
 @Configuration
 @RequiredArgsConstructor
+@Profile({"!live"})
 public class Bootstrap {
     private final ContactRepository contactRepository;
     private final ContactMapper mapper;
