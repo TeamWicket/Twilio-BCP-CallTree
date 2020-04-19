@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
+import org.wicket.calltree.dto.BcpEventDto
 import org.wicket.calltree.model.BcpStartRequest
 import org.wicket.calltree.services.CallTreeService
 import javax.validation.Valid
@@ -38,5 +39,18 @@ class CallTreeController(private val service: CallTreeService) {
   @Operation(summary = "Get all registered Twilio numbers")
   fun getAllTwilioNumbers(): List<String> {
     return service.fetchTwilioNumbers()
+  }
+
+  @GetMapping("/twilio/events", produces = [MediaType.APPLICATION_JSON_VALUE])
+  @Operation(summary = "Get all active events")
+  fun checkActiveEvents(): List<BcpEventDto> {
+    return service.checkEvent()
+  }
+
+  @GetMapping("/terminate/{twilioNumber}", produces = [MediaType.APPLICATION_JSON_VALUE])
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @Operation(summary = "Terminate a BCP event")
+  fun terminateCallTree(@PathVariable twilioNumber: String) {
+    service.endEvent(twilioNumber)
   }
 }

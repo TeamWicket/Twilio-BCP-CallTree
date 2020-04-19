@@ -39,9 +39,6 @@ public class InboundSmsDto {
     private String toTwilioNumber;
 
     @NotNull
-    private BcpEventDto bcpEvent;
-
-    @NotNull
     private String timestamp;
 
     private Long version;

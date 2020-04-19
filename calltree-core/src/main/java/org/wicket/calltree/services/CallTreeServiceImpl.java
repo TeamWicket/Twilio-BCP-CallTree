@@ -72,6 +72,17 @@ public class CallTreeServiceImpl implements CallTreeService {
         return twilioService.getTwilioNumbers();
     }
 
+    @Override
+    public void endEvent(@NotNull String twilioNumber) {
+        smsService.terminateEvent(twilioNumber);
+    }
+
+    @NotNull
+    @Override
+    public List<BcpEventDto> checkEvent() {
+        return bcpEventService.getAllEvents();
+    }
+
     protected InboundSmsDto smsParser(String body) {
         if (body == null) {
             throw new RuntimeException("body of incoming sms is null");

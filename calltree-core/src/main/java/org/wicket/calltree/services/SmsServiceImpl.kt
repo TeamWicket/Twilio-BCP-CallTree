@@ -24,6 +24,10 @@ class SmsServiceImpl(private val outboundMapper: OutboundSmsMapper,
   override fun saveInboundSms(inboundSmsDto: InboundSmsDto) {
     val mappedEntity = inboundMapper.dtoToEntity(inboundSmsDto)
     inboundRepository.save(mappedEntity)
+  }
 
+  override fun terminateEvent(twilioNumber: String) {
+    val smsForEvent = inboundRepository.findAllByToTwilioNumber(twilioNumber)
+    inboundRepository.deleteAll(smsForEvent)
   }
 }

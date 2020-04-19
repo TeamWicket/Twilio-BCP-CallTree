@@ -1,5 +1,6 @@
 package org.wicket.calltree.services
 
+import org.wicket.calltree.dto.BcpEventDto
 import org.wicket.calltree.dto.Response
 import org.wicket.calltree.model.BcpStartRequest
 
@@ -12,4 +13,8 @@ interface CallTreeService {
   fun replyToSms(body: String) : String
 
   fun fetchTwilioNumbers(): List<String>
+
+  fun endEvent(twilioNumber: String)
+
+  fun checkEvent(): List<BcpEventDto>
 }

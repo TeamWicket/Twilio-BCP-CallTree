@@ -9,4 +9,5 @@ import org.wicket.calltree.dto.Response
 interface SmsService {
   fun saveOutboundSms(responseList: List<Response>)
   fun saveInboundSms(inboundSmsDto: InboundSmsDto)
+  fun terminateEvent(twilioNumber: String)
 }

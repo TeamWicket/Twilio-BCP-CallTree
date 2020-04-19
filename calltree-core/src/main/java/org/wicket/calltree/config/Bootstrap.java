@@ -84,7 +84,6 @@ public class Bootstrap {
         inbound.setFromCountry("GB");
         inbound.setSmsStatus("received");
         inbound.setTimestamp("2020-04-14T19:44:50.851113+01:00[Europe/London]");
-        inbound.setBcpEvent(persistedEvent);
 
         inboundRepo.save(inbound);
 
