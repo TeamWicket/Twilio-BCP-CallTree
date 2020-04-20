@@ -6,8 +6,10 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import org.wicket.calltree.dto.BcpEventDto
 import org.wicket.calltree.model.BcpStartRequest
+import org.wicket.calltree.model.BcpStats
 import org.wicket.calltree.services.CallTreeService
 import javax.validation.Valid
+import kotlin.math.min
 
 /**
  * @author Alessandro Arosio - 11/04/2020 13:14
@@ -23,10 +25,10 @@ class CallTreeController(private val service: CallTreeService) {
     service.initiateCalls(bcpStartRequest)
   }
 
-  @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
+  @GetMapping("/stats/{number}", produces = [MediaType.APPLICATION_JSON_VALUE])
   @Operation(summary = "Calculate stats")
-  fun getStats() {
-    // placeholder
+  fun getStats(@PathVariable number: String, @RequestParam minutes: Long): BcpStats {
+    return service.calculateStats(number, minutes)
   }
 
   @PostMapping("/twilio", produces = [MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE])

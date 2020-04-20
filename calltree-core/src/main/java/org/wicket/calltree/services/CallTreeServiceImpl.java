@@ -4,19 +4,20 @@ import com.twilio.type.PhoneNumber;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
-import org.wicket.calltree.dto.BcpEventDto;
-import org.wicket.calltree.dto.ContactDto;
-import org.wicket.calltree.dto.InboundSmsDto;
-import org.wicket.calltree.dto.Response;
+import org.wicket.calltree.dto.*;
 import org.wicket.calltree.exceptions.BcpEventException;
 import org.wicket.calltree.model.BcpStartRequest;
+import org.wicket.calltree.model.BcpStats;
 import org.wicket.calltree.model.Recipient;
 import org.wicket.calltree.service.TwilioService;
 import org.wicket.calltree.services.utils.MessageMapper;
 
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.wicket.calltree.services.utils.TimeUtilsKt.zonedDateTimeDifference;
 
 /**
  * @author Alessandro Arosio - 11/04/2020 16:01
@@ -24,8 +25,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CallTreeServiceImpl implements CallTreeService {
-    private final TwilioService twilioService;
     private final MessageMapper mapper;
+    private final TwilioService twilioService;
     private final ContactService contactService;
     private final SmsService smsService;
     private final BcpEventService bcpEventService;
@@ -83,6 +84,49 @@ public class CallTreeServiceImpl implements CallTreeService {
     @Override
     public List<BcpEventDto> checkEvent() {
         return bcpEventService.getAllEvents();
+    }
+
+    @NotNull
+    @Override
+    public BcpStats calculateStats(@NotNull String twilioNumber, long minutes) {
+        List<InboundSmsDto> inboundResponses = smsService.findInboundMessagesByTwilioNumber(twilioNumber);
+        List<OutboundSmsDto> outboundResponses = smsService.findOutboundMessagesByTwilioNumber(twilioNumber);
+        String eventTime = bcpEventService.getEventByNumber(twilioNumber).getTimestamp();
+
+        Double averageTime = calculateOverallAverage(eventTime, inboundResponses);
+        Double responseBelowXMinutes = calculateResponseWithinXMinutes(twilioNumber, minutes, eventTime);
+
+        BcpStats bcpStats = new BcpStats();
+        bcpStats.setMessagesSent(inboundResponses.size());
+        bcpStats.setMessagesReceived(outboundResponses.size());
+        bcpStats.setAverage(averageTime);
+        bcpStats.setReplyPercentageWithinXMinutes(responseBelowXMinutes);
+
+        return bcpStats;
+    }
+
+    private Double calculateResponseWithinXMinutes(String twilioNumber, Long minutes, String eventTime) {
+        List<InboundSmsDto> inboundList = smsService.findInboundMessagesByTwilioNumber(twilioNumber);
+
+        long numberOfReplies = inboundList.stream().filter(sms -> {
+            long difference = zonedDateTimeDifference(eventTime, sms.getTimestamp(), ChronoUnit.MINUTES);
+            return difference > minutes;
+        }).count();
+
+        return (inboundList.size() * 100) / (double) numberOfReplies;
+    }
+
+
+    private Double calculateOverallAverage(String eventTime, List<InboundSmsDto> inboundResponses) {
+        List<Long> timeRespList = inboundResponses.stream()
+                .map(e -> {
+                    String replyTimestamp = e.getTimestamp();
+                    return zonedDateTimeDifference(eventTime, replyTimestamp, ChronoUnit.MINUTES);
+                }).collect(Collectors.toList());
+        return timeRespList.stream()
+                .mapToLong(e -> e)
+                .average()
+                .orElseThrow(RuntimeException::new);
     }
 
     protected InboundSmsDto smsParser(String body) {

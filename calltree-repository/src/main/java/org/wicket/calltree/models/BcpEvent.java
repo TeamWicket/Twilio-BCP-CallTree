@@ -34,7 +34,7 @@ public class BcpEvent {
     @Nullable
     private ZonedDateTime timestamp = ZonedDateTime.now();
 
-    @Column(name = "twilio_number")
+    @Column(name = "twilio_number", unique = true)
     @NotNull
     @NotBlank
     private String twilioNumber;

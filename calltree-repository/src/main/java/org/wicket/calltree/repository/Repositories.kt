@@ -17,6 +17,7 @@ interface InboundSmsRepository: JpaRepository<InboundSms, Long> {
 
 interface OutBoundSmsRepository: JpaRepository<OutboundSms, Long> {
   fun findAllByBcpEventAndToNumber(event: BcpEvent, twilioNumber: String): List<OutboundSms>
+  fun findAllByFromNumber(twilioNumber: String): List<OutboundSms>
 }
 
 interface BcpEventRepository: JpaRepository<BcpEvent, Long> {
