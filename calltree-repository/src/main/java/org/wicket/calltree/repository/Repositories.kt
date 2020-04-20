@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.wicket.calltree.models.BcpEvent
 import org.wicket.calltree.models.InboundSms
 import org.wicket.calltree.models.OutboundSms
+import java.util.*
 
 /**
  * @author Alessandro Arosio - 13/04/2020 22:35
@@ -19,6 +20,7 @@ interface OutBoundSmsRepository: JpaRepository<OutboundSms, Long> {
 }
 
 interface BcpEventRepository: JpaRepository<BcpEvent, Long> {
+  fun findByTwilioNumber(number: String): Optional<BcpEvent>
   fun findAllByEventNameAndTwilioNumber(eventName: String, twilioNumber: String): List<BcpEvent>
   fun countAllByEventNameAndTwilioNumber(eventName: String, twilioNumber: String): Int
 }

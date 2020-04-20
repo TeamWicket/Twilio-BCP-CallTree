@@ -8,6 +8,7 @@ import org.wicket.calltree.dto.BcpEventDto;
 import org.wicket.calltree.dto.ContactDto;
 import org.wicket.calltree.dto.InboundSmsDto;
 import org.wicket.calltree.dto.Response;
+import org.wicket.calltree.exceptions.BcpEventException;
 import org.wicket.calltree.model.BcpStartRequest;
 import org.wicket.calltree.model.Recipient;
 import org.wicket.calltree.service.TwilioService;
@@ -75,6 +76,7 @@ public class CallTreeServiceImpl implements CallTreeService {
     @Override
     public void endEvent(@NotNull String twilioNumber) {
         smsService.terminateEvent(twilioNumber);
+        bcpEventService.deleteEventByTwilioNumber(twilioNumber);
     }
 
     @NotNull
@@ -121,6 +123,11 @@ public class CallTreeServiceImpl implements CallTreeService {
     }
 
     private BcpEventDto saveNewEvent(BcpStartRequest request) {
+        BcpEventDto eventDto = bcpEventService.getEventByNumber(request.getTwilioNumber());
+        if (eventDto.getId() != null) {
+            throw new BcpEventException("This number is being used for the event: " + eventDto.getEventName() +
+                    ", please release the number before initiate a new event");
+        }
         var event = new BcpEventDto(null, request.getEventName(),
                 null, request.getTwilioNumber(), null);
         return bcpEventService.saveEvent(event);
