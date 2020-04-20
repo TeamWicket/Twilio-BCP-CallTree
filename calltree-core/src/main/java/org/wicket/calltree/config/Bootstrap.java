@@ -74,7 +74,7 @@ public class Bootstrap {
                 .collect(Collectors.toList()));
 
         BcpEvent bcpEvent = new BcpEvent(null, "TEST-EVENT",
-                ZonedDateTime.parse("2020-04-16T20:35:06.000Z"), TWILIO_NUMBER, null);
+                ZonedDateTime.parse("2020-04-14T18:42:06.000Z"), TWILIO_NUMBER, null);
         BcpEvent persistedEvent = bcpEventRepository.save(bcpEvent);
 
         InboundSms inbound = new InboundSms();
@@ -92,6 +92,7 @@ public class Bootstrap {
         outbound.setDateCreated("14 April 2020 at 18:43:25 UTC");
         outbound.setToNumber("+444");
         outbound.setStatus("queued");
+        outbound.setFromNumber(TWILIO_NUMBER);
         outbound.setBcpEvent(persistedEvent);
 
         outboundRepo.save(outbound);

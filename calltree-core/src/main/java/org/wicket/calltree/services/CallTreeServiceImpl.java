@@ -110,7 +110,7 @@ public class CallTreeServiceImpl implements CallTreeService {
 
         long numberOfReplies = inboundList.stream().filter(sms -> {
             long difference = zonedDateTimeDifference(eventTime, sms.getTimestamp(), ChronoUnit.MINUTES);
-            return difference > minutes;
+            return difference < minutes;
         }).count();
 
         return (inboundList.size() * 100) / (double) numberOfReplies;
