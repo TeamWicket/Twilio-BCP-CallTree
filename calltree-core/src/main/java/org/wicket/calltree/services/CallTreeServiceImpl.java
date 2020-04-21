@@ -2,10 +2,12 @@ package org.wicket.calltree.services;
 
 import com.twilio.type.PhoneNumber;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.wicket.calltree.dto.*;
 import org.wicket.calltree.exceptions.BcpEventException;
+import org.wicket.calltree.model.BcpContactStats;
 import org.wicket.calltree.model.BcpStartRequest;
 import org.wicket.calltree.model.BcpStats;
 import org.wicket.calltree.model.Recipient;
@@ -14,7 +16,9 @@ import org.wicket.calltree.services.utils.MessageMapper;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.wicket.calltree.services.utils.TimeUtilsKt.zonedDateTimeDifference;
@@ -103,6 +107,27 @@ public class CallTreeServiceImpl implements CallTreeService {
         bcpStats.setReplyPercentageWithinXMinutes(responseBelowXMinutes);
 
         return bcpStats;
+    }
+
+    @NotNull
+    @Override
+    public List<BcpContactStats> contactsStats(@NotNull String twilioNumber) {
+        List<InboundSmsDto> inboundResponses = smsService.findInboundMessagesByTwilioNumber(twilioNumber);
+        List<OutboundSmsDto> outboundResponses = smsService.findOutboundMessagesByTwilioNumber(twilioNumber);
+        val resultList = new ArrayList<BcpContactStats>();
+
+        outboundResponses.forEach(out -> {
+            Optional<InboundSmsDto> match = inboundResponses.stream()
+                    .filter(in -> out.getToNumber().equals(in.getFromContactNumber()))
+                    .findFirst();
+            match.ifPresent(inSms -> {
+                val stats = new BcpContactStats(out.getFromNumber(), out.getBody(), out.getDateCreated(),
+                        out.getToNumber(), inSms.getTimestamp(), inSms.getBody(), out.getBcpEvent().getEventName());
+                resultList.add(stats);
+            });
+        });
+
+        return resultList;
     }
 
     private Double calculateResponseWithinXMinutes(String twilioNumber, Long minutes, String eventTime) {

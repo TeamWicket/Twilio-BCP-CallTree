@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import org.wicket.calltree.dto.BcpEventDto
+import org.wicket.calltree.model.BcpContactStats
 import org.wicket.calltree.model.BcpStartRequest
 import org.wicket.calltree.model.BcpStats
 import org.wicket.calltree.services.CallTreeService
@@ -29,6 +30,12 @@ class CallTreeController(private val service: CallTreeService) {
   @Operation(summary = "Calculate stats")
   fun getStats(@PathVariable number: String, @RequestParam minutes: Long): BcpStats {
     return service.calculateStats(number, minutes)
+  }
+
+  @GetMapping("/stats/contacts/{number}", produces = [MediaType.APPLICATION_JSON_VALUE])
+  @Operation(summary = "Calculate individual stats for each Contact")
+  fun calculateContactsStats(@PathVariable number: String) : List<BcpContactStats> {
+    return service.contactsStats(number)
   }
 
   @PostMapping("/twilio", produces = [MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE])
