@@ -2,6 +2,7 @@ package org.wicket.calltree.controllers.v1
 
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import org.wicket.calltree.dto.ContactDto
 import org.wicket.calltree.enums.Role
@@ -15,25 +16,25 @@ import javax.validation.Valid
 @RequestMapping("/api/v1/contacts")
 class ContactController(private val contactService: ContactService) {
 
-  @GetMapping("/all")
+  @GetMapping("/all", produces = [MediaType.APPLICATION_JSON_VALUE])
   @Operation(summary = "Fetch all contacts")
   fun fetchAllContacts() : List<ContactDto> {
     return contactService.allContacts
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
   @Operation(summary = "Fetch single contact by ID")
   fun fetchContact(@PathVariable @Valid id: Long) : ContactDto {
     return contactService.getContact(id)
   }
 
-  @GetMapping("/role/{role}")
+  @GetMapping("/role/{role}", produces = [MediaType.APPLICATION_JSON_VALUE])
   @Operation(summary = "Fetch all contacts belonging to specific ROLE")
   fun fetchContactsOfOneRole(@PathVariable role: String) : List<ContactDto> {
     return contactService.getAllSelectedRole(Role.valueOf(role.toUpperCase()))
   }
 
-  @GetMapping("/tree/{role}")
+  @GetMapping("/tree/{role}", produces = [MediaType.APPLICATION_JSON_VALUE])
   @Operation(summary = "Fetch all contacts from MANAGERS to selected ROLE")
   fun fetchTreeUntilRole(@PathVariable role: String) : List<ContactDto> {
     return contactService.getCalltreeUntilRole(Role.valueOf(role.toUpperCase()))
@@ -46,14 +47,14 @@ class ContactController(private val contactService: ContactService) {
     contactService.deleteContact(contactDto.id)
   }
 
-  @PostMapping
+  @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
   @ResponseStatus(HttpStatus.CREATED)
   @Operation(summary = "Save contact")
   fun saveContact(@RequestBody @Valid contactDto: ContactDto) : ContactDto {
     return contactService.saveOrUpdate(contactDto)
   }
 
-  @PutMapping
+  @PutMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
   @Operation(summary = "Update contact")
   fun updateContact(@RequestBody @Valid contactDto: ContactDto) : ContactDto {
     return contactService.saveOrUpdate(contactDto)

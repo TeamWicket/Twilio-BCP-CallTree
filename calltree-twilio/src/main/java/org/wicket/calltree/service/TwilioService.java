@@ -12,4 +12,6 @@ public interface TwilioService {
     List<Message> sendSms(List<Recipient> recipients);
 
     String replyToReceivedSms(String reply);
+
+    List<String> getTwilioNumbers();
 }
