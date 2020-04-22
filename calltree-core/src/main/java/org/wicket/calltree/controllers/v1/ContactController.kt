@@ -15,7 +15,7 @@ import javax.validation.Valid
 @RequestMapping("/api/v1/contacts")
 class ContactController(private val contactService: ContactService) {
 
-  @GetMapping("/all")
+  @GetMapping
   @Operation(summary = "Fetch all contacts")
   fun fetchAllContacts() : List<ContactDto> {
     return contactService.allContacts
@@ -39,11 +39,11 @@ class ContactController(private val contactService: ContactService) {
     return contactService.getCalltreeUntilRole(Role.valueOf(role.toUpperCase()))
   }
 
-  @DeleteMapping
+  @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @Operation(summary = "Remove contact")
-  fun removeContact(@RequestBody @Valid contactDto: ContactDto) {
-    contactService.deleteContact(contactDto.id)
+  fun removeContact(@PathVariable @Valid id:Long) {
+    contactService.deleteContact(id)
   }
 
   @PostMapping
@@ -53,7 +53,7 @@ class ContactController(private val contactService: ContactService) {
     return contactService.saveOrUpdate(contactDto)
   }
 
-  @PutMapping
+  @PutMapping("/{id}")
   @Operation(summary = "Update contact")
   fun updateContact(@RequestBody @Valid contactDto: ContactDto) : ContactDto {
     return contactService.saveOrUpdate(contactDto)
