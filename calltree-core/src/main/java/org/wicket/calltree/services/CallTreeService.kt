@@ -2,6 +2,7 @@ package org.wicket.calltree.services
 
 import org.wicket.calltree.dto.BcpEventDto
 import org.wicket.calltree.dto.Response
+import org.wicket.calltree.dto.TwilioNumberDto
 import org.wicket.calltree.model.BcpContactStats
 import org.wicket.calltree.model.BcpStartRequest
 import org.wicket.calltree.model.BcpStats
@@ -16,11 +17,11 @@ interface CallTreeService {
 
   fun fetchTwilioNumbers(): List<String>
 
-  fun endEvent(twilioNumber: String)
+  fun endEvent(twilioNumber: TwilioNumberDto)
 
   fun checkEvent(): List<BcpEventDto>
 
-  fun calculateStats(twilioNumber: String, minutes: Long): BcpStats
+  fun calculateStats(twilioNumber: TwilioNumberDto, minutes: Long): BcpStats
 
   fun contactsStats(twilioNumber: String): List<BcpContactStats>
 }

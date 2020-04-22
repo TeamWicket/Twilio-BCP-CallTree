@@ -27,13 +27,13 @@ class BcpEventServiceImpl(private val bcpEventRepo: BcpEventRepository,
     return bcpEventMapper.entityToDto(persistedEvent)
   }
 
-  override fun deleteEventByTwilioNumber(number: String) {
-    val event = bcpEventRepo.findByTwilioNumber(number)
+  override fun deleteEventByTwilioNumber(twilioNumberId: Long) {
+    val event = bcpEventRepo.findByTwilioNumber_Id(twilioNumberId)
     event.ifPresent { bcpEventRepo.delete(it) }
   }
 
-  override fun getEventByNumber(number: String): BcpEventDto {
-    val event = bcpEventRepo.findByTwilioNumber(number)
+  override fun getEventByNumber(twilioNumberId: Long): BcpEventDto {
+    val event = bcpEventRepo.findByTwilioNumber_Id(twilioNumberId)
     return bcpEventMapper.entityToDto(event.orElseThrow { BcpEventException("Event not found") })
   }
 }

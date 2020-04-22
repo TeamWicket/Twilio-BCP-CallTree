@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.wicket.calltree.dto.InboundSmsDto;
+import org.wicket.calltree.enums.SmsStatus;
 import org.wicket.calltree.service.TwilioServiceImpl;
 import org.wicket.calltree.services.utils.MessageMapper;
 
@@ -41,7 +42,7 @@ class CallTreeServiceImplTest {
         assertThat(inboundSmsDto.getSmsStatus()).isNotNull();
 
         assertEquals("US", inboundSmsDto.getToCountry());
-        assertEquals("received", inboundSmsDto.getSmsStatus());
+        assertEquals(SmsStatus.RECEIVED, inboundSmsDto.getSmsStatus());
         assertEquals("3", inboundSmsDto.getBody());
         assertEquals("GB", inboundSmsDto.getFromCountry());
         assertEquals("+441234", inboundSmsDto.getFromContactNumber());

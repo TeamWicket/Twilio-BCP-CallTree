@@ -34,10 +34,10 @@ public class BcpEvent {
     @Nullable
     private ZonedDateTime timestamp = ZonedDateTime.now();
 
-    @Column(name = "twilio_number", unique = true)
+    @ManyToOne
+    @JoinColumn(name = "twilio_numbers")
     @NotNull
-    @NotBlank
-    private String twilioNumber;
+    private TwilioNumber twilioNumber;
 
     @Version
     private Long version;

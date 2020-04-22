@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.wicket.calltree.enums.SmsStatus;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
@@ -26,7 +27,7 @@ public class InboundSmsDto {
     private String toCountry;
 
     @NotNull
-    private String smsStatus;
+    private SmsStatus smsStatus;
 
     @NotNull
     private String body;
