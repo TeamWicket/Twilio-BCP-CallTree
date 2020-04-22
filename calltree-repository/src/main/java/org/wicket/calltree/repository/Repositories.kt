@@ -6,6 +6,7 @@ import org.wicket.calltree.models.InboundSms
 import org.wicket.calltree.models.OutboundSms
 import org.wicket.calltree.models.TwilioNumber
 import java.util.*
+import javax.validation.constraints.NotNull
 
 /**
  * @author Alessandro Arosio - 13/04/2020 22:35
@@ -29,4 +30,5 @@ interface BcpEventRepository : JpaRepository<BcpEvent, Long> {
 
 interface TwilioNumberRepository : JpaRepository<TwilioNumber, Long> {
     fun findByTwilioNumber(number: String): Optional<TwilioNumber>
+    fun findAllByIsAvailable(isAvailable: @NotNull Boolean): List<TwilioNumber>
 }

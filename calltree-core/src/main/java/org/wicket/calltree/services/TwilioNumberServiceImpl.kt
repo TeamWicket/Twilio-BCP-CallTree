@@ -15,4 +15,27 @@ class TwilioNumberServiceImpl(private val numberRepository: TwilioNumberReposito
                 .map { twilioNumberMapper.entityToDto(it) }
                 .collect(Collectors.toList())
     }
+
+    override fun saveNewNumber(newNumberDto: TwilioNumberDto): TwilioNumberDto {
+        val number = twilioNumberMapper.dtoToEntity(newNumberDto)
+        val persisted = numberRepository.save(number)
+        return twilioNumberMapper.entityToDto(persisted)
+    }
+
+    override fun deleteNumber(numberDto: TwilioNumberDto) {
+        val findById = numberRepository.findById(numberDto.id)
+        findById.ifPresent { numberRepository.delete(it) }
+    }
+
+    override fun getAvailableNumbers(): List<TwilioNumberDto> {
+        val numbersAvailable = numberRepository.findAllByIsAvailable(true)
+        return numbersAvailable.stream()
+            .map { twilioNumberMapper.entityToDto(it) }
+            .collect(Collectors.toList())
+    }
+
+    override fun findByNumber(number: String): TwilioNumberDto {
+        val entity = numberRepository.findByTwilioNumber(number)
+        entity.get().let { return twilioNumberMapper.entityToDto(it) }
+    }
 }
