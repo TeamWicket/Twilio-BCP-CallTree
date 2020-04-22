@@ -1,18 +1,18 @@
 package org.wicket.calltree.config;
 
+import com.twilio.Twilio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.wicket.calltree.dto.ContactDto;
 import org.wicket.calltree.enums.CallingOption;
 import org.wicket.calltree.enums.Role;
+import org.wicket.calltree.enums.SmsStatus;
 import org.wicket.calltree.mappers.ContactMapper;
 import org.wicket.calltree.models.BcpEvent;
 import org.wicket.calltree.models.InboundSms;
 import org.wicket.calltree.models.OutboundSms;
-import org.wicket.calltree.repository.BcpEventRepository;
-import org.wicket.calltree.repository.ContactRepository;
-import org.wicket.calltree.repository.InboundSmsRepository;
-import org.wicket.calltree.repository.OutBoundSmsRepository;
+import org.wicket.calltree.models.TwilioNumber;
+import org.wicket.calltree.repository.*;
 
 import javax.annotation.PostConstruct;
 import java.time.ZonedDateTime;
@@ -30,6 +30,7 @@ public class Bootstrap {
     private final InboundSmsRepository inboundRepo;
     private final OutBoundSmsRepository outboundRepo;
     private final BcpEventRepository bcpEventRepository;
+    private final TwilioNumberRepository twilioNumberRepository;
 
     private static final String TWILIO_NUMBER = "+0132456";
 
@@ -73,8 +74,11 @@ public class Bootstrap {
                 .map(mapper::dtoToContact)
                 .collect(Collectors.toList()));
 
+        TwilioNumber twilioNumber = new TwilioNumber(null, TWILIO_NUMBER, true);
+        TwilioNumber persistedNumber = twilioNumberRepository.save(twilioNumber);
+
         BcpEvent bcpEvent = new BcpEvent(null, "TEST-EVENT",
-                ZonedDateTime.parse("2020-04-14T18:42:06.000Z"), TWILIO_NUMBER, null);
+                ZonedDateTime.parse("2020-04-14T18:42:06.000Z"), persistedNumber, null);
         BcpEvent persistedEvent = bcpEventRepository.save(bcpEvent);
 
         InboundSms inbound = new InboundSms();
@@ -82,7 +86,7 @@ public class Bootstrap {
         inbound.setFromContactNumber("+444");
         inbound.setToTwilioNumber(TWILIO_NUMBER);
         inbound.setFromCountry("GB");
-        inbound.setSmsStatus("received");
+        inbound.setSmsStatus(SmsStatus.RECEIVED);
         inbound.setTimestamp("2020-04-14T19:44:50.851113+01:00[Europe/London]");
 
         inboundRepo.save(inbound);

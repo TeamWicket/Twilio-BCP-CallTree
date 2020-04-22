@@ -6,6 +6,7 @@ import lombok.val;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.wicket.calltree.dto.*;
+import org.wicket.calltree.enums.SmsStatus;
 import org.wicket.calltree.exceptions.BcpEventException;
 import org.wicket.calltree.model.BcpContactStats;
 import org.wicket.calltree.model.BcpStartRequest;
@@ -79,9 +80,9 @@ public class CallTreeServiceImpl implements CallTreeService {
     }
 
     @Override
-    public void endEvent(@NotNull String twilioNumber) {
-        smsService.terminateEvent(twilioNumber);
-        bcpEventService.deleteEventByTwilioNumber(twilioNumber);
+    public void endEvent(TwilioNumberDto twilioNumber) {
+        smsService.terminateEvent(twilioNumber.getTwilioNumber());
+        bcpEventService.deleteEventByTwilioNumber(twilioNumber.getId());
     }
 
     @NotNull
@@ -92,13 +93,13 @@ public class CallTreeServiceImpl implements CallTreeService {
 
     @NotNull
     @Override
-    public BcpStats calculateStats(@NotNull String twilioNumber, long minutes) {
-        List<InboundSmsDto> inboundResponses = smsService.findInboundMessagesByTwilioNumber(twilioNumber);
-        List<OutboundSmsDto> outboundResponses = smsService.findOutboundMessagesByTwilioNumber(twilioNumber);
-        String eventTime = bcpEventService.getEventByNumber(twilioNumber).getTimestamp();
+    public BcpStats calculateStats(@NotNull TwilioNumberDto twilioNumber, long minutes) {
+        List<InboundSmsDto> inboundResponses = smsService.findInboundMessagesByTwilioNumber(twilioNumber.getTwilioNumber());
+        List<OutboundSmsDto> outboundResponses = smsService.findOutboundMessagesByTwilioNumber(twilioNumber.getTwilioNumber());
+        String eventTime = bcpEventService.getEventByNumber(twilioNumber.getId()).getTimestamp();
 
         Double averageTime = calculateOverallAverage(eventTime, inboundResponses);
-        Double responseBelowXMinutes = calculateResponseWithinXMinutes(twilioNumber, minutes, eventTime);
+        Double responseBelowXMinutes = calculateResponseWithinXMinutes(twilioNumber.getTwilioNumber(), minutes, eventTime);
 
         BcpStats bcpStats = new BcpStats();
         bcpStats.setMessagesSent(inboundResponses.size());
@@ -164,7 +165,7 @@ public class CallTreeServiceImpl implements CallTreeService {
 
         // mapping from the APIs. These values will not change.
         inboundSmsDto.setToCountry(chunks[0].replace("ToCountry=", ""));
-        inboundSmsDto.setSmsStatus(chunks[8].replace("SmsStatus=", ""));
+        inboundSmsDto.setSmsStatus(SmsStatus.RECEIVED);
         inboundSmsDto.setBody(chunks[10].replace("Body=", ""));
         inboundSmsDto.setFromCountry(chunks[11].replace("FromCountry=", ""));
         inboundSmsDto.setToTwilioNumber(chunks[12].replace("To=%2B", "+"));
@@ -192,7 +193,7 @@ public class CallTreeServiceImpl implements CallTreeService {
     }
 
     private BcpEventDto saveNewEvent(BcpStartRequest request) {
-        BcpEventDto eventDto = bcpEventService.getEventByNumber(request.getTwilioNumber());
+        BcpEventDto eventDto = bcpEventService.getEventByNumber(request.getTwilioNumber().getId());
         if (eventDto.getId() != null) {
             throw new BcpEventException("This number is being used for the event: " + eventDto.getEventName() +
                     ", please release the number before initiate a new event");

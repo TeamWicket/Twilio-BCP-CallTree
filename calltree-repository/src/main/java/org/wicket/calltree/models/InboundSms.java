@@ -3,6 +3,7 @@ package org.wicket.calltree.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.wicket.calltree.enums.SmsStatus;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -26,7 +27,7 @@ public class InboundSms {
 
     @Column(name = "sms_status")
     @NotNull
-    private String smsStatus;
+    private SmsStatus smsStatus;
 
     @Column(name = "body")
     @NotNull

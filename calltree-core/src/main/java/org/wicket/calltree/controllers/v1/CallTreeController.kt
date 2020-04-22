@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import org.wicket.calltree.dto.BcpEventDto
+import org.wicket.calltree.dto.TwilioNumberDto
 import org.wicket.calltree.model.BcpContactStats
 import org.wicket.calltree.model.BcpStartRequest
 import org.wicket.calltree.model.BcpStats
@@ -28,7 +29,7 @@ class CallTreeController(private val service: CallTreeService) {
 
   @GetMapping("/stats/{number}", produces = [MediaType.APPLICATION_JSON_VALUE])
   @Operation(summary = "Calculate stats")
-  fun getStats(@PathVariable number: String, @RequestParam minutes: Long): BcpStats {
+  fun getStats(@PathVariable number: TwilioNumberDto, @RequestParam minutes: Long): BcpStats {
     return service.calculateStats(number, minutes)
   }
 
@@ -59,7 +60,7 @@ class CallTreeController(private val service: CallTreeService) {
   @GetMapping("/terminate/{twilioNumber}", produces = [MediaType.APPLICATION_JSON_VALUE])
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @Operation(summary = "Terminate a BCP event")
-  fun terminateCallTree(@PathVariable twilioNumber: String) {
+  fun terminateCallTree(@PathVariable twilioNumber: TwilioNumberDto) {
     service.endEvent(twilioNumber)
   }
 }

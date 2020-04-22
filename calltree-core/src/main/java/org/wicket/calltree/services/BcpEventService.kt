@@ -12,8 +12,8 @@ interface BcpEventService {
 
   fun saveEvent(eventDto: BcpEventDto) : BcpEventDto
 
-  fun deleteEventByTwilioNumber(number: String)
+  fun deleteEventByTwilioNumber(twilioNumberId: Long)
 
-  fun getEventByNumber(number: String): BcpEventDto
+  fun getEventByNumber(twilioNumberId: Long): BcpEventDto
 
 }
