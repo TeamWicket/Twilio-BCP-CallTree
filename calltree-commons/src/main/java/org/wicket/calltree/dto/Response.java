@@ -53,4 +53,5 @@ public class Response {
     private String to;
     @JsonProperty("uri")
     private String uri;
+    private BcpEventDto bcpEvent;
 }

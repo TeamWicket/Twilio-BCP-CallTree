@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 public class OutboundSms {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @NotNull
@@ -45,6 +45,11 @@ public class OutboundSms {
     @NotNull
     @Column(name = "status")
     private String status;
+
+    @ManyToOne
+    @JoinColumn(name = "bcp_event_id")
+    @NotNull
+    private BcpEvent bcpEvent;
 
     @Version
     private Long version;
