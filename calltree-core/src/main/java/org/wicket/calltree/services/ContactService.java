@@ -16,7 +16,8 @@ public interface ContactService {
 
     void deleteContact(Long id);
 
-    List<ContactDto> getAllContacts(@Nullable String orderDirection, @Nullable String orderByValue);
+    List<ContactDto> getAllContacts(@Nullable String orderDirection, @Nullable String orderByValue,
+                                    @Nullable Integer page, @Nullable Integer size);
 
     ContactDto getContact(Long id);
 

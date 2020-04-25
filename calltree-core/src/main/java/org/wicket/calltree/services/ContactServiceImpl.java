@@ -1,6 +1,8 @@
 package org.wicket.calltree.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.wicket.calltree.dto.ContactDto;
 import org.wicket.calltree.enums.Role;
@@ -14,6 +16,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.springframework.data.domain.Sort.Direction;
+import static org.springframework.data.domain.Sort.by;
 
 /**
  * @author Alessandro Arosio - 07/04/2020 20:23
@@ -61,13 +66,29 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public List<ContactDto> getAllContacts(@Nullable String orderDirection, @Nullable String orderByValue) {
+    public List<ContactDto> getAllContacts(@Nullable String orderDirection, @Nullable String orderByValue,
+                                           @Nullable Integer page, @Nullable Integer size) {
         List<Contact> contactList;
 
-        if (orderDirection == null || orderByValue == null) {
+        // if all the params are null, return all elements
+        if ((orderDirection == null || orderByValue == null) &&
+                (page == null || size == null)) {
             contactList = repository.findAll();
-        } else {
+
+            // sorting is null, paging is NOT null
+        } else if ((orderDirection == null || orderByValue == null) &&
+                (page != null && size != null)) {
+            Page<Contact> result = repository.findAll(PageRequest.of(page, size));
+            return result.getContent().stream().map(mapper::contactToDto).collect(Collectors.toList());
+
+            // sorting NOT null, paging is null
+        } else if ((orderDirection != null && orderByValue != null) &&
+                (page == null || size == null)) {
             contactList = sortedlist(orderDirection, orderByValue);
+
+            // all params are NOT null
+        } else {
+            contactList = sortedPagedList(orderDirection, orderByValue, page, size);
         }
 
         return contactList.stream()
@@ -137,5 +158,21 @@ public class ContactServiceImpl implements ContactService {
         }
 
         return repository.findAll();
+    }
+
+    private List<Contact> sortedPagedList(String orderDirection, String orderValue, Integer page, Integer size) {
+
+        if (orderDirection.equalsIgnoreCase("asc") &&
+                orderValue.equalsIgnoreCase("lastName")) {
+            return repository.findAll(PageRequest.of(page, size, by(Direction.ASC, orderValue))).getContent();
+        } else if (orderDirection.equalsIgnoreCase("desc")
+                && orderValue.equalsIgnoreCase("lastName")) {
+            return repository.findAll(PageRequest.of(page, size, by(Direction.DESC, orderValue))).getContent();
+        } else if (orderDirection.equalsIgnoreCase("asc")
+                && orderValue.equalsIgnoreCase("firstName")) {
+            return repository.findAll(PageRequest.of(page, size, by(Direction.ASC, orderValue))).getContent();
+        } else  {
+            return repository.findAll(PageRequest.of(page, size, by(Direction.DESC, orderValue))).getContent();
+        }
     }
 }
