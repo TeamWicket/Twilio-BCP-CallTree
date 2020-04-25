@@ -1,6 +1,5 @@
 package org.wicket.calltree.config;
 
-import com.twilio.Twilio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -10,8 +9,7 @@ import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.enums.SmsStatus;
 import org.wicket.calltree.mappers.ContactMapper;
 import org.wicket.calltree.models.BcpEvent;
-import org.wicket.calltree.models.InboundSms;
-import org.wicket.calltree.models.OutboundSms;
+import org.wicket.calltree.models.BcpEventSms;
 import org.wicket.calltree.models.TwilioNumber;
 import org.wicket.calltree.repository.*;
 
@@ -29,8 +27,7 @@ import java.util.stream.Collectors;
 public class Bootstrap {
     private final ContactRepository contactRepository;
     private final ContactMapper mapper;
-    private final InboundSmsRepository inboundRepo;
-    private final OutBoundSmsRepository outboundRepo;
+    private final BcpEventSmsRepository bcpEventSmsRepository;
     private final BcpEventRepository bcpEventRepository;
     private final TwilioNumberRepository twilioNumberRepository;
 
@@ -83,25 +80,17 @@ public class Bootstrap {
                 ZonedDateTime.parse("2020-04-14T18:42:06.000Z"), persistedNumber, null);
         BcpEvent persistedEvent = bcpEventRepository.save(bcpEvent);
 
-        InboundSms inbound = new InboundSms();
-        inbound.setBody("Hello!");
-        inbound.setFromContactNumber("+444");
-        inbound.setToTwilioNumber(TWILIO_NUMBER);
-        inbound.setFromCountry("GB");
-        inbound.setSmsStatus(SmsStatus.RECEIVED);
-        inbound.setTimestamp("2020-04-14T19:44:50.851113+01:00[Europe/London]");
+        BcpEventSms eventSms = new BcpEventSms();
+        eventSms.setBcpEvent(persistedEvent);
+        eventSms.setOutboundMessage("testing sms persistence");
+        eventSms.setDateCreated("14 April 2020 at 18:43:25 UTC");
+        eventSms.setSmsStatus(SmsStatus.RECEIVED);
+        eventSms.setRecipientNumber("+444");
+        eventSms.setRecipientCountry("GB");
+        eventSms.setRecipientMessage("Hello!");
+        eventSms.setRecipientTimestamp("2020-04-14T19:44:50.851113+01:00[Europe/London]");
 
-        inboundRepo.save(inbound);
-
-        OutboundSms outbound = new OutboundSms();
-        outbound.setBody("testing sms persistence");
-        outbound.setDateCreated("14 April 2020 at 18:43:25 UTC");
-        outbound.setToNumber("+444");
-        outbound.setStatus("queued");
-        outbound.setFromNumber(TWILIO_NUMBER);
-        outbound.setBcpEvent(persistedEvent);
-
-        outboundRepo.save(outbound);
+        bcpEventSmsRepository.save(eventSms);
 
     }
 }

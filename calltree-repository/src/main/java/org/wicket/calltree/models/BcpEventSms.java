@@ -3,6 +3,7 @@ package org.wicket.calltree.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.wicket.calltree.enums.SmsStatus;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,11 +16,16 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Entity
 @Table(name = "outbound_sms")
-public class OutboundSms {
+public class BcpEventSms {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "bcp_event_id")
+    @NotNull
+    private BcpEvent bcpEvent;
 
     @NotNull
     @Column(name = "date_created")
@@ -31,25 +37,28 @@ public class OutboundSms {
     @Column(name = "date_sent")
     private String dateSent;
 
-    @Column(name = "body")
     @NotNull
-    private String body;
+    @Column(name = "outbound_message")
+    private String outboundMessage;
 
-    @Column(name = "from_number")
-    private String fromNumber;
+    @Column(name = "sms_status")
+    private SmsStatus smsStatus;
 
+    @Column(name = "recipient_number")
     @NotNull
-    @Column(name = "to_number")
-    private String toNumber;
+    private String recipientNumber;
 
-    @NotNull
-    @Column(name = "status")
-    private String status;
+    @Column(name = "recipient_country")
+    private String recipientCountry;
 
-    @ManyToOne
-    @JoinColumn(name = "bcp_event_id")
-    @NotNull
-    private BcpEvent bcpEvent;
+    @Column(name = "recipient_message")
+    private String recipientMessage;
+
+    @Column(name = "recipient_timestamp")
+    private String recipientTimestamp;
+
+    @Column(name = "error_message")
+    private String errorMessage;
 
     @Version
     private Long version;

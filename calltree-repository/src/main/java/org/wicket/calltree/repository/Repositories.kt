@@ -3,7 +3,7 @@ package org.wicket.calltree.repository
 import org.springframework.data.jpa.repository.JpaRepository
 import org.wicket.calltree.models.BcpEvent
 import org.wicket.calltree.models.InboundSms
-import org.wicket.calltree.models.OutboundSms
+import org.wicket.calltree.models.BcpEventSms
 import org.wicket.calltree.models.TwilioNumber
 import java.util.*
 import javax.validation.constraints.NotNull
@@ -12,14 +12,9 @@ import javax.validation.constraints.NotNull
  * @author Alessandro Arosio - 13/04/2020 22:35
  */
 
-interface InboundSmsRepository : JpaRepository<InboundSms, Long> {
-    fun findAllByToTwilioNumber(twilioNumber: String): List<InboundSms>
-    fun deleteAllByToTwilioNumber(number: String)
-}
-
-interface OutBoundSmsRepository : JpaRepository<OutboundSms, Long> {
-    fun findAllByBcpEventAndToNumber(event: BcpEvent, twilioNumber: String): List<OutboundSms>
-    fun findAllByFromNumber(twilioNumber: String): List<OutboundSms>
+interface BcpEventSmsRepository : JpaRepository<BcpEventSms, Long> {
+    fun findAllByBcpEventAndRecipientNumber(event: BcpEvent, twilioNumber: String): List<BcpEventSms>
+    fun findAllByBcpEvent_Id(bcpEventId: Long): List<BcpEventSms>
 }
 
 interface BcpEventRepository : JpaRepository<BcpEvent, Long> {

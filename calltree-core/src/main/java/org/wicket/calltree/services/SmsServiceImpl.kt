@@ -1,51 +1,36 @@
 package org.wicket.calltree.services
 
 import org.springframework.stereotype.Service
-import org.wicket.calltree.dto.InboundSmsDto
-import org.wicket.calltree.dto.OutboundSmsDto
+import org.wicket.calltree.dto.BcpEventSmsDto
 import org.wicket.calltree.dto.Response
-import org.wicket.calltree.mappers.InboundSmsMapper
-import org.wicket.calltree.mappers.OutboundSmsMapper
-import org.wicket.calltree.models.TwilioNumber
-import org.wicket.calltree.repository.InboundSmsRepository
-import org.wicket.calltree.repository.OutBoundSmsRepository
-import org.wicket.calltree.repository.TwilioNumberRepository
+import org.wicket.calltree.mappers.BcpEventSmsMapper
+import org.wicket.calltree.models.BcpEventSms
+import org.wicket.calltree.repository.BcpEventSmsRepository
 import java.util.stream.Collectors
 
 @Service
-class SmsServiceImpl(private val outboundMapper: OutboundSmsMapper,
-                     private val inboundMapper: InboundSmsMapper,
-                     private val outBoundRepository: OutBoundSmsRepository,
-                     private val inboundRepository: InboundSmsRepository) : SmsService {
+class SmsServiceImpl(private val bcpEventSmsMapper: BcpEventSmsMapper,
+                     private val bcpEventRepository: BcpEventSmsRepository) : SmsService {
 
   override fun saveOutboundSms(responseList: List<Response>) {
     responseList.forEach {
-      val mappedEntity = outboundMapper.responseToEntity(it)
-      outBoundRepository.save(mappedEntity)
+      val mappedEntity: BcpEventSms = bcpEventSmsMapper.responseToEntity(it)
+      bcpEventRepository.save(mappedEntity)
     }
   }
 
-  override fun saveInboundSms(inboundSmsDto: InboundSmsDto) {
-    val mappedEntity = inboundMapper.dtoToEntity(inboundSmsDto)
-    inboundRepository.save(mappedEntity)
+  override fun saveInboundSms(inboundSmsDto: BcpEventSmsDto) {
+    //@todo
   }
 
   override fun terminateEvent(twilioNumber: String) {
-    val smsForEvent = inboundRepository.findAllByToTwilioNumber(twilioNumber)
-    inboundRepository.deleteAll(smsForEvent)
+    //@todo
   }
 
-  override fun findOutboundMessagesByTwilioNumber(twilioNumber: String): List<OutboundSmsDto> {
-    val outboundList = outBoundRepository.findAllByFromNumber(twilioNumber)
+  override fun findMessagesByBcpEvent(bcpEventId: Long): List<BcpEventSmsDto> {
+    val outboundList = bcpEventRepository.findAllByBcpEvent_Id(bcpEventId)
     return outboundList.stream()
-        .map { outboundMapper.entityToDto(it) }
-        .collect(Collectors.toList())
-  }
-
-  override fun findInboundMessagesByTwilioNumber(twilioNumber: String): List<InboundSmsDto> {
-    val inboundList = inboundRepository.findAllByToTwilioNumber(twilioNumber)
-    return inboundList.stream()
-        .map { inboundMapper.entityToDto(it) }
+        .map { bcpEventSmsMapper.entityToDto(it) }
         .collect(Collectors.toList())
   }
 }
