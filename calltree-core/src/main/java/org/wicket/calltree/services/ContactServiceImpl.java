@@ -9,6 +9,7 @@ import org.wicket.calltree.mappers.ContactMapper;
 import org.wicket.calltree.models.Contact;
 import org.wicket.calltree.repository.ContactRepository;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -60,8 +61,18 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public List<ContactDto> getAllContacts() {
-        return repository.findAll().stream()
+    public List<ContactDto> getAllContacts(@Nullable String order) {
+        List<Contact> contactList;
+
+        if (order != null && order.equalsIgnoreCase("asc")) {
+            contactList = repository.findByOrderByLastNameAsc();
+        } else if (order != null && order.equalsIgnoreCase("desc")) {
+            contactList = repository.findByOrderByLastNameDesc();
+        } else {
+            contactList = repository.findAll();
+        }
+
+        return contactList.stream()
                 .map(mapper::contactToDto)
                 .collect(Collectors.toList());
     }

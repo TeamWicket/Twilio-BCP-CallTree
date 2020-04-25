@@ -3,6 +3,7 @@ package org.wicket.calltree.services;
 import org.wicket.calltree.dto.ContactDto;
 import org.wicket.calltree.enums.Role;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public interface ContactService {
 
     void deleteContact(Long id);
 
-    List<ContactDto> getAllContacts();
+    List<ContactDto> getAllContacts(@Nullable String order);
 
     ContactDto getContact(Long id);
 

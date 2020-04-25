@@ -12,6 +12,7 @@ import java.util.Optional;
  */
 public interface ContactRepository extends JpaRepository<Contact, Long> {
     List<Contact> findAllByRoleEquals(Role role);
-
     Optional<Contact> findByPhoneNumber(String phoneNumber);
+    List<Contact> findByOrderByLastNameAsc();
+    List<Contact> findByOrderByLastNameDesc();
 }
