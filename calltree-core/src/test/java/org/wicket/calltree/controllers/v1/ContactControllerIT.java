@@ -46,14 +46,14 @@ class ContactControllerIT {
 
     @BeforeEach
     void setUp() {
-        System.out.println("Before each test: " + contactService.getAllContacts(null).size());
+        System.out.println("Before each test: " + contactService.getAllContacts(null, null).size());
         mapper = new ObjectMapper().registerModule(new KotlinModule());
         writer = mapper.writerWithDefaultPrettyPrinter();
     }
 
     @AfterEach
     void tearDown() {
-        System.out.println("AFTER each test: " + contactService.getAllContacts(null).size());
+        System.out.println("AFTER each test: " + contactService.getAllContacts(null, null).size());
     }
 
     @Test
@@ -89,6 +89,7 @@ class ContactControllerIT {
         MvcResult mvcResult = mvc.perform(
                 get(API_ROOT.concat("/all"))
                         .param("orderBy", "ASC")
+                        .param("orderValue", "lastName")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content()
@@ -107,7 +108,8 @@ class ContactControllerIT {
         System.out.println("FETCH all orderBy DESC");
         MvcResult mvcResult = mvc.perform(
                 get(API_ROOT.concat("/all"))
-                        .param("orderBy", "DESC")
+                        .param("orderDirection", "DESC")
+                        .param("orderByValue", "lastName")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content()
@@ -122,9 +124,29 @@ class ContactControllerIT {
     }
 
     @Test
+    void fetchAllContact_ReturnsListOrderedByFirstName_DESC() throws Exception {
+        System.out.println("FETCH all orderBy DESC");
+        MvcResult mvcResult = mvc.perform(
+                get(API_ROOT.concat("/all"))
+                        .param("orderDirection", "DESC")
+                        .param("orderByValue", "firstName")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(4)))
+                .andReturn();
+
+        String s = mvcResult.getResponse().getContentAsString();
+        val list = List.of(mapper.readValue(s, ContactDto[].class));
+
+        assertEquals("Richard", list.get(0).getFirstName());
+    }
+
+    @Test
     void saveContact_WithValidProperties_ReturnsSuccess_StatusIsCreated() throws Exception {
         System.out.println("SAVE OK");
-        assertThat(contactService.getAllContacts(null)).hasSize(3);
+        assertThat(contactService.getAllContacts(null, null)).hasSize(3);
 
         ContactDto contact = new ContactDto();
         contact.setFirstName("Alessandro");
@@ -143,14 +165,14 @@ class ContactControllerIT {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", notNullValue()));
 
-        assertThat(contactService.getAllContacts(null)).hasSize(4);
+        assertThat(contactService.getAllContacts(null, null)).hasSize(4);
     }
 
     @Test
     void saveContact_WithInvalidProperties_ReturnsFail_WithStatus400() throws Exception {
         System.out.println("SAVE fail");
 
-        assertThat(contactService.getAllContacts(null)).hasSize(4);
+        assertThat(contactService.getAllContacts(null, null)).hasSize(4);
 
         ContactDto contact = new ContactDto();
         contact.setFirstName("Alessandro");
@@ -167,13 +189,13 @@ class ContactControllerIT {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
 
-        assertThat(contactService.getAllContacts(null)).hasSize(4);
+        assertThat(contactService.getAllContacts(null, null)).hasSize(4);
     }
 
     @Test
     void updateContact_ReturnsStatusOk() throws Exception {
         System.out.println("UPDATE");
-        assertEquals(4, contactService.getAllContacts(null).size());
+        assertEquals(4, contactService.getAllContacts(null, null).size());
         ContactDto contact = contactService.getContact(3L);
 
         assertEquals("Ralph", contact.getFirstName());
@@ -193,13 +215,13 @@ class ContactControllerIT {
                 .andExpect(jsonPath("$.id", equalTo(contact.getId().intValue())))
                 .andExpect(jsonPath("$.firstName", equalTo(newFirstName)));
 
-        assertEquals(4, contactService.getAllContacts(null).size());
+        assertEquals(4, contactService.getAllContacts(null, null).size());
     }
 
     @Test
     void removeContact_ReturnsStatus_NoContent() throws Exception {
         System.out.println("REMOVE");
-        assertEquals(4, contactService.getAllContacts(null).size());
+        assertEquals(4, contactService.getAllContacts(null, null).size());
 
         ContactDto contact = contactService.getContact(3L);
 
@@ -211,7 +233,7 @@ class ContactControllerIT {
                         .content(body))
                 .andExpect(status().isNoContent());
 
-        assertEquals(3, contactService.getAllContacts(null).size());
+        assertEquals(3, contactService.getAllContacts(null, null).size());
     }
 
     @Test

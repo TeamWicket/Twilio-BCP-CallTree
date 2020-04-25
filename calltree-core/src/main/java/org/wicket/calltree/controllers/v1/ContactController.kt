@@ -18,8 +18,9 @@ class ContactController(private val contactService: ContactService) {
 
   @GetMapping("/all", produces = [MediaType.APPLICATION_JSON_VALUE])
   @Operation(summary = "Fetch all contacts")
-  fun fetchAllContacts(@RequestParam(required = false) orderBy: String?) : List<ContactDto> {
-    return contactService.getAllContacts(orderBy)
+  fun fetchAllContacts(@RequestParam(required = false) orderDirection: String?,
+                       @RequestParam(required = false) orderByValue: String?) : List<ContactDto> {
+    return contactService.getAllContacts(orderDirection, orderByValue)
   }
 
   @GetMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])

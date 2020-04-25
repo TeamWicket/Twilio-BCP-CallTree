@@ -61,15 +61,13 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public List<ContactDto> getAllContacts(@Nullable String order) {
+    public List<ContactDto> getAllContacts(@Nullable String orderDirection, @Nullable String orderByValue) {
         List<Contact> contactList;
 
-        if (order != null && order.equalsIgnoreCase("asc")) {
-            contactList = repository.findByOrderByLastNameAsc();
-        } else if (order != null && order.equalsIgnoreCase("desc")) {
-            contactList = repository.findByOrderByLastNameDesc();
-        } else {
+        if (orderDirection == null || orderByValue == null) {
             contactList = repository.findAll();
+        } else {
+            contactList = sortedlist(orderDirection, orderByValue);
         }
 
         return contactList.stream()
@@ -120,5 +118,24 @@ public class ContactServiceImpl implements ContactService {
     public ContactDto fetchContactByPhoneNumber(String string) {
         Optional<Contact> contact = repository.findByPhoneNumber(string);
         return mapper.contactToDto(contact.orElseThrow(ContactException::new));
+    }
+
+    private List<Contact> sortedlist(String orderDirection, String orderValue) {
+
+        if (orderDirection.equalsIgnoreCase("asc") &&
+                orderValue.equalsIgnoreCase("lastName")) {
+            return repository.findByOrderByLastNameAsc();
+        } else if (orderDirection.equalsIgnoreCase("desc")
+                && orderValue.equalsIgnoreCase("lastName")) {
+            return repository.findByOrderByLastNameDesc();
+        } else if (orderDirection.equalsIgnoreCase("asc")
+                && orderValue.equalsIgnoreCase("firstName")) {
+            return repository.findByOrderByFirstNameAsc();
+        } else if (orderDirection.equalsIgnoreCase("desc")
+                && orderValue.equalsIgnoreCase("firstName")) {
+            return repository.findByOrderByFirstNameDesc();
+        }
+
+        return repository.findAll();
     }
 }

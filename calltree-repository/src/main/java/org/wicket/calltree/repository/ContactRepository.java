@@ -15,4 +15,7 @@ public interface ContactRepository extends JpaRepository<Contact, Long> {
     Optional<Contact> findByPhoneNumber(String phoneNumber);
     List<Contact> findByOrderByLastNameAsc();
     List<Contact> findByOrderByLastNameDesc();
+    List<Contact> findByOrderByFirstNameAsc();
+    List<Contact> findByOrderByFirstNameDesc();
+
 }
