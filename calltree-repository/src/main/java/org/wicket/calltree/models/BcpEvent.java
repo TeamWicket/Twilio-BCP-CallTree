@@ -39,6 +39,10 @@ public class BcpEvent {
     @NotNull
     private TwilioNumber twilioNumber;
 
+    @Column(name = "is_active")
+    @NotNull
+    private Boolean isActive;
+
     @Version
     private Long version;
 }

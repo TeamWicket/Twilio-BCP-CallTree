@@ -10,9 +10,9 @@ import org.wicket.calltree.dto.Response;
 import org.wicket.calltree.enums.CallingOption;
 import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.mappers.ContactMapper;
-import org.wicket.calltree.mappers.OutboundSmsMapper;
+import org.wicket.calltree.mappers.BcpEventSmsMapper;
+import org.wicket.calltree.models.BcpMessage;
 import org.wicket.calltree.models.Contact;
-import org.wicket.calltree.models.OutboundSms;
 
 import java.util.List;
 
@@ -26,12 +26,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MapperTest {
 
     private static ContactMapper contactMapper;
-    private static OutboundSmsMapper outboundMapper;
+    private static BcpEventSmsMapper outboundMapper;
 
     @BeforeAll
     static void beforeAll() {
         contactMapper = Mappers.getMapper(ContactMapper.class);
-        outboundMapper = Mappers.getMapper(OutboundSmsMapper.class);
+        outboundMapper = Mappers.getMapper(BcpEventSmsMapper.class);
     }
 
     @Test
@@ -79,12 +79,13 @@ public class MapperTest {
         response.setApiVersion("v1");
         response.setErrorCode("0");
 
-        OutboundSms outboundSms = outboundMapper.responseToEntity(response);
+        BcpMessage bcpEventSms = outboundMapper.responseToEntity(response);
 
-        assertEquals(response.getBody(), outboundSms.getBody());
-        assertEquals(response.getDateCreated(), outboundSms.getDateCreated());
-        assertEquals(response.getTo(), outboundSms.getToNumber());
-        assertNull(outboundSms.getFromNumber());
-        assertEquals(response.getStatus(), outboundSms.getStatus());
+        assertEquals(response.getBody(), bcpEventSms.getOutboundMessage());
+        assertEquals(response.getDateCreated(), bcpEventSms.getDateCreated());
+        assertEquals(response.getDateUpdated(), bcpEventSms.getDateUpdated());
+        assertEquals(response.getDateSent(), bcpEventSms.getDateSent());
+        assertEquals(response.getTo(), bcpEventSms.getRecipientNumber());
+        assertNull(bcpEventSms.getSmsStatus());
     }
 }

@@ -17,11 +17,11 @@ interface CallTreeService {
 
   fun fetchTwilioNumbers(): List<String>
 
-  fun endEvent(twilioNumber: TwilioNumberDto)
+  fun endEvent(bcpEventDto: BcpEventDto)
 
   fun checkEvent(): List<BcpEventDto>
 
   fun calculateStats(twilioNumber: TwilioNumberDto, minutes: Long): BcpStats
 
-  fun contactsStats(twilioNumber: String): List<BcpContactStats>
+  fun contactsStats(bcpEventId: Long): List<BcpContactStats>
 }

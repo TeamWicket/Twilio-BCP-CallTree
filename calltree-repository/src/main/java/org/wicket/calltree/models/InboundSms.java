@@ -48,6 +48,11 @@ public class InboundSms {
     @NotNull
     private String toTwilioNumber;
 
+    @ManyToOne
+    @JoinColumn(name = "bcp_event_id")
+    @NotNull
+    private BcpEvent bcpEvent;
+
     @Version
     private Long version;
 }

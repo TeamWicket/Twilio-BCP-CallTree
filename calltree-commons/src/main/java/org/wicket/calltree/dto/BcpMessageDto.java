@@ -3,6 +3,7 @@ package org.wicket.calltree.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.wicket.calltree.enums.SmsStatus;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
@@ -13,31 +14,37 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OutboundSmsDto {
+public class BcpMessageDto {
 
     @Nullable
     private Long id;
 
     @NotNull
-    private String dateCreated;
+    private BcpEventDto bcpEvent;
 
     @NotNull
-    private String body;
+    private String dateCreated;
 
     private String dateUpdated;
 
     private String dateSent;
 
-    private String fromNumber;
+    @NotNull
+    private String outboundMessage;
 
     @NotNull
-    private String toNumber;
+    private SmsStatus smsStatus;
 
     @NotNull
-    private String status;
+    private String recipientNumber;
 
-    @NotNull
-    private BcpEventDto bcpEvent;
+    private String recipientCountry;
+
+    private String recipientMessage;
+
+    private String recipientTimestamp;
+
+    private String errorMessage;
 
     private Long version;
 }
