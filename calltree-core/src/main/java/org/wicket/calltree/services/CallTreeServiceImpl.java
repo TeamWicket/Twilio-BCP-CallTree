@@ -68,12 +68,12 @@ public class CallTreeServiceImpl implements CallTreeService {
     @NotNull
     @Override
     public String replyToSms(@NotNull String body) {
-        BcpEventSmsDto bcpEventSmsDto = smsParser(body);
-        ContactDto contactDto = contactService.fetchContactByPhoneNumber(bcpEventSmsDto.getRecipientNumber());
+        BcpMessageDto bcpMessageDto = smsParser(body);
+        ContactDto contactDto = contactService.fetchContactByPhoneNumber(bcpMessageDto.getRecipientNumber());
         ContactDto manager = contactService.getContact(contactDto.getPointOfContactId());
         String reply = buildReply(contactDto, manager);
 
-        smsService.saveBcpEventSms(bcpEventSmsDto);
+        smsService.saveBcpEventSms(bcpMessageDto);
 
         return twilioService.replyToReceivedSms(reply);
     }
@@ -122,7 +122,7 @@ public class CallTreeServiceImpl implements CallTreeService {
     @NotNull
     @Override
     public List<BcpContactStats> contactsStats(long bcpEventId) {
-        List<BcpEventSmsDto> messages = smsService.findMessagesByBcpEvent(bcpEventId);
+        List<BcpMessageDto> messages = smsService.findMessagesByBcpEvent(bcpEventId);
         val resultList = new ArrayList<BcpContactStats>();
 
         messages.forEach(msg -> {
@@ -140,7 +140,7 @@ public class CallTreeServiceImpl implements CallTreeService {
     }
 
     private Double calculateResponseWithinXMinutes(BcpEventDto bcpEvent, Long minutes, String eventTime) {
-        List<BcpEventSmsDto> messages = smsService.findMessagesByBcpEvent(bcpEvent.getId()).stream()
+        List<BcpMessageDto> messages = smsService.findMessagesByBcpEvent(bcpEvent.getId()).stream()
                 .filter(x -> x.getSmsStatus().equals(SmsStatus.RECEIVED))
                 .collect(Collectors.toList());
 
@@ -153,7 +153,7 @@ public class CallTreeServiceImpl implements CallTreeService {
     }
 
 
-    private Double calculateOverallAverage(String eventTime, List<BcpEventSmsDto> response) {
+    private Double calculateOverallAverage(String eventTime, List<BcpMessageDto> response) {
         List<Long> timeRespList = response.stream()
                 .map(e -> {
                     String replyTimestamp = e.getRecipientTimestamp();
@@ -165,7 +165,7 @@ public class CallTreeServiceImpl implements CallTreeService {
                 .orElseThrow(RuntimeException::new);
     }
 
-    protected BcpEventSmsDto smsParser(String body) {
+    protected BcpMessageDto smsParser(String body) {
         if (body == null) {
             throw new RuntimeException("body of incoming sms is null");
         }
@@ -173,7 +173,7 @@ public class CallTreeServiceImpl implements CallTreeService {
         String[] chunks = body.split("&");
 
         String fromPhone = chunks[20].replace("From=", "").replace("%2B", "+");
-        BcpEventSmsDto message = smsService.findActiveMessagesByRecipientNumber(fromPhone);
+        BcpMessageDto message = smsService.findActiveMessagesByRecipientNumber(fromPhone);
         if (message.getId() == null) {
             throw new RuntimeException(String.format("No active event for number: %s", fromPhone));
         }

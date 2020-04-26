@@ -11,8 +11,8 @@ import org.wicket.calltree.enums.CallingOption;
 import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.mappers.ContactMapper;
 import org.wicket.calltree.mappers.BcpEventSmsMapper;
+import org.wicket.calltree.models.BcpMessage;
 import org.wicket.calltree.models.Contact;
-import org.wicket.calltree.models.BcpEventSms;
 
 import java.util.List;
 
@@ -79,7 +79,7 @@ public class MapperTest {
         response.setApiVersion("v1");
         response.setErrorCode("0");
 
-        BcpEventSms bcpEventSms = outboundMapper.responseToEntity(response);
+        BcpMessage bcpEventSms = outboundMapper.responseToEntity(response);
 
         assertEquals(response.getBody(), bcpEventSms.getOutboundMessage());
         assertEquals(response.getDateCreated(), bcpEventSms.getDateCreated());

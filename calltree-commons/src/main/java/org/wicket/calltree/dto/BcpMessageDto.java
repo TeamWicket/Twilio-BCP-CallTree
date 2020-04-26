@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BcpEventSmsDto {
+public class BcpMessageDto {
 
     @Nullable
     private Long id;

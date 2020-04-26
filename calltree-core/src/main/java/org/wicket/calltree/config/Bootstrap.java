@@ -9,7 +9,7 @@ import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.enums.SmsStatus;
 import org.wicket.calltree.mappers.ContactMapper;
 import org.wicket.calltree.models.BcpEvent;
-import org.wicket.calltree.models.BcpEventSms;
+import org.wicket.calltree.models.BcpMessage;
 import org.wicket.calltree.models.TwilioNumber;
 import org.wicket.calltree.repository.*;
 
@@ -80,7 +80,7 @@ public class Bootstrap {
                 ZonedDateTime.parse("2020-04-14T18:42:06.000Z"), persistedNumber, false, null);
         BcpEvent persistedEvent = bcpEventRepository.save(bcpEvent);
 
-        BcpEventSms eventSms = new BcpEventSms();
+        BcpMessage eventSms = new BcpMessage();
         eventSms.setBcpEvent(persistedEvent);
         eventSms.setOutboundMessage("testing sms persistence");
         eventSms.setDateCreated("14 April 2020 at 18:43:25 UTC");

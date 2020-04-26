@@ -15,8 +15,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "outbound_sms")
-public class BcpEventSms {
+@Table(name = "bcp_message")
+public class BcpMessage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

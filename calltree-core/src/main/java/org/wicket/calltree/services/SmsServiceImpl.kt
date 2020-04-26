@@ -1,10 +1,10 @@
 package org.wicket.calltree.services
 
 import org.springframework.stereotype.Service
-import org.wicket.calltree.dto.BcpEventSmsDto
+import org.wicket.calltree.dto.BcpMessageDto
 import org.wicket.calltree.dto.Response
 import org.wicket.calltree.mappers.BcpEventSmsMapper
-import org.wicket.calltree.models.BcpEventSms
+import org.wicket.calltree.models.BcpMessage
 import org.wicket.calltree.repository.BcpEventSmsRepository
 import java.util.stream.Collectors
 
@@ -15,24 +15,24 @@ class SmsServiceImpl(private val bcpEventSmsMapper: BcpEventSmsMapper,
 
   override fun saveSmsFromResponse(responseList: List<Response>) {
     responseList.forEach {
-      val mappedEntity: BcpEventSms = bcpEventSmsMapper.responseToEntity(it)
+      val mappedEntity: BcpMessage = bcpEventSmsMapper.responseToEntity(it)
       bcpEventRepository.save(mappedEntity)
     }
   }
 
-  override fun saveBcpEventSms(bcpEventSmsDto: BcpEventSmsDto) {
-    val mappedEntity: BcpEventSms = bcpEventSmsMapper.dtoToEntity(bcpEventSmsDto)
+  override fun saveBcpEventSms(bcpMessageDto: BcpMessageDto) {
+    val mappedEntity: BcpMessage = bcpEventSmsMapper.dtoToEntity(bcpMessageDto)
     bcpEventSmsRepository.save(mappedEntity)
   }
 
-  override fun findMessagesByBcpEvent(bcpEventId: Long): List<BcpEventSmsDto> {
+  override fun findMessagesByBcpEvent(bcpEventId: Long): List<BcpMessageDto> {
     val messageList = bcpEventRepository.findAllByBcpEvent_Id(bcpEventId)
     return messageList.stream()
         .map { bcpEventSmsMapper.entityToDto(it) }
         .collect(Collectors.toList())
   }
 
-  override fun findActiveMessagesByRecipientNumber(recipientNumber: String): BcpEventSmsDto {
+  override fun findActiveMessagesByRecipientNumber(recipientNumber: String): BcpMessageDto {
     val message = bcpEventSmsRepository.findFirstByRecipientNumberAndBcpEvent_IsActive(recipientNumber, true);
     return bcpEventSmsMapper.entityToDto(message);
   }
