@@ -7,11 +7,8 @@ import org.wicket.calltree.dto.BcpMessageDto;
 import org.wicket.calltree.dto.Response;
 import org.wicket.calltree.models.BcpMessage;
 
-/**
- * @author Alessandro Arosio - 13/04/2020 22:27
- */
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface BcpEventSmsMapper {
+public interface BcpMessageMapper {
     BcpMessageDto entityToDto(BcpMessage bcpEventSms);
     BcpMessage dtoToEntity(BcpMessageDto dto);
 

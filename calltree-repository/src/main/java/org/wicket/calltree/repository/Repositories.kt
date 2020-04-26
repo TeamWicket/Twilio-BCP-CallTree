@@ -12,9 +12,10 @@ import javax.validation.constraints.NotNull
  * @author Alessandro Arosio - 13/04/2020 22:35
  */
 
-interface BcpEventSmsRepository : JpaRepository<BcpMessage, Long> {
-    @Query()
-    fun findFirstByRecipientNumberAndBcpEvent_IsActive(recipientNumber: String, @NotNull isActive:Boolean): BcpMessage
+interface BcpMessageRepository : JpaRepository<BcpMessage, Long> {
+    fun findFirstByRecipientNumberAndBcpEvent_TwilioNumber_TwilioNumberAndBcpEvent_IsActive(recipientNumber: String,
+                                                                                            teilioNumber: String,
+                                                                                            @NotNull isActive:Boolean): BcpMessage
     fun findAllByBcpEvent_Id(bcpEventId: Long): List<BcpMessage>
 }
 

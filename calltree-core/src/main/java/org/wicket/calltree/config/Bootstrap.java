@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class Bootstrap {
     private final ContactRepository contactRepository;
     private final ContactMapper mapper;
-    private final BcpEventSmsRepository bcpEventSmsRepository;
+    private final BcpMessageRepository bcpMessageRepository;
     private final BcpEventRepository bcpEventRepository;
     private final TwilioNumberRepository twilioNumberRepository;
 
@@ -80,6 +80,11 @@ public class Bootstrap {
                 ZonedDateTime.parse("2020-04-14T18:42:06.000Z"), persistedNumber, false, null);
         BcpEvent persistedEvent = bcpEventRepository.save(bcpEvent);
 
+
+        BcpEvent bcpEvent2 = new BcpEvent(null, "TEST-EVENT-QUEUE",
+                ZonedDateTime.parse("2020-04-20T18:42:06.000Z"), persistedNumber, true, null);
+        BcpEvent persistedEvent2 = bcpEventRepository.save(bcpEvent2);
+
         BcpMessage eventSms = new BcpMessage();
         eventSms.setBcpEvent(persistedEvent);
         eventSms.setOutboundMessage("testing sms persistence");
@@ -90,7 +95,16 @@ public class Bootstrap {
         eventSms.setRecipientMessage("Hello!");
         eventSms.setRecipientTimestamp("2020-04-14T19:44:50.851113+01:00[Europe/London]");
 
-        bcpEventSmsRepository.save(eventSms);
+        bcpMessageRepository.save(eventSms);
+
+        BcpMessage eventSms2 = new BcpMessage();
+        eventSms2.setBcpEvent(persistedEvent2);
+        eventSms2.setOutboundMessage("testing sms persistence");
+        eventSms2.setDateCreated("14 April 2020 at 18:43:25 UTC");
+        eventSms2.setSmsStatus(SmsStatus.SENT);
+        eventSms2.setRecipientNumber("+444");
+
+        bcpMessageRepository.save(eventSms2);
 
     }
 }
