@@ -41,4 +41,6 @@ public class ContactDto {
     private List<CallingOption> callingOption;
 
     private Long pointOfContactId;
+
+    private Long version;
 }

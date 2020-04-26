@@ -1,7 +1,9 @@
 package org.wicket.calltree.services;
 
 import org.wicket.calltree.dto.ContactDto;
+import org.wicket.calltree.enums.Role;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -14,7 +16,14 @@ public interface ContactService {
 
     void deleteContact(Long id);
 
-    List<ContactDto> getAllContacts();
+    List<ContactDto> getAllContacts(@Nullable String orderDirection, @Nullable String orderByValue,
+                                    @Nullable Integer page, @Nullable Integer size);
 
     ContactDto getContact(Long id);
+
+    List<ContactDto> getAllSelectedRole(Role role);
+
+    List<ContactDto> getCalltreeUntilRole(Role role);
+
+    ContactDto fetchContactByPhoneNumber(String string);
 }

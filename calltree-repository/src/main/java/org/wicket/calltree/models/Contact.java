@@ -22,7 +22,7 @@ import java.util.List;
 public class Contact {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @NotNull
@@ -34,7 +34,7 @@ public class Contact {
     private String lastName;
 
     @NotNull
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
     @NotNull
@@ -47,4 +47,7 @@ public class Contact {
 
     @Nullable
     private Long pointOfContactId;
+
+    @Version
+    private Long version;
 }

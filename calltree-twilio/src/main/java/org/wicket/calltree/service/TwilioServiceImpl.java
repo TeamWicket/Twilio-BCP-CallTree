@@ -1,0 +1,62 @@
+package org.wicket.calltree.service;
+
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.twiml.MessagingResponse;
+import com.twilio.twiml.messaging.Body;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.wicket.calltree.model.Recipient;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * @author Alessandro Arosio - 11/04/2020 14:10
+ */
+@Service
+public class TwilioServiceImpl implements TwilioService {
+
+    @Value("${account.sid}")
+    private String accountSid;
+
+    @Value("${auth.token}")
+    private String authToken;
+
+    @Value("${twilio.numbers}")
+    private String[] twilioNumbers;
+
+    @Override
+    public List<Message> sendSms(List<Recipient> recipients) {
+        Twilio.init(accountSid, authToken);
+        return recipients.stream()
+                .map(recipient ->
+                        Message.creator(
+                                recipient.getReceiver(),
+                                recipient.getSender(),
+                                recipient.getMessage()
+                        ).create()
+                )
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String replyToReceivedSms(String reply) {
+        Body body = new Body
+                .Builder(reply)
+                .build();
+        com.twilio.twiml.messaging.Message sms = new com.twilio.twiml.messaging.Message.Builder()
+                .body(body)
+                .build();
+        MessagingResponse twiml = new MessagingResponse.Builder()
+                .message(sms)
+                .build();
+        return twiml.toXml();
+    }
+
+    @Override
+    public List<String> getTwilioNumbers() {
+        return Arrays.asList(twilioNumbers);
+    }
+}
