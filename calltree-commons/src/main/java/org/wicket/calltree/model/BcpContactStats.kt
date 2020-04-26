@@ -7,6 +7,6 @@ class BcpContactStats(val fromTwilioNumber: String,
                       val textSent: String?,
                       val dateCreated: String,
                       val toContact: String,
-                      val smsAcknowledged: String,
+                      val inboundTimestamp: String,
                       val inboundText: String?,
                       val eventName: String)
