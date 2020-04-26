@@ -105,7 +105,7 @@ public class ContactServiceImpl implements ContactService {
     public ContactDto getContact(Long id) {
         Optional<Contact> contact = repository.findById(id);
         return contact.map(mapper::contactToDto)
-                .orElseThrow(() -> new ContactException("Contact not found wit ID: " + id));
+                .orElseThrow(() -> new ContactException("Contact not found with ID: " + id));
     }
 
     @Override
