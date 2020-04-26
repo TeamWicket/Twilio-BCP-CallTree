@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull
 @RequestMapping("/api/v1/numbers")
 class TwilioNumberController(private val numberService: TwilioNumberService) {
 
-    @GetMapping("/all", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Operation(summary = "Fetch all numbers")
     fun fetchAllNumbers(): List<TwilioNumberDto> {
         return numberService.getAllNumbers()
@@ -38,7 +38,7 @@ class TwilioNumberController(private val numberService: TwilioNumberService) {
         return numberService.getAvailableNumbers()
     }
 
-    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping("/{id}",produces = [MediaType.APPLICATION_JSON_VALUE])
     @Operation(summary = "Search Twilio entity by number")
     fun searchByNumber(@RequestParam @NotNull @NotBlank number: String): TwilioNumberDto {
         return numberService.findByNumber(number)
