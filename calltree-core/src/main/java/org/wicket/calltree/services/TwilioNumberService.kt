@@ -7,5 +7,5 @@ interface TwilioNumberService {
     fun saveNewNumber(newNumberDto: TwilioNumberDto): TwilioNumberDto
     fun deleteNumber(numberDto: TwilioNumberDto)
     fun getAvailableNumbers(): List<TwilioNumberDto>
-    fun findByNumber(number: String): TwilioNumberDto
+    fun getNumberById(id: Long): TwilioNumberDto
 }

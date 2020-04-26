@@ -4,11 +4,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.wicket.calltree.dto.TwilioNumberDto;
 import org.wicket.calltree.enums.CallingOption;
 import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.enums.SmsStatus;
-import org.wicket.calltree.model.BcpStats;
 import org.wicket.calltree.models.BcpEvent;
 import org.wicket.calltree.models.BcpMessage;
 import org.wicket.calltree.models.Contact;
@@ -22,7 +20,6 @@ import java.time.ZonedDateTime;
 
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 class CallTreeServiceImplIT {
@@ -89,15 +86,5 @@ class CallTreeServiceImplIT {
 
         assertThat(updatedMessage.getRecipientMessage()).isEqualTo(resposne);
         assertThat(updatedMessage.getSmsStatus()).isEqualTo(SmsStatus.RECEIVED);
-    }
-
-    @Test
-    void calculateStats() {
-        TwilioNumberDto twilioNumber = new TwilioNumberDto(1L, "+0132456", true);
-        long time = 5L;
-
-        BcpStats bcpStats = callTreeService.calculateStats(twilioNumber, time);
-
-        assertNotNull(bcpStats);
     }
 }
