@@ -77,7 +77,7 @@ public class Bootstrap {
         TwilioNumber persistedNumber = twilioNumberRepository.save(twilioNumber);
 
         BcpEvent bcpEvent = new BcpEvent(null, "TEST-EVENT",
-                ZonedDateTime.parse("2020-04-14T18:42:06.000Z"), persistedNumber, null);
+                ZonedDateTime.parse("2020-04-14T18:42:06.000Z"), persistedNumber, false, null);
         BcpEvent persistedEvent = bcpEventRepository.save(bcpEvent);
 
         BcpEventSms eventSms = new BcpEventSms();

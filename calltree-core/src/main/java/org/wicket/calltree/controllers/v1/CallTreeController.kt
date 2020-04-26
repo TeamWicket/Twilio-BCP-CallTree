@@ -35,8 +35,8 @@ class CallTreeController(private val service: CallTreeService) {
 
   @GetMapping("/stats/contacts/{number}", produces = [MediaType.APPLICATION_JSON_VALUE])
   @Operation(summary = "Calculate individual stats for each Contact")
-  fun calculateContactsStats(@PathVariable number: String) : List<BcpContactStats> {
-    return service.contactsStats(number)
+  fun calculateContactsStats(@PathVariable bcpEventId: Long) : List<BcpContactStats> {
+    return service.contactsStats(bcpEventId)
   }
 
   @PostMapping("/twilio", produces = [MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE])
@@ -60,7 +60,7 @@ class CallTreeController(private val service: CallTreeService) {
   @GetMapping("/terminate/{twilioNumber}", produces = [MediaType.APPLICATION_JSON_VALUE])
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @Operation(summary = "Terminate a BCP event")
-  fun terminateCallTree(@PathVariable twilioNumber: TwilioNumberDto) {
-    service.endEvent(twilioNumber)
+  fun terminateCallTree(@PathVariable bcpEventDto: BcpEventDto) {
+    service.endEvent(bcpEventDto)
   }
 }

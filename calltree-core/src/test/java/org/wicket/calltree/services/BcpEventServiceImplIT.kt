@@ -2,9 +2,8 @@ package org.wicket.calltree.services
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
-import org.junit.jupiter.api.MethodOrderer.*
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
 import org.springframework.beans.factory.annotation.Autowired
-
 import org.springframework.boot.test.context.SpringBootTest
 import org.wicket.calltree.dto.BcpEventDto
 import org.wicket.calltree.dto.TwilioNumberDto
@@ -20,54 +19,56 @@ import kotlin.test.assertEquals
 @SpringBootTest
 @TestMethodOrder(OrderAnnotation::class)
 internal class BcpEventServiceImplIT {
-  lateinit var twilioNumberDto: TwilioNumberDto
-  lateinit var persistedNumber: TwilioNumber
+    lateinit var twilioNumberDto: TwilioNumberDto
+    lateinit var persistedNumber: TwilioNumber
 
-  @Autowired
-  lateinit var bcpEventService: BcpEventService
-  @Autowired
-  lateinit var twilioNumberMapper: TwilioNumberMapper
-  @Autowired
-  lateinit var twilioNumberRepository: TwilioNumberRepository
+    @Autowired
+    lateinit var bcpEventService: BcpEventService
 
-  @BeforeAll
-  internal fun beforeAll() {
-      val twilioNumber = TwilioNumber(null, "+0987", true)
-      persistedNumber = twilioNumberRepository.save(twilioNumber)
-      twilioNumberDto = twilioNumberMapper.entityToDto(persistedNumber)
-  }
+    @Autowired
+    lateinit var twilioNumberMapper: TwilioNumberMapper
 
-  @Order(0)
-  @Test
-  internal fun testGetAllEvents() {
-    assertThat(bcpEventService.getAllEvents()).hasSize(1)
-  }
+    @Autowired
+    lateinit var twilioNumberRepository: TwilioNumberRepository
 
-  @Order(1)
-  @Test
-  fun deleteEventByTwilioNumber() {
-    val newEvent =  BcpEventDto(null, "JUNIT", null, twilioNumberDto, null)
-    bcpEventService.saveEvent(newEvent)
-    assertThat(bcpEventService.getAllEvents()).hasSize(2)
-  }
+    @BeforeAll
+    internal fun beforeAll() {
+        val twilioNumber = TwilioNumber(null, "+0987", true)
+        persistedNumber = twilioNumberRepository.save(twilioNumber)
+        twilioNumberDto = twilioNumberMapper.entityToDto(persistedNumber)
+    }
 
-  @Order(2)
-  @Test
-  fun getEventByNumber() {
-    val event = bcpEventService.getEventByNumber(twilioNumberDto.id ?: 0)
-    assertEquals("JUNIT", event.eventName)
+    @Order(0)
+    @Test
+    internal fun testGetAllEvents() {
+        assertThat(bcpEventService.getAllEvents()).hasSize(1)
+    }
 
-  }
+    @Order(1)
+    @Test
+    fun saveEvent() {
+        val newEvent = BcpEventDto(null, "JUNIT", null, twilioNumberDto, true, null)
+        bcpEventService.saveEvent(newEvent)
+        assertThat(bcpEventService.getAllEvents()).hasSize(2)
+    }
 
-  @Order(3)
-  @Test
-  internal fun testGetEventByNumber_EventNotFound_ThrowsException() {
-    assertThrows<BcpEventException> { bcpEventService.getEventByNumber(twilioNumberDto.id ?: 0) }
+    @Order(2)
+    @Test
+    fun getEventByNumber() {
+        val event = bcpEventService.getEventByNumber(twilioNumberDto.id ?: 0)
+        assertEquals("JUNIT", event.eventName)
 
-  }
+    }
 
-  @AfterAll
-  internal fun afterAll() {
-     twilioNumberRepository.delete(persistedNumber);
-  }
+    @Order(3)
+    @Test
+    internal fun testGetEventByNumber_EventNotFound_ThrowsException() {
+        assertThrows<BcpEventException> { bcpEventService.getEventByNumber(twilioNumberDto.id ?: 0) }
+
+    }
+
+    @AfterAll
+    internal fun afterAll() {
+        twilioNumberRepository.delete(persistedNumber);
+    }
 }

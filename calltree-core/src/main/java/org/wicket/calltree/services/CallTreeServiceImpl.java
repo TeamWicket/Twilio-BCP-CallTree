@@ -2,6 +2,7 @@ package org.wicket.calltree.services;
 
 import com.twilio.type.PhoneNumber;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.wicket.calltree.dto.*;
@@ -16,11 +17,11 @@ import org.wicket.calltree.services.utils.MessageMapper;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.emptyList;
 import static org.wicket.calltree.services.utils.TimeUtilsKt.zonedDateTimeDifference;
 
 /**
@@ -50,7 +51,7 @@ public class CallTreeServiceImpl implements CallTreeService {
                 .map(v -> {
                     Response response = mapper.messageToResponse(v);
                     response.setBcpEvent(event);
-                    if (Objects.equals(response.getStatus() ,"failed")) {
+                    if (Objects.equals(response.getStatus(), "failed")) {
                         response.setSmsStatus(SmsStatus.ERROR);
                     } else {
                         response.setSmsStatus(SmsStatus.SENT);
@@ -59,7 +60,7 @@ public class CallTreeServiceImpl implements CallTreeService {
                 })
                 .collect(Collectors.toList());
 
-        smsService.saveOutboundSms(responses);
+        smsService.saveSmsFromResponse(responses);
 
         return responses;
     }
@@ -67,16 +68,14 @@ public class CallTreeServiceImpl implements CallTreeService {
     @NotNull
     @Override
     public String replyToSms(@NotNull String body) {
-
-        //@todo
-        /*InboundSmsDto inboundSmsDto = smsParser(body);
-        ContactDto contactDto = contactService.fetchContactByPhoneNumber(inboundSmsDto.getFromContactNumber());
+        BcpEventSmsDto bcpEventSmsDto = smsParser(body);
+        ContactDto contactDto = contactService.fetchContactByPhoneNumber(bcpEventSmsDto.getRecipientNumber());
         ContactDto manager = contactService.getContact(contactDto.getPointOfContactId());
         String reply = buildReply(contactDto, manager);
 
-        smsService.saveInboundSms(inboundSmsDto);*/
+        smsService.saveBcpEventSms(bcpEventSmsDto);
 
-        return "string";//twilioService.replyToReceivedSms(reply);
+        return twilioService.replyToReceivedSms(reply);
     }
 
     @NotNull
@@ -86,9 +85,9 @@ public class CallTreeServiceImpl implements CallTreeService {
     }
 
     @Override
-    public void endEvent(TwilioNumberDto twilioNumber) {
-        smsService.terminateEvent(twilioNumber.getTwilioNumber());
-        bcpEventService.deleteEventByTwilioNumber(twilioNumber.getId());
+    public void endEvent(BcpEventDto bcpEventDto) {
+        bcpEventDto.setIsActive(false);
+        bcpEventService.saveEvent(bcpEventDto);
     }
 
     @NotNull
@@ -100,7 +99,7 @@ public class CallTreeServiceImpl implements CallTreeService {
     @NotNull
     @Override
     public BcpStats calculateStats(@NotNull TwilioNumberDto twilioNumber, long minutes) {
-        BcpEventDto event = bcpEventService.getEventByNumber(twilioNumber.getId());
+       /* BcpEventDto event = bcpEventService.getEventByNumber(twilioNumber.getId());
         List<BcpEventSmsDto> messages = smsService.findMessagesByBcpEvent(event.getId());
         String eventTime = bcpEventService.getEventByNumber(twilioNumber.getId()).getTimestamp();
 
@@ -115,42 +114,42 @@ public class CallTreeServiceImpl implements CallTreeService {
         bcpStats.setAverage(averageTime);
         bcpStats.setReplyPercentageWithinXMinutes(responseBelowXMinutes);
 
-        return bcpStats;
+        return bcpStats;*/
+        //@todo needs reworked as part of stats story
+        return new BcpStats();
     }
 
     @NotNull
     @Override
-    public List<BcpContactStats> contactsStats(@NotNull String twilioNumber) {
-        /*List<InboundSmsDto> inboundResponses = smsService.findInboundMessagesByTwilioNumber(twilioNumber);
-        List<BcpEventSmsDto> outboundResponses = smsService.findOutboundMessagesByTwilioNumber(twilioNumber);
+    public List<BcpContactStats> contactsStats(long bcpEventId) {
+        List<BcpEventSmsDto> messages = smsService.findMessagesByBcpEvent(bcpEventId);
         val resultList = new ArrayList<BcpContactStats>();
 
-        outboundResponses.forEach(out -> {
-            Optional<InboundSmsDto> match = inboundResponses.stream()
-                    .filter(in -> out.getRecipientNumber().equals(in.getFromContactNumber()))
-                    .findFirst();
-            match.ifPresent(inSms -> {
-                val stats = new BcpContactStats(out.getBcpEvent().getTwilioNumber().getTwilioNumber(),
-                        out.getOutboundMessage(),
-                        out.getDateCreated(),
-                        out.getRecipientNumber(), inSms.getTimestamp(), inSms.getBody(), out.getBcpEvent().getEventName());
-                resultList.add(stats);
-            });
-        });*/
+        messages.forEach(msg -> {
+            val stats = new BcpContactStats(msg.getBcpEvent().getTwilioNumber().getTwilioNumber(),
+                    msg.getOutboundMessage(),
+                    msg.getDateCreated(),
+                    msg.getRecipientNumber(),
+                    msg.getRecipientTimestamp(),
+                    msg.getRecipientMessage(),
+                    msg.getBcpEvent().getEventName());
+            resultList.add(stats);
+        });
 
-        return emptyList();//@todo return with new SMS resultList;
+        return resultList;
     }
 
-    private Double calculateResponseWithinXMinutes(String twilioNumber, Long minutes, String eventTime) {
-        /*List<InboundSmsDto> inboundList = smsService.findInboundMessagesByTwilioNumber(twilioNumber);
+    private Double calculateResponseWithinXMinutes(BcpEventDto bcpEvent, Long minutes, String eventTime) {
+        List<BcpEventSmsDto> messages = smsService.findMessagesByBcpEvent(bcpEvent.getId()).stream()
+                .filter(x -> x.getSmsStatus().equals(SmsStatus.RECEIVED))
+                .collect(Collectors.toList());
 
-        long numberOfReplies = inboundList.stream().filter(sms -> {
-            long difference = zonedDateTimeDifference(eventTime, sms.getTimestamp(), ChronoUnit.MINUTES);
+        long numberOfReplies = messages.stream().filter(sms -> {
+            long difference = zonedDateTimeDifference(eventTime, sms.getRecipientTimestamp(), ChronoUnit.MINUTES);
             return difference < minutes;
-        }).count(); */
+        }).count();
 
-        //@todo implement for new SMS
-        return 1d;//(inboundList.size() * 100) / (double) numberOfReplies;
+        return (messages.size() * 100) / (double) numberOfReplies;
     }
 
 
@@ -166,14 +165,19 @@ public class CallTreeServiceImpl implements CallTreeService {
                 .orElseThrow(RuntimeException::new);
     }
 
-    protected BcpEventSmsDto smsParser(String body, BcpEventSmsDto message) {
+    protected BcpEventSmsDto smsParser(String body) {
         if (body == null) {
             throw new RuntimeException("body of incoming sms is null");
         }
 
         String[] chunks = body.split("&");
 
-        // mapping from the APIs. These values will not change.
+        String fromPhone = chunks[20].replace("From=", "").replace("%2B", "+");
+        BcpEventSmsDto message = smsService.findActiveMessagesByRecipientNumber(fromPhone);
+        if (message.getId() == null) {
+            throw new RuntimeException(String.format("No active event for number: %s", fromPhone));
+        }
+
         message.setSmsStatus(SmsStatus.RECEIVED);
         message.setRecipientMessage(chunks[10].replace("Body=", ""));
         message.setRecipientCountry(chunks[0].replace("FromCountry=", ""));
@@ -206,7 +210,7 @@ public class CallTreeServiceImpl implements CallTreeService {
                     ", please release the number before initiate a new event");
         }
         var event = new BcpEventDto(null, request.getEventName(),
-                null, request.getTwilioNumber(), null);
+                null, request.getTwilioNumber(), true, null);
         return bcpEventService.saveEvent(event);
     }
 }
