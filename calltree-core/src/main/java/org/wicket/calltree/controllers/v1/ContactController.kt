@@ -16,7 +16,7 @@ import javax.validation.Valid
 @RequestMapping("/api/v1/contacts")
 class ContactController(private val contactService: ContactService) {
 
-  @GetMapping("/all", produces = [MediaType.APPLICATION_JSON_VALUE])
+  @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
   @Operation(summary = "Fetch all contacts")
   fun fetchAllContacts(@RequestParam(required = false) orderDirection: String?,
                        @RequestParam(required = false) orderByValue: String?,
