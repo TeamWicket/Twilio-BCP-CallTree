@@ -63,4 +63,10 @@ class ContactController(private val contactService: ContactService) {
   fun updateContact(@RequestBody @Valid contactDto: ContactDto) : ContactDto {
     return contactService.saveOrUpdate(contactDto)
   }
+
+  @GetMapping("/many", produces = [MediaType.APPLICATION_JSON_VALUE])
+  @Operation(summary = "Get many contacts by ID")
+  fun getMany(@RequestParam vararg id: Long): List<ContactDto> {
+    return contactService.fetchManyContactsById(id)
+  }
 }
