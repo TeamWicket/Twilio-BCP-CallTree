@@ -10,13 +10,13 @@ import org.wicket.calltree.services.utils.zonedDateTimeDifference
 import java.time.temporal.ChronoUnit
 
 @Service
-class StatsServiceImpl(private val smsService: SmsService,
+class StatsServiceImpl(private val bcpMessageService: BcpMessageService,
                        private val bcpEventService: BcpEventService) : StatsService {
 
   override fun calculateStats(eventId: Long, responseWithinMinutes: Long): BcpStats {
     val event = bcpEventService.getEventById(eventId)
     val eventTimestamp = event.timestamp
-    val eventMessages = smsService.findMessagesByBcpEvent(event.id!!)
+    val eventMessages = bcpMessageService.findMessagesByBcpEvent(event.id!!)
     val average = calculateOverallAverage(eventTimestamp!!, eventMessages)
     val receivedSms = countReceivedSms(eventMessages)
     val percentageResponse = eventMessages.size * 100 / receivedSms.toDouble()
@@ -25,7 +25,7 @@ class StatsServiceImpl(private val smsService: SmsService,
   }
 
   override fun contactStats(eventId: Long): List<BcpContactStats> {
-    val eventMessages = smsService.findMessagesByBcpEvent(eventId)
+    val eventMessages = bcpMessageService.findMessagesByBcpEvent(eventId)
     return eventMessages.map {
       val stats = BcpContactStats(
           it.bcpEvent.twilioNumber.twilioNumber,
