@@ -26,6 +26,11 @@ import static org.springframework.data.domain.Sort.by;
 @Service
 @RequiredArgsConstructor
 public class ContactServiceImpl implements ContactService {
+    private static final String LAST_NAME = "lastName";
+    private static final String FIRST_NAME = "firstName";
+    private static final String ASC = "asc";
+    private static final String DESC = "desc";
+
     private final ContactRepository repository;
     private final ContactMapper mapper;
 
@@ -143,17 +148,17 @@ public class ContactServiceImpl implements ContactService {
 
     private List<Contact> sortedlist(String orderDirection, String orderValue) {
 
-        if (orderDirection.equalsIgnoreCase("asc") &&
-                orderValue.equalsIgnoreCase("lastName")) {
+        if (orderDirection.equalsIgnoreCase(ASC) &&
+                orderValue.equalsIgnoreCase(LAST_NAME)) {
             return repository.findByOrderByLastNameAsc();
-        } else if (orderDirection.equalsIgnoreCase("desc")
-                && orderValue.equalsIgnoreCase("lastName")) {
+        } else if (orderDirection.equalsIgnoreCase(DESC)
+                && orderValue.equalsIgnoreCase(LAST_NAME)) {
             return repository.findByOrderByLastNameDesc();
-        } else if (orderDirection.equalsIgnoreCase("asc")
-                && orderValue.equalsIgnoreCase("firstName")) {
+        } else if (orderDirection.equalsIgnoreCase(ASC)
+                && orderValue.equalsIgnoreCase(FIRST_NAME)) {
             return repository.findByOrderByFirstNameAsc();
-        } else if (orderDirection.equalsIgnoreCase("desc")
-                && orderValue.equalsIgnoreCase("firstName")) {
+        } else if (orderDirection.equalsIgnoreCase(DESC)
+                && orderValue.equalsIgnoreCase(FIRST_NAME)) {
             return repository.findByOrderByFirstNameDesc();
         }
 
@@ -162,14 +167,14 @@ public class ContactServiceImpl implements ContactService {
 
     private List<Contact> sortedPagedList(String orderDirection, String orderValue, Integer page, Integer size) {
 
-        if (orderDirection.equalsIgnoreCase("asc") &&
-                orderValue.equalsIgnoreCase("lastName")) {
+        if (orderDirection.equalsIgnoreCase(ASC) &&
+                orderValue.equalsIgnoreCase(LAST_NAME)) {
             return repository.findAll(PageRequest.of(page, size, by(Direction.ASC, orderValue))).getContent();
-        } else if (orderDirection.equalsIgnoreCase("desc")
-                && orderValue.equalsIgnoreCase("lastName")) {
+        } else if (orderDirection.equalsIgnoreCase(DESC)
+                && orderValue.equalsIgnoreCase(LAST_NAME)) {
             return repository.findAll(PageRequest.of(page, size, by(Direction.DESC, orderValue))).getContent();
-        } else if (orderDirection.equalsIgnoreCase("asc")
-                && orderValue.equalsIgnoreCase("firstName")) {
+        } else if (orderDirection.equalsIgnoreCase(ASC)
+                && orderValue.equalsIgnoreCase(FIRST_NAME)) {
             return repository.findAll(PageRequest.of(page, size, by(Direction.ASC, orderValue))).getContent();
         } else  {
             return repository.findAll(PageRequest.of(page, size, by(Direction.DESC, orderValue))).getContent();
