@@ -20,8 +20,4 @@ interface CallTreeService {
   fun endEvent(bcpEventDto: BcpEventDto)
 
   fun checkEvent(): List<BcpEventDto>
-
-  fun calculateStats(twilioNumber: TwilioNumberDto, minutes: Long): BcpStats
-
-  fun contactsStats(bcpEventId: Long): List<BcpContactStats>
 }

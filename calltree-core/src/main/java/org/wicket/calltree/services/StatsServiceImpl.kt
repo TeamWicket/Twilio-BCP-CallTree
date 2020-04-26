@@ -25,7 +25,19 @@ class StatsServiceImpl(private val smsService: SmsService,
   }
 
   override fun contactStats(eventId: Long): List<BcpContactStats> {
-    TODO("Not yet implemented")
+    val eventMessages = smsService.findMessagesByBcpEvent(eventId)
+    return eventMessages.map {
+      val stats = BcpContactStats(
+          it.bcpEvent.twilioNumber.twilioNumber,
+          it.outboundMessage,
+          it.dateCreated,
+          it.recipientNumber,
+          it.recipientTimestamp,
+          it.recipientMessage,
+          it.bcpEvent.eventName
+      )
+      stats
+    }.toList()
   }
 
   private fun calculateOverallAverage(eventTime: String, messagesList: List<BcpMessageDto>): Double {

@@ -27,18 +27,6 @@ class CallTreeController(private val service: CallTreeService) {
     service.initiateCalls(bcpStartRequest)
   }
 
-  @GetMapping("/stats/{number}", produces = [MediaType.APPLICATION_JSON_VALUE])
-  @Operation(summary = "Calculate stats")
-  fun getStats(@PathVariable number: TwilioNumberDto, @RequestParam minutes: Long): BcpStats {
-    return service.calculateStats(number, minutes)
-  }
-
-  @GetMapping("/stats/contacts/{number}", produces = [MediaType.APPLICATION_JSON_VALUE])
-  @Operation(summary = "Calculate individual stats for each Contact")
-  fun calculateContactsStats(@PathVariable bcpEventId: Long) : List<BcpContactStats> {
-    return service.contactsStats(bcpEventId)
-  }
-
   @PostMapping("/twilio", produces = [MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE])
   @Operation(summary = "Reply to incoming SMS (Twilio specific only)")
   fun replyToIncomingSms(@RequestBody body: String): String {
