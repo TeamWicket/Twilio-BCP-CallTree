@@ -1,14 +1,18 @@
 package org.wicket.calltree.controllers.v1
 
 import io.swagger.v3.oas.annotations.Operation
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
+import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.*
 import org.wicket.calltree.dto.BcpEventDto
 import org.wicket.calltree.dto.TwilioNumberDto
 import org.wicket.calltree.model.BcpContactStats
 import org.wicket.calltree.model.BcpStartRequest
 import org.wicket.calltree.model.BcpStats
+import org.wicket.calltree.models.BcpEvent
 import org.wicket.calltree.services.CallTreeService
 import javax.validation.Valid
 import kotlin.math.min
@@ -33,16 +37,15 @@ class CallTreeController(private val service: CallTreeService) {
     return service.replyToSms(body)
   }
 
-  @GetMapping("/twilio-numbers", produces = [MediaType.APPLICATION_JSON_VALUE])
-  @Operation(summary = "Get all registered Twilio numbers")
-  fun getAllTwilioNumbers(): List<String> {
-    return service.fetchTwilioNumbers()
-  }
-
   @GetMapping("/twilio/events", produces = [MediaType.APPLICATION_JSON_VALUE])
   @Operation(summary = "Get all active events")
-  fun checkActiveEvents(): List<BcpEventDto> {
-    return service.checkEvent()
+  fun checkActiveEvents(@RequestParam page: Int,
+                        @RequestParam size: Int): ResponseEntity<List<BcpEvent>> {
+    val totalEvents = service.pagedEvents(page, size)
+    val map = HttpHeaders()
+    map["X-Total-Count"] = totalEvents.totalElements.toString()
+
+    return ResponseEntity<List<BcpEvent>>(totalEvents.content, map, HttpStatus.OK);
   }
 
   @GetMapping("/terminate/{twilioNumber}", produces = [MediaType.APPLICATION_JSON_VALUE])
