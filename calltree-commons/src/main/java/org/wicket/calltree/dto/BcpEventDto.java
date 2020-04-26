@@ -31,6 +31,8 @@ public class BcpEventDto {
     @NotBlank
     private TwilioNumberDto twilioNumber;
 
+    private Boolean isActive;
+
     @Nullable
     private Long version;
 }

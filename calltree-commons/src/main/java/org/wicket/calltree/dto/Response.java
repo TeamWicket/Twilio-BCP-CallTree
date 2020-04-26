@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.wicket.calltree.enums.SmsStatus;
 
 import java.util.Currency;
 
@@ -54,4 +55,5 @@ public class Response {
     @JsonProperty("uri")
     private String uri;
     private BcpEventDto bcpEvent;
+    private SmsStatus smsStatus;
 }
