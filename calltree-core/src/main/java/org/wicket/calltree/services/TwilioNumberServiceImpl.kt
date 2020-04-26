@@ -34,8 +34,8 @@ class TwilioNumberServiceImpl(private val numberRepository: TwilioNumberReposito
             .collect(Collectors.toList())
     }
 
-    override fun findByNumber(number: String): TwilioNumberDto {
-        val entity = numberRepository.findByTwilioNumber(number)
-        entity.get().let { return twilioNumberMapper.entityToDto(it) }
+    override fun getNumberById(id: Long): TwilioNumberDto {
+        val number = numberRepository.findById(id)
+        number.get().let { return twilioNumberMapper.entityToDto(it) }
     }
 }

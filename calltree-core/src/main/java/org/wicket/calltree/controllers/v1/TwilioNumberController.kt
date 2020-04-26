@@ -39,8 +39,8 @@ class TwilioNumberController(private val numberService: TwilioNumberService) {
     }
 
     @GetMapping("/{id}",produces = [MediaType.APPLICATION_JSON_VALUE])
-    @Operation(summary = "Search Twilio entity by number")
-    fun searchByNumber(@RequestParam @NotNull @NotBlank number: String): TwilioNumberDto {
-        return numberService.findByNumber(number)
+    @Operation(summary = "Search Twilio number by id")
+    fun searchById(@PathVariable id: Long): TwilioNumberDto {
+        return numberService.getNumberById(id)
     }
 }
