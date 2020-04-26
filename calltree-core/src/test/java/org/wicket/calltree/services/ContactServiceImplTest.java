@@ -140,7 +140,7 @@ class ContactServiceImplTest {
         when(repository.findAll()).thenReturn(contactList);
         when(mockList.size()).thenReturn(contactList.size());
 
-        contactService.getAllContacts();
+        contactService.getAllContacts(null, null, null, null);
 
         assertThat(mockList).hasSize(3);
     }
