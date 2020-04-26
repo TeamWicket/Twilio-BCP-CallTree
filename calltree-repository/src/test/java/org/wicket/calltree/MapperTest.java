@@ -9,8 +9,8 @@ import org.wicket.calltree.dto.ContactDto;
 import org.wicket.calltree.dto.Response;
 import org.wicket.calltree.enums.CallingOption;
 import org.wicket.calltree.enums.Role;
+import org.wicket.calltree.mappers.BcpMessageMapper;
 import org.wicket.calltree.mappers.ContactMapper;
-import org.wicket.calltree.mappers.BcpEventSmsMapper;
 import org.wicket.calltree.models.BcpMessage;
 import org.wicket.calltree.models.Contact;
 
@@ -26,12 +26,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MapperTest {
 
     private static ContactMapper contactMapper;
-    private static BcpEventSmsMapper outboundMapper;
+    private static BcpMessageMapper outboundMapper;
 
     @BeforeAll
     static void beforeAll() {
         contactMapper = Mappers.getMapper(ContactMapper.class);
-        outboundMapper = Mappers.getMapper(BcpEventSmsMapper.class);
+        outboundMapper = Mappers.getMapper(BcpMessageMapper.class);
     }
 
     @Test
