@@ -28,4 +28,6 @@ public interface ContactService {
     List<ContactDto> getCalltreeUntilRole(Role role);
 
     ContactDto fetchContactByPhoneNumber(String string);
+
+    List<ContactDto> fetchManyContactsById(long[] id);
 }

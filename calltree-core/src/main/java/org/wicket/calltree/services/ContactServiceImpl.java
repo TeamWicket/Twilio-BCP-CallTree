@@ -12,6 +12,7 @@ import org.wicket.calltree.models.Contact;
 import org.wicket.calltree.repository.ContactRepository;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -153,6 +154,20 @@ public class ContactServiceImpl implements ContactService {
     public ContactDto fetchContactByPhoneNumber(String string) {
         Optional<Contact> contact = repository.findByPhoneNumber(string);
         return mapper.contactToDto(contact.orElseThrow(ContactException::new));
+    }
+
+    @Override
+    public List<ContactDto> fetchManyContactsById(long[] id) {
+        List<ContactDto> resultList = new ArrayList<>();
+
+        for (Long value : id) {
+            Optional<Contact> contact = repository.findById(value);
+            contact.ifPresent(c -> {
+                ContactDto dto = mapper.contactToDto(c);
+                resultList.add(dto);
+            });
+        }
+        return resultList;
     }
 
     private List<Contact> sortedlist(String orderDirection, String orderValue) {

@@ -7,16 +7,12 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.wicket.calltree.dto.ContactDto;
 import org.wicket.calltree.dto.Response;
-import org.wicket.calltree.enums.CallingOption;
 import org.wicket.calltree.enums.Role;
+import org.wicket.calltree.mappers.BcpMessageMapper;
 import org.wicket.calltree.mappers.ContactMapper;
-import org.wicket.calltree.mappers.BcpEventSmsMapper;
 import org.wicket.calltree.models.BcpMessage;
 import org.wicket.calltree.models.Contact;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -26,12 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MapperTest {
 
     private static ContactMapper contactMapper;
-    private static BcpEventSmsMapper outboundMapper;
+    private static BcpMessageMapper outboundMapper;
 
     @BeforeAll
     static void beforeAll() {
         contactMapper = Mappers.getMapper(ContactMapper.class);
-        outboundMapper = Mappers.getMapper(BcpEventSmsMapper.class);
+        outboundMapper = Mappers.getMapper(BcpMessageMapper.class);
     }
 
     @Test
@@ -41,12 +37,10 @@ public class MapperTest {
         contactDto.setLastName("Wicket");
         contactDto.setRole(Role.CHAMPION);
         contactDto.setPhoneNumber("+123");
-        contactDto.setCallingOption(List.of(CallingOption.WHATSAPP, CallingOption.SMS));
 
         var contact = contactMapper.dtoToContact(contactDto);
 
         assertNotNull(contact);
-        assertThat(contact.getCallingOption()).hasSize(2);
         assertEquals(contact.getRole(), contactDto.getRole());
     }
 
@@ -57,12 +51,10 @@ public class MapperTest {
         contact.setLastName("Wicket");
         contact.setRole(Role.CHAMPION);
         contact.setPhoneNumber("+123");
-        contact.setCallingOption(List.of(CallingOption.WHATSAPP));
 
         var dto = contactMapper.contactToDto(contact);
 
         assertNotNull(dto);
-        assertThat(dto.getCallingOption()).hasSize(1);
         assertEquals(dto.getRole(), contact.getRole());
     }
 
