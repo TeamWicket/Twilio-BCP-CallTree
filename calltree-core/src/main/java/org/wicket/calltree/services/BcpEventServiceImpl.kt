@@ -1,9 +1,12 @@
 package org.wicket.calltree.services
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.wicket.calltree.dto.BcpEventDto
 import org.wicket.calltree.exceptions.BcpEventException
 import org.wicket.calltree.mappers.BcpEventMapper
+import org.wicket.calltree.models.BcpEvent
 import org.wicket.calltree.repository.BcpEventRepository
 import java.util.stream.Collectors
 
@@ -35,5 +38,9 @@ class BcpEventServiceImpl(private val bcpEventRepo: BcpEventRepository,
   override fun getEventByNumber(twilioNumberId: Long): BcpEventDto {
     val event = bcpEventRepo.findByTwilioNumber_Id(twilioNumberId)
     return bcpEventMapper.entityToDto(event.orElseThrow { BcpEventException("Event not found") })
+  }
+
+  override fun getPagedEvents(page: Int, size: Int): Page<BcpEvent> {
+    return bcpEventRepo.findAll(PageRequest.of(page, size))
   }
 }

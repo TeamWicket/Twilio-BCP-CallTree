@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.wicket.calltree.dto.ContactDto;
-import org.wicket.calltree.enums.CallingOption;
 import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.services.ContactService;
 
@@ -175,7 +174,6 @@ class ContactControllerIT {
         contact.setLastName("Arosio");
         contact.setRole(Role.REPORTER);
         contact.setPointOfContactId(1L);
-        contact.setCallingOption(List.of(CallingOption.SMS));
         contact.setPhoneNumber("+1234");
 
         String body = writer.writeValueAsString(contact);
@@ -200,7 +198,6 @@ class ContactControllerIT {
         contact.setFirstName("Alessandro");
         contact.setLastName("Arosio");
         contact.setRole(Role.REPORTER);
-        contact.setCallingOption(List.of(CallingOption.SMS));
         contact.setPhoneNumber("+1234");
 
         String body = writer.writeValueAsString(contact);

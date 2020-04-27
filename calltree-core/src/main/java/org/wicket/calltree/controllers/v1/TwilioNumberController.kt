@@ -1,14 +1,15 @@
 package org.wicket.calltree.controllers.v1
 
 import io.swagger.v3.oas.annotations.Operation
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.wicket.calltree.dto.TwilioNumberDto
+import org.wicket.calltree.models.TwilioNumber
 import org.wicket.calltree.services.TwilioNumberService
 import javax.validation.Valid
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 
 @RestController
 @RequestMapping("/api/v1/numbers")
@@ -16,8 +17,12 @@ class TwilioNumberController(private val numberService: TwilioNumberService) {
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Operation(summary = "Fetch all numbers")
-    fun fetchAllNumbers(): List<TwilioNumberDto> {
-        return numberService.getAllNumbers()
+    fun fetchAllNumbers(@RequestParam page: Int,
+                        @RequestParam size: Int): ResponseEntity<List<TwilioNumber>> {
+        val result = numberService.getAllNumbers(page, size)
+        val map = HttpHeaders()
+        map["X-Total-Count"] = result.totalElements.toString()
+        return ResponseEntity<List<TwilioNumber>>(result.content, map, HttpStatus.OK)
     }
 
     @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -39,8 +44,8 @@ class TwilioNumberController(private val numberService: TwilioNumberService) {
     }
 
     @GetMapping("/{id}",produces = [MediaType.APPLICATION_JSON_VALUE])
-    @Operation(summary = "Search Twilio entity by number")
-    fun searchByNumber(@RequestParam @NotNull @NotBlank number: String): TwilioNumberDto {
-        return numberService.findByNumber(number)
+    @Operation(summary = "Search Twilio number by id")
+    fun searchById(@PathVariable id: Long): TwilioNumberDto {
+        return numberService.getNumberById(id)
     }
 }

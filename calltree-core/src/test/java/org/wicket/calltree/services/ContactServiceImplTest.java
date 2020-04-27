@@ -9,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.wicket.calltree.dto.ContactDto;
-import org.wicket.calltree.enums.CallingOption;
 import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.exceptions.ContactException;
 import org.wicket.calltree.mappers.ContactMapper;
@@ -100,10 +99,8 @@ class ContactServiceImplTest {
         Optional<Contact> opt = Optional.of(contact);
 
         assertEquals("oldName", contact.getFirstName());
-        assertThat(contact.getCallingOption()).hasSize(2);
 
         contact.setFirstName("NEW");
-        contact.setCallingOption(List.of(CallingOption.SMS));
 
         when(repository.findById(anyLong())).thenReturn(opt);
         when(mapper.dtoToContact(any(ContactDto.class))).thenReturn(contact);
@@ -111,7 +108,6 @@ class ContactServiceImplTest {
 
         contactService.saveOrUpdate(contactDto);
         assertEquals("NEW", contact.getFirstName());
-        assertThat(contact.getCallingOption()).hasSize(1);
         verify(repository, atMostOnce()).save(any(Contact.class));
     }
 
@@ -121,7 +117,6 @@ class ContactServiceImplTest {
 
         when(repository.findById(1L)).thenReturn(Optional.of(fromDb));
 
-        contactDto.setCallingOption(List.of(CallingOption.SMS));
         contactService.deleteContact(1L);
 
         verify(repository, atLeastOnce()).delete(fromDb);
@@ -171,7 +166,6 @@ class ContactServiceImplTest {
         contact.setId(9L);
         contact.setRole(Role.MANAGER);
         contact.setPhoneNumber("+000");
-        contact.setCallingOption(List.of(CallingOption.WHATSAPP, CallingOption.SMS));
         contact.setFirstName("oldName");
         contact.setLastName("Murphy");
         contact.setPointOfContactId(99L);

@@ -41,6 +41,7 @@ public class BcpMessage {
     @Column(name = "outbound_message")
     private String outboundMessage;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "sms_status")
     private SmsStatus smsStatus;
 
