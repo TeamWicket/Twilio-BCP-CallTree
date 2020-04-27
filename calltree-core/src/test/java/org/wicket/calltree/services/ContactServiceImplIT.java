@@ -29,7 +29,6 @@ public class ContactServiceImplIT {
         assertThat(allSelectedRole).hasSize(1);
         assertEquals("Ralph", allSelectedRole.get(0).getFirstName());
         assertEquals("Johnson", allSelectedRole.get(0).getLastName());
-        assertThat(allSelectedRole.get(0).getCallingOption()).hasSize(2);
         assertEquals(Role.LEADER, allSelectedRole.get(0).getRole());
     }
 

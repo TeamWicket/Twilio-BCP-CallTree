@@ -1,9 +1,11 @@
 package org.wicket.calltree.controllers.v1
 
 import io.swagger.v3.oas.annotations.Operation
+import org.springframework.data.domain.Sort
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.wicket.calltree.dto.TwilioNumberDto
 import org.wicket.calltree.model.BcpContactStats
 import org.wicket.calltree.model.BcpStats
 import org.wicket.calltree.services.StatsService
@@ -23,7 +25,13 @@ class StatsController(private val statsService: StatsService) {
 
   @GetMapping("/total", produces = [MediaType.APPLICATION_JSON_VALUE])
   @Operation(summary = "Calculate individual stats for each Contact")
-  fun calculateContactsStats(@RequestParam eventId: Long) : List<BcpContactStats> {
-    return statsService.contactStats(eventId)
+  fun calculateContactsStats(@RequestParam eventId: Long,
+                             @RequestParam orderByValue: String,
+                             @RequestParam direction: Sort.Direction,
+                             @RequestParam page: Int,
+                             @RequestParam size: Int) : ResponseEntity<List<BcpContactStats>> {
+
+//    return statsService.contactStats(eventId,,,, )
+    return ResponseEntity(HttpStatus.NO_CONTENT)
   }
 }

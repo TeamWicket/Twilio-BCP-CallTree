@@ -1,5 +1,7 @@
 package org.wicket.calltree.services
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Sort
 import org.wicket.calltree.model.BcpContactStats
 import org.wicket.calltree.model.BcpStats
 

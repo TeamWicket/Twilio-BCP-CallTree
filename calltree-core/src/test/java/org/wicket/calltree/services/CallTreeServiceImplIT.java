@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.wicket.calltree.enums.CallingOption;
 import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.enums.SmsStatus;
 import org.wicket.calltree.models.BcpEvent;
@@ -18,7 +17,6 @@ import org.wicket.calltree.repository.TwilioNumberRepository;
 
 import java.time.ZonedDateTime;
 
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -44,7 +42,6 @@ class CallTreeServiceImplIT {
         testManager.setLastName("O'Manager");
         testManager.setPhoneNumber("+" + RECIPIENT_NUMBER_TWO);
         testManager.setRole(Role.CHAMPION);
-        testManager.setCallingOption(singletonList(CallingOption.SMS));
         testManager.setVersion(0L);
         testManager = contactRepository.save(testManager);
 
@@ -53,7 +50,6 @@ class CallTreeServiceImplIT {
         testContact.setLastName("McTest");
         testContact.setPhoneNumber("+" + RECIPIENT_NUMBER_ONE);
         testContact.setRole(Role.LEADER);
-        testContact.setCallingOption(singletonList(CallingOption.SMS));
         testContact.setVersion(0L);
         testContact.setPointOfContactId(testManager.getId());
         testContact = contactRepository.save(testContact);

@@ -2,28 +2,26 @@ package org.wicket.calltree.services;
 
 import com.twilio.type.PhoneNumber;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
-import org.wicket.calltree.dto.*;
+import org.wicket.calltree.dto.BcpEventDto;
+import org.wicket.calltree.dto.BcpMessageDto;
+import org.wicket.calltree.dto.ContactDto;
+import org.wicket.calltree.dto.Response;
 import org.wicket.calltree.enums.SmsStatus;
 import org.wicket.calltree.exceptions.BcpEventException;
-import org.wicket.calltree.model.BcpContactStats;
 import org.wicket.calltree.model.BcpStartRequest;
-import org.wicket.calltree.model.BcpStats;
 import org.wicket.calltree.model.Recipient;
+import org.wicket.calltree.models.BcpEvent;
 import org.wicket.calltree.service.TwilioService;
 import org.wicket.calltree.services.utils.MessageMapper;
 
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import static org.wicket.calltree.services.utils.TimeUtilsKt.zonedDateTimeDifference;
 
 /**
  * @author Alessandro Arosio - 11/04/2020 16:01
@@ -82,12 +80,6 @@ public class CallTreeServiceImpl implements CallTreeService {
         return twilioService.replyToReceivedSms(reply);
     }
 
-    @NotNull
-    @Override
-    public List<String> fetchTwilioNumbers() {
-        return twilioService.getTwilioNumbers();
-    }
-
     @Override
     public void endEvent(BcpEventDto bcpEventDto) {
         bcpEventDto.setIsActive(false);
@@ -98,6 +90,12 @@ public class CallTreeServiceImpl implements CallTreeService {
     @Override
     public List<BcpEventDto> checkEvent() {
         return bcpEventService.getAllEvents();
+    }
+
+    @NotNull
+    @Override
+    public Page<BcpEvent> pagedEvents(int page, int size) {
+        return bcpEventService.getPagedEvents(page, size);
     }
 
     protected BcpMessageDto smsParser(String body) {

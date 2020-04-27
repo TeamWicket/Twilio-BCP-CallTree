@@ -1,5 +1,9 @@
 package org.wicket.calltree.services
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.wicket.calltree.dto.BcpMessageDto
 import org.wicket.calltree.dto.Response
@@ -36,5 +40,10 @@ class BcpMessageServiceImpl(private val bcpMessageMapper: BcpMessageMapper,
     val message = bcpMessageRepository.findFirstByRecipientNumberAndBcpEvent_TwilioNumber_TwilioNumberAndBcpEvent_IsActive(
             recipientNumber, twilioNumber, true)
     return bcpMessageMapper.entityToDto(message);
+  }
+
+  override fun getAllPageMessage(eventId: Long, orderValue: String, direction: Sort.Direction, page: Int, size: Int): Page<BcpMessage> {
+    val pg: Pageable = PageRequest.of(page, size,direction, orderValue)
+    return bcpMessageRepository.findAllByBcpEvent_Id(eventId, pg)
   }
 }
