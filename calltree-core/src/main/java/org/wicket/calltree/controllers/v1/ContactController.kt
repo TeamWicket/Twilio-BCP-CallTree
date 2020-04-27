@@ -1,29 +1,32 @@
 package org.wicket.calltree.controllers.v1
 
 import io.swagger.v3.oas.annotations.Operation
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.wicket.calltree.dto.ContactDto
 import org.wicket.calltree.enums.Role
 import org.wicket.calltree.services.ContactService
 import javax.validation.Valid
 
-/**
- * @author Alessandro Arosio - 10/04/2020 10:16
- */
 @RestController
 @RequestMapping("/api/v1/contacts")
 class ContactController(private val contactService: ContactService) {
 
   @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
   @Operation(summary = "Fetch all contacts")
-  fun fetchAllContacts(@RequestParam(required = false) orderDirection: String?,
-                       @RequestParam(required = false) orderByValue: String?,
-                       @RequestParam(required = false) page: Int?,
-                       @RequestParam(required = false) size: Int?) : List<ContactDto> {
+  fun fetchAllContacts(@RequestParam(required = false) _end: Int?,
+                       @RequestParam(required = false) _order: String?,
+                       @RequestParam(required = false) _sort: String?,
+                       @RequestParam(required = false) _start: Int?) : ResponseEntity<List<ContactDto>?> {
 
-    return contactService.getAllContacts(orderDirection, orderByValue, page, size)
+    val headers = HttpHeaders()
+    val num = contactService.numContacts
+    headers.add("X-Total-Count", num.toString())
+
+    return ResponseEntity.accepted().headers(headers).body(contactService.getAllContacts(_order, _sort, _start, _end ))
   }
 
   @GetMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
