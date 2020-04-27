@@ -1,5 +1,7 @@
 package org.wicket.calltree.repository
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.wicket.calltree.models.BcpEvent
@@ -17,6 +19,7 @@ interface BcpMessageRepository : JpaRepository<BcpMessage, Long> {
                                                                                             teilioNumber: String,
                                                                                             @NotNull isActive:Boolean): BcpMessage
     fun findAllByBcpEvent_Id(bcpEventId: Long): List<BcpMessage>
+    fun findAllByBcpEvent_Id(bcpEventId: Long, pageable: Pageable): Page<BcpMessage>
 }
 
 interface BcpEventRepository : JpaRepository<BcpEvent, Long> {

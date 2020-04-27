@@ -1,7 +1,8 @@
 package org.wicket.calltree.services
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
-import org.wicket.calltree.dto.BcpEventDto
 import org.wicket.calltree.dto.BcpMessageDto
 import org.wicket.calltree.enums.SmsStatus
 import org.wicket.calltree.model.BcpContactStats
@@ -26,6 +27,7 @@ class StatsServiceImpl(private val bcpMessageService: BcpMessageService,
 
   override fun contactStats(eventId: Long): List<BcpContactStats> {
     val eventMessages = bcpMessageService.findMessagesByBcpEvent(eventId)
+//    val eventMessages2 = bcpMessageService.getAllPageMessage(eventId, orderValue, direction, page, size)
     return eventMessages.map {
       val stats = BcpContactStats(
           it.bcpEvent.twilioNumber.twilioNumber,
