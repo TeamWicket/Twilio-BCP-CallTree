@@ -17,9 +17,9 @@ class TwilioNumberController(private val numberService: TwilioNumberService) {
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Operation(summary = "Fetch all numbers")
-    fun fetchAllNumbers(@RequestParam page: Int,
-                        @RequestParam size: Int): ResponseEntity<List<TwilioNumber>> {
-        val result = numberService.getAllNumbers(page, size)
+    fun fetchAllNumbers(@RequestParam _start: Int,
+                        @RequestParam _end: Int): ResponseEntity<List<TwilioNumber>> {
+        val result = numberService.getAllNumbers(_start, _end)
         val map = HttpHeaders()
         map["X-Total-Count"] = result.totalElements.toString()
         return ResponseEntity<List<TwilioNumber>>(result.content, map, HttpStatus.OK)
