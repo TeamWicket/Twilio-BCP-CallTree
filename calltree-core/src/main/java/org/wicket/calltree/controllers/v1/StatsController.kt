@@ -2,6 +2,7 @@ package org.wicket.calltree.controllers.v1
 
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.data.domain.Sort
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -30,8 +31,11 @@ class StatsController(private val statsService: StatsService) {
                              @RequestParam direction: Sort.Direction,
                              @RequestParam page: Int,
                              @RequestParam size: Int) : ResponseEntity<List<BcpContactStats>> {
+    val stats = statsService.contactStats(eventId, orderByValue, direction, page, size)
+    val map = HttpHeaders()
+    map["X-Total-Count"] = stats.totalElements.toString()
 
-//    return statsService.contactStats(eventId,,,, )
-    return ResponseEntity(HttpStatus.NO_CONTENT)
+    return ResponseEntity(stats.statsList, map, HttpStatus.OK)
+
   }
 }

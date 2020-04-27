@@ -1,9 +1,9 @@
 package org.wicket.calltree.services
 
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.wicket.calltree.dto.BcpMessageDto
+import org.wicket.calltree.dto.StatsWrapperDto
 import org.wicket.calltree.enums.SmsStatus
 import org.wicket.calltree.model.BcpContactStats
 import org.wicket.calltree.model.BcpStats
@@ -25,10 +25,10 @@ class StatsServiceImpl(private val bcpMessageService: BcpMessageService,
     return BcpStats(average, eventMessages.size, receivedSms, percentageResponse)
   }
 
-  override fun contactStats(eventId: Long): List<BcpContactStats> {
-    val eventMessages = bcpMessageService.findMessagesByBcpEvent(eventId)
-//    val eventMessages2 = bcpMessageService.getAllPageMessage(eventId, orderValue, direction, page, size)
-    return eventMessages.map {
+  override fun contactStats(eventId: Long, orderValue: String, direction: Sort.Direction, page: Int, size: Int): StatsWrapperDto {
+    val eventMessages = bcpMessageService.getAllPageMessage(eventId, orderValue, direction, page, size)
+
+    val contactStatsList = eventMessages.content.map {
       val stats = BcpContactStats(
           it.bcpEvent.twilioNumber.twilioNumber,
           it.outboundMessage,
@@ -40,6 +40,10 @@ class StatsServiceImpl(private val bcpMessageService: BcpMessageService,
       )
       stats
     }.toList()
+
+
+
+    return StatsWrapperDto(eventMessages.totalElements.toInt(), contactStatsList)
   }
 
   private fun calculateOverallAverage(eventTime: String, messagesList: List<BcpMessageDto>): Double {
