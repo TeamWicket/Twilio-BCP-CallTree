@@ -8,6 +8,7 @@ import org.wicket.calltree.mappers.TwilioNumberMapper
 import org.wicket.calltree.models.TwilioNumber
 import org.wicket.calltree.repository.TwilioNumberRepository
 import java.util.stream.Collectors
+import javax.validation.constraints.NotNull
 
 @Service
 class TwilioNumberServiceImpl(private val numberRepository: TwilioNumberRepository,
@@ -38,5 +39,13 @@ class TwilioNumberServiceImpl(private val numberRepository: TwilioNumberReposito
     override fun getNumberById(id: Long): TwilioNumberDto {
         val number = numberRepository.findById(id)
         number.get().let { return twilioNumberMapper.entityToDto(it) }
+    }
+
+    override fun getManyNums(active: Boolean, @NotNull vararg id: Long): List<TwilioNumberDto> {
+        val allAvailable = numberRepository.findAllByIsAvailable(active)
+        return allAvailable
+            .filter { id.contains(it.id!!) }
+            .map { twilioNumberMapper.entityToDto(it) }
+            .toList()
     }
 }
