@@ -13,7 +13,7 @@ import org.wicket.calltree.services.utils.helper.MapperHelper;
 public interface MessageMapper {
 
     @Mapping(target = "bcpEvent", ignore = true)
-    @Mapping(target = "smsStatus", source = "status")
+    @Mapping(target = "smsStatus", ignore = true)
     Response messageToResponse(Message message);
 
 }

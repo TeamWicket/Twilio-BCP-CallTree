@@ -2,6 +2,7 @@ package org.wicket.calltree.services;
 
 import com.twilio.type.PhoneNumber;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.jms.core.JmsTemplate;
@@ -39,6 +40,9 @@ public class CallTreeServiceImpl implements CallTreeService {
     @NotNull
     @Override
     public List<Response> initiateCalls(@NotNull BcpStartRequest bcpStartRequest) {
+        if (!bcpStartRequest.getTwilioNumber().getIsAvailable()) {
+            throw new BcpEventException("This number is already being used for an event");
+        }
         BcpEventDto event = saveNewEvent(bcpStartRequest);
 
         var recipientList = contactService.getCalltreeUntilRole(bcpStartRequest.getToRoles()).stream()
@@ -103,18 +107,20 @@ public class CallTreeServiceImpl implements CallTreeService {
             throw new RuntimeException("body of incoming sms is null");
         }
 
-        String[] chunks = body.split("&");
+        String fromPhone = StringUtils.substringBetween(body, "From=", "&").replace("%2B", "+");
+        String toPhone = StringUtils.substringBetween(body, "To=", "&").replace("%2B", "+");
+        if (StringUtils.isEmpty(fromPhone) || StringUtils.isEmpty(toPhone)) {
+            throw new RuntimeException(String.format("Message to/from unidentified number"));
+        }
 
-        String fromPhone = chunks[18].replace("From=", "").replace("%2B", "+");
-        String toPhone = chunks[12].replace("To=", "").replace("%2B", "+");
         BcpMessageDto message = bcpMessageService.findActiveMessagesByRecipientNumber(fromPhone, toPhone);
         if (message.getId() == null) {
             throw new RuntimeException(String.format("No active event for number: %s", fromPhone));
         }
 
         message.setSmsStatus(SmsStatus.RECEIVED);
-        message.setRecipientMessage(chunks[10].replace("Body=", ""));
-        message.setRecipientCountry(chunks[0].replace("FromCountry=", ""));
+        message.setRecipientMessage(StringUtils.substringBetween(body, "Body=", "&"));
+        message.setRecipientCountry(StringUtils.substringBetween(body, "FromCountry=", "&"));
         message.setRecipientTimestamp(ZonedDateTime.now().toString());
 
         return message;
@@ -138,11 +144,6 @@ public class CallTreeServiceImpl implements CallTreeService {
     }
 
     private BcpEventDto saveNewEvent(BcpStartRequest request) {
-        BcpEventDto eventDto = bcpEventService.getEventByNumber(request.getTwilioNumber().getId());
-        if (eventDto.getId() != null) {
-            throw new BcpEventException("This number is being used for the event: " + eventDto.getEventName() +
-                    ", please release the number before initiate a new event");
-        }
         var event = new BcpEventDto(null, request.getEventName(),
                 null, request.getTwilioNumber(), true, null);
         return bcpEventService.saveEvent(event);
