@@ -59,4 +59,10 @@ class TwilioNumberController(private val numberService: TwilioNumberService, pri
     fun searchById(@PathVariable id: Long): TwilioNumberDto {
         return numberService.getNumberById(id)
     }
+
+    @GetMapping("/many",produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Operation(summary = "Search Twilio number by id")
+    fun getManyNumbers(@RequestParam active: Boolean, @RequestParam vararg id: Long): List<TwilioNumberDto> {
+        return numberService.getManyNums(active, id)
+    }
 }
