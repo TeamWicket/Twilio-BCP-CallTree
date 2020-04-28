@@ -1,6 +1,7 @@
 package org.wicket.calltree.controllers.v1
 
 import io.swagger.v3.oas.annotations.Operation
+import org.springframework.data.domain.Page
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -8,19 +9,29 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.wicket.calltree.dto.TwilioNumberDto
 import org.wicket.calltree.models.TwilioNumber
+import org.wicket.calltree.repository.TwilioNumberRepository
 import org.wicket.calltree.services.TwilioNumberService
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api/v1/numbers")
-class TwilioNumberController(private val numberService: TwilioNumberService) {
+class TwilioNumberController(private val numberService: TwilioNumberService, private val repo: TwilioNumberRepository) {
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Operation(summary = "Fetch all numbers")
     fun fetchAllNumbers(@RequestParam _start: Int,
-                        @RequestParam _end: Int): ResponseEntity<List<TwilioNumber>> {
-        val result = numberService.getAllNumbers(_start, _end)
+                        @RequestParam _end: Int,
+                        @RequestParam(required = false) _getAvail: Boolean = false): ResponseEntity<List<TwilioNumber>> {
+        val result : Page<TwilioNumber>
         val map = HttpHeaders()
+
+        if (_getAvail){
+            map["X-Total-Count"] = repo.findAllByIsAvailable(true).count().toString()
+            return ResponseEntity<List<TwilioNumber>>(repo.findAllByIsAvailable(true), map, HttpStatus.OK)
+        }
+        else{
+            result = numberService.getAllNumbers(_start, _end)
+        }
         map["X-Total-Count"] = result.totalElements.toString()
         return ResponseEntity<List<TwilioNumber>>(result.content, map, HttpStatus.OK)
     }
