@@ -2,6 +2,7 @@ package org.wicket.calltree.models;
 
 import com.sun.istack.Nullable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.wicket.calltree.enums.Role;
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "Contact")
 public class Contact {

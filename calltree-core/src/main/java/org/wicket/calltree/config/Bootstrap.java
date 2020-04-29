@@ -104,5 +104,16 @@ public class Bootstrap {
 
         bcpMessageRepository.save(eventSms2);
 
+        BcpMessage eventSms3 = new BcpMessage();
+        eventSms3.setBcpEvent(persistedEvent);
+        eventSms3.setOutboundMessage("testing sms persistence");
+        eventSms3.setDateCreated("14 April 2020 at 18:53:25 UTC");
+        eventSms3.setSmsStatus(SmsStatus.SENT);
+        eventSms3.setRecipientNumber("+444");
+        eventSms3.setRecipientTimestamp("2020-04-14T19:48:50.851113+01:00[Europe/London]");
+        eventSms3.setSmsStatus(SmsStatus.RECEIVED);
+
+        bcpMessageRepository.save(eventSms3);
+
     }
 }

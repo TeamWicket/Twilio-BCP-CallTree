@@ -39,7 +39,7 @@ class TwilioNumberController(private val numberService: TwilioNumberService, pri
     @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Operation(summary = "Save new Twilio numbers for BCP calls")
     fun addNewNumber(@RequestBody number: @Valid TwilioNumberDto): TwilioNumberDto {
-        return numberService.saveNewNumber(number)
+        return numberService.saveNumber(number)
     }
 
     @DeleteMapping("/{id}")
