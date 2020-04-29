@@ -43,8 +43,6 @@ class StatsServiceImpl(private val bcpMessageService: BcpMessageService,
       stats
     }.toList()
 
-
-
     return StatsWrapperDto(eventMessages.totalElements.toInt(), contactStatsList)
   }
 
