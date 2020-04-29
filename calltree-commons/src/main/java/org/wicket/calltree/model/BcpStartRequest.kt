@@ -10,5 +10,5 @@ import java.time.ZonedDateTime
 data class BcpStartRequest(val text: String,
                            val toRoles: Role = Role.REPORTER,
                            val eventName: String,
-                           val twilioNumber: TwilioNumberDto,
+                           val twilioNumberId: Long,
                            val timestamp: ZonedDateTime = ZonedDateTime.now())
