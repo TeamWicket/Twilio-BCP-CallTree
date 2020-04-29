@@ -7,10 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
-import org.wicket.calltree.dto.BcpEventDto;
-import org.wicket.calltree.dto.BcpMessageDto;
-import org.wicket.calltree.dto.ContactDto;
-import org.wicket.calltree.dto.Response;
+import org.wicket.calltree.dto.*;
 import org.wicket.calltree.enums.SmsStatus;
 import org.wicket.calltree.exceptions.BcpEventException;
 import org.wicket.calltree.model.BcpStartRequest;
@@ -35,12 +32,14 @@ public class CallTreeServiceImpl implements CallTreeService {
     private final ContactService contactService;
     private final BcpMessageService bcpMessageService;
     private final BcpEventService bcpEventService;
+    private final TwilioNumberService numberService;
     private final JmsTemplate jmsTemplate;
 
     @NotNull
     @Override
     public List<Response> initiateCalls(@NotNull BcpStartRequest bcpStartRequest) {
-        if (!bcpStartRequest.getTwilioNumber().getIsAvailable()) {
+        TwilioNumberDto numberDto = numberService.getNumberById(bcpStartRequest.getTwilioNumberId());
+        if (!numberDto.getIsAvailable()) {
             throw new BcpEventException("This number is already being used for an event");
         }
         BcpEventDto event = saveNewEvent(bcpStartRequest);
@@ -144,8 +143,9 @@ public class CallTreeServiceImpl implements CallTreeService {
     }
 
     private BcpEventDto saveNewEvent(BcpStartRequest request) {
+        TwilioNumberDto numberDto = numberService.getNumberById(request.getTwilioNumberId());
         var event = new BcpEventDto(null, request.getEventName(),
-                null, request.getTwilioNumber(), true, null);
+                null, numberDto, true, null);
         return bcpEventService.saveEvent(event);
     }
 }
