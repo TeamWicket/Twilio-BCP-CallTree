@@ -8,7 +8,9 @@ import org.wicket.calltree.enums.SmsStatus
 import org.wicket.calltree.model.BcpContactStats
 import org.wicket.calltree.model.BcpStats
 import org.wicket.calltree.services.utils.zonedDateTimeDifference
+import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
+import javax.validation.constraints.NotBlank
 
 @Service
 class StatsServiceImpl(private val bcpMessageService: BcpMessageService,
@@ -19,7 +21,7 @@ class StatsServiceImpl(private val bcpMessageService: BcpMessageService,
     val eventTimestamp = event.timestamp
     val eventMessages = bcpMessageService.findMessagesByBcpEvent(event.id!!)
     val average = calculateOverallAverage(eventTimestamp!!, eventMessages)
-    val receivedSms = countReceivedSms(eventMessages)
+    val receivedSms = countReceivedSms(eventTimestamp, eventMessages, responseWithinMinutes)
     val percentageResponse = eventMessages.size * 100 / receivedSms.toDouble()
 
     return BcpStats(average, eventMessages.size, receivedSms, percentageResponse)
@@ -53,8 +55,12 @@ class StatsServiceImpl(private val bcpMessageService: BcpMessageService,
     }.average()
   }
 
-  private fun countReceivedSms(messagesList: List<BcpMessageDto>): Int {
-    return messagesList.filter { it.smsStatus == SmsStatus.RECEIVED }
+  private fun countReceivedSms(eventTime: @NotBlank String, messagesList: List<BcpMessageDto>,
+                               minutes: Long): Int {
+    return messagesList.filter {
+      ZonedDateTime.parse(it.recipientTimestamp) <= ZonedDateTime.parse(eventTime).plusMinutes(minutes) &&
+        it.smsStatus == SmsStatus.RECEIVED
+         }
         .count()
   }
 }

@@ -10,3 +10,5 @@ response time between outbound and inbound sms, % of replies within X minutes, a
 
 ![image](https://i.ibb.co/H4qZ1v4/Initiation.png)
 
+There are four key roles in this Business Continuity Plan: CHAMPION, MANAGER, LEADER, REPORTER. <br />
+When an event starts, the messages 

@@ -145,7 +145,7 @@ public class CallTreeServiceImpl implements CallTreeService {
     private BcpEventDto saveNewEvent(BcpStartRequest request) {
         TwilioNumberDto numberDto = numberService.getNumberById(request.getTwilioNumberId());
         var event = new BcpEventDto(null, request.getEventName(),
-                null, numberDto, true, null);
+                null, numberDto, false, null);
         return bcpEventService.saveEvent(event);
     }
 }
