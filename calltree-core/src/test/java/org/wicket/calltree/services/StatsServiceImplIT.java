@@ -18,7 +18,7 @@ public class StatsServiceImplIT {
     StatsService statsService;
 
     @Test
-    void calculateStats() {
+    void calculateStats_WithValidRequest_ReturnsStats() {
         TwilioNumberDto twilioNumber = new TwilioNumberDto(1L, "+0132456", true);
         long time = 5L;
 
