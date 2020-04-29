@@ -48,10 +48,10 @@ class ContactController(private val contactService: ContactService) {
   }
 
   @DeleteMapping("/{id}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
   @Operation(summary = "Remove contact")
-  fun removeContact(@PathVariable @Valid id:Long) {
+  fun removeContact(@PathVariable @Valid id:Long) : Long {
     contactService.deleteContact(id)
+    return id
   }
 
   @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
