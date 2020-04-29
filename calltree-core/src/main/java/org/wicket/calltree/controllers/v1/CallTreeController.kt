@@ -33,7 +33,7 @@ class CallTreeController(private val service: CallTreeService) {
   }
 
   @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-  @Operation(summary = "Get all active events")
+  @Operation(summary = "Get all events")
   fun checkActiveEvents(@RequestParam _start: Int,
                         @RequestParam _end: Int): ResponseEntity<List<BcpEvent>> {
     val totalEvents = service.pagedEvents(_start, _end)
@@ -48,5 +48,15 @@ class CallTreeController(private val service: CallTreeService) {
   @Operation(summary = "Terminate a BCP event")
   fun terminateCallTree(@PathVariable bcpEventDto: BcpEventDto) {
     service.endEvent(bcpEventDto)
+  }
+
+  @GetMapping("/many", produces = [MediaType.APPLICATION_JSON_VALUE])
+  @Operation(summary = "Get many events by ID")
+  fun getMany(@RequestParam vararg id: Long): ResponseEntity<List<BcpEvent>> {
+    val totalEvents = service.pagedEvents(0, 20)
+    val map = HttpHeaders()
+    map["X-Total-Count"] = totalEvents.totalElements.toString()
+
+    return ResponseEntity<List<BcpEvent>>(totalEvents.content, map, HttpStatus.OK);
   }
 }

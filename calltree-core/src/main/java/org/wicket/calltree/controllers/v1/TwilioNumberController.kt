@@ -42,10 +42,10 @@ class TwilioNumberController(private val numberService: TwilioNumberService, pri
         return numberService.saveNewNumber(number)
     }
 
-    @DeleteMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteNumber(@RequestBody numberDto: @Valid TwilioNumberDto) {
-        numberService.deleteNumber(numberDto)
+    @DeleteMapping("/{id}")
+    fun deleteNumber(@PathVariable @Valid id:Long): Long {
+        numberService.deleteNumber(id)
+        return id
     }
 
     @GetMapping("/available", produces = [MediaType.APPLICATION_JSON_VALUE])

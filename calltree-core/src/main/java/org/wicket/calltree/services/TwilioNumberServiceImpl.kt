@@ -24,8 +24,8 @@ class TwilioNumberServiceImpl(private val numberRepository: TwilioNumberReposito
         return twilioNumberMapper.entityToDto(persisted)
     }
 
-    override fun deleteNumber(numberDto: TwilioNumberDto) {
-        val findById = numberRepository.findById(numberDto.id)
+    override fun deleteNumber(id: Long) {
+        val findById = numberRepository.findById(id)
         findById.ifPresent { numberRepository.delete(it) }
     }
 
