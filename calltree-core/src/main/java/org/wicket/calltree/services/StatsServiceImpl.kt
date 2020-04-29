@@ -56,6 +56,7 @@ class StatsServiceImpl(private val bcpMessageService: BcpMessageService,
   private fun countReceivedSms(eventTime: @NotBlank String, messagesList: List<BcpMessageDto>,
                                minutes: Long): Int {
     return messagesList.filter {
+      it.recipientTimestamp != null &&
       ZonedDateTime.parse(it.recipientTimestamp) <= ZonedDateTime.parse(eventTime).plusMinutes(minutes) &&
         it.smsStatus == SmsStatus.RECEIVED
          }
