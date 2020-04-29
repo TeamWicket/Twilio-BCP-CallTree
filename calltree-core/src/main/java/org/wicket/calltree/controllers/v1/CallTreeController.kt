@@ -21,7 +21,7 @@ class CallTreeController(private val service: CallTreeService) {
 
   @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
   @ResponseStatus(HttpStatus.OK)
-  @Operation(summary = "Initiate BCP calls")
+  @Operation(summary = "Create and Initiate BCP event")
   fun startCalls(@RequestBody @Valid bcpStartRequest: BcpStartRequest) {
     service.initiateCalls(bcpStartRequest)
   }
