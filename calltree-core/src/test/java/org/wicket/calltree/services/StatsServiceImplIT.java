@@ -3,9 +3,9 @@ package org.wicket.calltree.services;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.wicket.calltree.dto.TwilioNumberDto;
 import org.wicket.calltree.model.BcpStats;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
@@ -19,11 +19,11 @@ public class StatsServiceImplIT {
 
     @Test
     void calculateStats() {
-        TwilioNumberDto twilioNumber = new TwilioNumberDto(1L, "+0132456", true);
-        long time = 5L;
-
-        BcpStats bcpStats = statsService.calculateStats(twilioNumber.getId(), time);
+        BcpStats bcpStats = statsService.calculateStats(1L, 5L);
 
         assertNotNull(bcpStats);
+        assertEquals(2, bcpStats.getMessagesSent());
+        assertEquals(1, bcpStats.getMessagesReceived());
+        assertEquals(50.00, bcpStats.getReplyPercentageWithinXMinutes());
     }
 }
