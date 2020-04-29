@@ -1,4 +1,4 @@
-package org.wicket.calltree.services;
+package org.wicket.calltree.validation;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,7 @@
 package org.wicket.calltree.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.wicket.calltree.enums.SmsStatus;
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class BcpMessageDto {
 
     @Nullable

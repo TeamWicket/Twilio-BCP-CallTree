@@ -18,7 +18,7 @@ class TwilioNumberServiceImpl(private val numberRepository: TwilioNumberReposito
         return numberRepository.findAll(PageRequest.of(page, size))
     }
 
-    override fun saveNewNumber(newNumberDto: TwilioNumberDto): TwilioNumberDto {
+    override fun saveNumber(newNumberDto: TwilioNumberDto): TwilioNumberDto {
         val number = twilioNumberMapper.dtoToEntity(newNumberDto)
         val persisted = numberRepository.save(number)
         return twilioNumberMapper.entityToDto(persisted)

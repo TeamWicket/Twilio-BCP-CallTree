@@ -25,7 +25,7 @@ class EndBcpEventReceiver(private val twilioNumberService: TwilioNumberService,
 
             val twilioNumber = event.twilioNumber
             twilioNumber.isAvailable = true
-            twilioNumberService.saveNewNumber(twilioNumber)
+            twilioNumberService.saveNumber(twilioNumber)
         }
     }
 }

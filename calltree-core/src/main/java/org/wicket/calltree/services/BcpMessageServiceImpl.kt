@@ -9,18 +9,18 @@ import org.wicket.calltree.dto.BcpMessageDto
 import org.wicket.calltree.dto.Response
 import org.wicket.calltree.mappers.BcpMessageMapper
 import org.wicket.calltree.models.BcpMessage
+import org.wicket.calltree.repository.BcpEventRepository
 import org.wicket.calltree.repository.BcpMessageRepository
 import java.util.stream.Collectors
 
 @Service
 class BcpMessageServiceImpl(private val bcpMessageMapper: BcpMessageMapper,
-                            private val bcpEventRepository: BcpMessageRepository,
                             private val bcpMessageRepository: BcpMessageRepository) : BcpMessageService {
 
   override fun saveSmsFromResponse(responseList: List<Response>) {
     responseList.forEach {
       val mappedEntity: BcpMessage = bcpMessageMapper.responseToEntity(it)
-      bcpEventRepository.save(mappedEntity)
+      bcpMessageRepository.save(mappedEntity)
     }
   }
 
@@ -30,7 +30,7 @@ class BcpMessageServiceImpl(private val bcpMessageMapper: BcpMessageMapper,
   }
 
   override fun findMessagesByBcpEvent(bcpEventId: Long): List<BcpMessageDto> {
-    val messageList = bcpEventRepository.findAllByBcpEvent_Id(bcpEventId)
+    val messageList = bcpMessageRepository.findAllByBcpEvent_Id(bcpEventId)
     return messageList.stream()
         .map { bcpMessageMapper.entityToDto(it) }
         .collect(Collectors.toList())

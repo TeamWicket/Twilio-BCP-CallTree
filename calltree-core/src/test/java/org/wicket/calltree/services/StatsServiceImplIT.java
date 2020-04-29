@@ -18,7 +18,7 @@ public class StatsServiceImplIT {
     StatsService statsService;
 
     @Test
-    void calculateStats() {
+    void calculateStats_WithValidRequest_ReturnsStats() {
         BcpStats bcpStats = statsService.calculateStats(1L, 5L);
 
         assertNotNull(bcpStats);
