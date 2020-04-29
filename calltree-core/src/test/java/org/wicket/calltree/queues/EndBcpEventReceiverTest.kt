@@ -59,7 +59,7 @@ internal class EndBcpEventReceiverTest {
         endBcpEventReceiver.receiveEndEventMessage(bcpMessage1)
 
         Mockito.verify(bcpEventService, Mockito.never()).saveEvent(bcpEvent)
-        Mockito.verify(twilioNumberService, Mockito.never()).saveNewNumber(twilioNumber)
+        Mockito.verify(twilioNumberService, Mockito.never()).saveNumber(twilioNumber)
     }
 
     @Test
@@ -70,6 +70,6 @@ internal class EndBcpEventReceiverTest {
         endBcpEventReceiver.receiveEndEventMessage(bcpMessage1)
 
         Mockito.verify(bcpEventService, Mockito.atMostOnce()).saveEvent(bcpEvent)
-        Mockito.verify(twilioNumberService, Mockito.atMostOnce()).saveNewNumber(twilioNumber)
+        Mockito.verify(twilioNumberService, Mockito.atMostOnce()).saveNumber(twilioNumber)
     }
 }

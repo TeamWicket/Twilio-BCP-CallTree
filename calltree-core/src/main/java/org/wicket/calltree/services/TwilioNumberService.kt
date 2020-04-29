@@ -6,7 +6,7 @@ import org.wicket.calltree.models.TwilioNumber
 
 interface TwilioNumberService {
     fun getAllNumbers(page: Int, size: Int): Page<TwilioNumber>
-    fun saveNewNumber(newNumberDto: TwilioNumberDto): TwilioNumberDto
+    fun saveNumber(newNumberDto: TwilioNumberDto): TwilioNumberDto
     fun deleteNumber(numberDto: TwilioNumberDto)
     fun getAvailableNumbers(): List<TwilioNumberDto>
     fun getNumberById(id: Long): TwilioNumberDto

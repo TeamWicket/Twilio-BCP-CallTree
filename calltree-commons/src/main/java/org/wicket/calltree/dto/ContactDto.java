@@ -1,6 +1,7 @@
 package org.wicket.calltree.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.wicket.calltree.enums.Role;
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @NotNullForNonChampion(fieldName = "role", fieldValue = Role.CHAMPION, dependFieldName = "pointOfContactId")
 public class ContactDto {
 

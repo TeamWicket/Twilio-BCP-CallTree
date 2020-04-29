@@ -22,7 +22,7 @@ class StatsServiceImpl(private val bcpMessageService: BcpMessageService,
     val eventMessages = bcpMessageService.findMessagesByBcpEvent(event.id!!)
     val average = calculateOverallAverage(eventTimestamp!!, eventMessages)
     val receivedSms = countReceivedSms(eventTimestamp, eventMessages, responseWithinMinutes)
-    val percentageResponse = eventMessages.size * 100 / receivedSms.toDouble()
+    val percentageResponse = receivedSms.toDouble() / eventMessages.size * 100
 
     return BcpStats(average, eventMessages.size, receivedSms, percentageResponse)
   }
@@ -47,7 +47,9 @@ class StatsServiceImpl(private val bcpMessageService: BcpMessageService,
   }
 
   private fun calculateOverallAverage(eventTime: String, messagesList: List<BcpMessageDto>): Double {
-    return messagesList.map {
+    return messagesList
+        .filter { it.recipientTimestamp != null }
+        .map {
       val replyTimestamp = it.recipientTimestamp
       zonedDateTimeDifference(eventTime, replyTimestamp, ChronoUnit.MINUTES)
     }.average()

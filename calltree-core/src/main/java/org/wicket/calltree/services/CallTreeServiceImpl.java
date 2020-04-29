@@ -88,7 +88,8 @@ public class CallTreeServiceImpl implements CallTreeService {
         bcpEventDto.setIsActive(false);
         TwilioNumberDto twilioNumber = bcpEventDto.getTwilioNumber();
         twilioNumber.setIsAvailable(true);
-        numberService.saveNewNumber(twilioNumber);
+
+        numberService.saveNumber(twilioNumber);
         bcpEventService.saveEvent(bcpEventDto);
     }
 
@@ -104,7 +105,7 @@ public class CallTreeServiceImpl implements CallTreeService {
         return bcpEventService.getPagedEvents(page, size);
     }
 
-    protected BcpMessageDto smsParser(String body) {
+    private BcpMessageDto smsParser(String body) {
         if (body == null) {
             throw new RuntimeException("body of incoming sms is null");
         }
@@ -148,7 +149,7 @@ public class CallTreeServiceImpl implements CallTreeService {
     private BcpEventDto saveNewEvent(BcpStartRequest request) {
         TwilioNumberDto numberDto = numberService.getNumberById(request.getTwilioNumberId());
         numberDto.setIsAvailable(false);
-        numberService.saveNewNumber(numberDto);
+        numberService.saveNumber(numberDto);
         var event = new BcpEventDto(null, request.getEventName(),
                 null, numberDto, true, null);
         return bcpEventService.saveEvent(event);
