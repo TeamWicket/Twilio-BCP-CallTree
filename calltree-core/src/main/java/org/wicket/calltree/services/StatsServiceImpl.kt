@@ -8,7 +8,9 @@ import org.wicket.calltree.enums.SmsStatus
 import org.wicket.calltree.model.BcpContactStats
 import org.wicket.calltree.model.BcpStats
 import org.wicket.calltree.services.utils.zonedDateTimeDifference
+import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
+import javax.validation.constraints.NotBlank
 
 @Service
 class StatsServiceImpl(private val bcpMessageService: BcpMessageService,
@@ -19,8 +21,8 @@ class StatsServiceImpl(private val bcpMessageService: BcpMessageService,
     val eventTimestamp = event.timestamp
     val eventMessages = bcpMessageService.findMessagesByBcpEvent(event.id!!)
     val average = calculateOverallAverage(eventTimestamp!!, eventMessages)
-    val receivedSms = countReceivedSms(eventMessages)
-    val percentageResponse = eventMessages.size * 100 / receivedSms.toDouble()
+    val receivedSms = countReceivedSms(eventTimestamp, eventMessages, responseWithinMinutes)
+    val percentageResponse = receivedSms.toDouble() / eventMessages.size * 100
 
     return BcpStats(average, eventMessages.size, receivedSms, percentageResponse)
   }
@@ -41,20 +43,25 @@ class StatsServiceImpl(private val bcpMessageService: BcpMessageService,
       stats
     }.toList()
 
-
-
     return StatsWrapperDto(eventMessages.totalElements.toInt(), contactStatsList)
   }
 
   private fun calculateOverallAverage(eventTime: String, messagesList: List<BcpMessageDto>): Double {
-    return messagesList.map {
+    return messagesList
+        .filter { it.recipientTimestamp != null }
+        .map {
       val replyTimestamp = it.recipientTimestamp
       zonedDateTimeDifference(eventTime, replyTimestamp, ChronoUnit.MINUTES)
     }.average()
   }
 
-  private fun countReceivedSms(messagesList: List<BcpMessageDto>): Int {
-    return messagesList.filter { it.smsStatus == SmsStatus.RECEIVED }
+  private fun countReceivedSms(eventTime: @NotBlank String, messagesList: List<BcpMessageDto>,
+                               minutes: Long): Int {
+    return messagesList.filter {
+      it.recipientTimestamp != null &&
+      ZonedDateTime.parse(it.recipientTimestamp) <= ZonedDateTime.parse(eventTime).plusMinutes(minutes) &&
+        it.smsStatus == SmsStatus.RECEIVED
+         }
         .count()
   }
 }
