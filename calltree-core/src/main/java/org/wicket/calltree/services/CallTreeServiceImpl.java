@@ -88,12 +88,9 @@ public class CallTreeServiceImpl implements CallTreeService {
         bcpEventDto.setIsActive(false);
         TwilioNumberDto twilioNumber = bcpEventDto.getTwilioNumber();
         twilioNumber.setIsAvailable(true);
-        numberService.saveNewNumber(twilioNumber);
-        bcpEventService.saveEvent(bcpEventDto);
 
-        TwilioNumberDto twilioNumberDto = bcpEventDto.getTwilioNumber();
-        twilioNumberDto.setIsAvailable(true);
-        numberService.saveNumber(twilioNumberDto);
+        numberService.saveNumber(twilioNumber);
+        bcpEventService.saveEvent(bcpEventDto);
     }
 
     @NotNull
@@ -152,7 +149,7 @@ public class CallTreeServiceImpl implements CallTreeService {
     private BcpEventDto saveNewEvent(BcpStartRequest request) {
         TwilioNumberDto numberDto = numberService.getNumberById(request.getTwilioNumberId());
         numberDto.setIsAvailable(false);
-        numberService.saveNewNumber(numberDto);
+        numberService.saveNumber(numberDto);
         var event = new BcpEventDto(null, request.getEventName(),
                 null, numberDto, true, null);
         return bcpEventService.saveEvent(event);
