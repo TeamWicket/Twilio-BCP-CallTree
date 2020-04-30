@@ -10,7 +10,7 @@ import org.wicket.calltree.models.BcpEvent
  * @author Alessandro Arosio - 11/04/2020 13:16
  */
 interface CallTreeService {
-  fun initiateCalls(bcpStartRequest: BcpStartRequest) : List<Response>
+  fun initiateCalls(bcpStartRequest: BcpStartRequest) : Long
 
   fun replyToSms(body: String) : String
 

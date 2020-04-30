@@ -37,7 +37,7 @@ public class CallTreeServiceImpl implements CallTreeService {
 
     @NotNull
     @Override
-    public List<Response> initiateCalls(@NotNull BcpStartRequest bcpStartRequest) {
+    public long initiateCalls(@NotNull BcpStartRequest bcpStartRequest) {
         TwilioNumberDto numberDto = numberService.getNumberById(bcpStartRequest.getTwilioNumberId());
         if (!numberDto.getIsAvailable()) {
             throw new BcpEventException("This number is already being used for an event");
@@ -54,6 +54,7 @@ public class CallTreeServiceImpl implements CallTreeService {
                 .map(v -> {
                     Response response = mapper.messageToResponse(v);
                     response.setBcpEvent(event);
+                    response.setDateSent(ZonedDateTime.now().toString());
                     if (Objects.equals(response.getStatus(), "failed")) {
                         response.setSmsStatus(SmsStatus.ERROR);
                     } else {
@@ -65,7 +66,7 @@ public class CallTreeServiceImpl implements CallTreeService {
 
         bcpMessageService.saveSmsFromResponse(responses);
 
-        return responses;
+        return event.getId();
     }
 
     @NotNull
@@ -151,7 +152,7 @@ public class CallTreeServiceImpl implements CallTreeService {
         numberDto.setIsAvailable(false);
         numberService.saveNumber(numberDto);
         var event = new BcpEventDto(null, request.getEventName(),
-                null, numberDto, true, null);
+                ZonedDateTime.now().toString(), numberDto, true, null);
         return bcpEventService.saveEvent(event);
     }
 }

@@ -98,9 +98,9 @@ class CallTreeServiceImplTest {
     void initiateCalls_WithValidRequest_ReturnsExpectedResponse() {
         BcpStartRequest request = new BcpStartRequest("test", Role.REPORTER, "Test Event", NUMBER_ID, ZonedDateTime.now());
 
-        List<Response> output = callTreeServiceImpl.initiateCalls(request);
+        Long output = callTreeServiceImpl.initiateCalls(request);
 
-        assertThat(output).contains(response);
+        assertThat(output).isEqualTo(eventDto.getId());
     }
 
     @Test
