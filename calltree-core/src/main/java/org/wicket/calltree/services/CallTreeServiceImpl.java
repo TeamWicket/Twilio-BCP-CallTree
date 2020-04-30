@@ -152,7 +152,7 @@ public class CallTreeServiceImpl implements CallTreeService {
         numberDto.setIsAvailable(false);
         numberService.saveNumber(numberDto);
         var event = new BcpEventDto(null, request.getEventName(),
-                null, numberDto, true, null);
+                ZonedDateTime.now().toString(), numberDto, true, null);
         return bcpEventService.saveEvent(event);
     }
 }
