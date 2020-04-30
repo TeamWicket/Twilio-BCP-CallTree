@@ -6,9 +6,6 @@ import org.mapstruct.Mapping;
 import org.wicket.calltree.dto.Response;
 import org.wicket.calltree.services.utils.helper.MapperHelper;
 
-/**
- * @author Alessandro Arosio - 11/04/2020 15:30
- */
 @Mapper(uses = MapperHelper.class)
 public interface MessageMapper {
 

@@ -13,9 +13,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-/**
- * @author Alessandro Arosio - 12/04/2020 09:30
- */
 @SpringBootTest
 public class ContactServiceImplIT {
 

@@ -11,9 +11,6 @@ import org.wicket.calltree.model.BcpContactStats
 import org.wicket.calltree.model.BcpStats
 import org.wicket.calltree.services.StatsService
 
-/**
- * @author Alessandro Arosio - 26/04/2020 19:40
- */
 @RestController
 @RequestMapping("/api/v1/stats")
 class StatsController(private val statsService: StatsService) {

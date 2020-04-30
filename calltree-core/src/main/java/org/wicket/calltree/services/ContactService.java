@@ -6,9 +6,6 @@ import org.wicket.calltree.enums.Role;
 import javax.annotation.Nullable;
 import java.util.List;
 
-/**
- * @author Alessandro Arosio - 07/04/2020 20:16
- */
 public interface ContactService {
     List<ContactDto> saveList(List<ContactDto> dtoList);
 

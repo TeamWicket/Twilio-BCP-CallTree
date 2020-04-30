@@ -21,9 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-/**
- * @author Alessandro Arosio - 13/04/2020 11:06
- */
 @ExtendWith(SpringExtension.class)
 class CallTreeServiceImplTest {
     private static final Long NUMBER_ID = 1L;

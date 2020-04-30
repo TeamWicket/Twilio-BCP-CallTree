@@ -23,9 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-/**
- * @author Alessandro Arosio - 07/04/2020 22:43
- */
 @ExtendWith(SpringExtension.class)
 class ContactServiceImplTest {
     @Mock

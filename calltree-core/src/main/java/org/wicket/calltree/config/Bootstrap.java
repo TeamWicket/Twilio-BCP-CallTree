@@ -20,9 +20,6 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @author Alessandro Arosio - 05/04/2020 17:50
- */
 @Configuration
 @RequiredArgsConstructor
 @Profile({"!live"})

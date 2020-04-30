@@ -6,9 +6,6 @@ import org.wicket.calltree.dto.BcpMessageDto
 import org.wicket.calltree.dto.Response
 import org.wicket.calltree.models.BcpMessage
 
-/**
- * @author Alessandro Arosio - 14/04/2020 18:18
- */
 interface BcpMessageService {
   fun saveSmsFromResponse(responseList: List<Response>)
   fun saveBcpEventSms(bcpMessageDto: BcpMessageDto)

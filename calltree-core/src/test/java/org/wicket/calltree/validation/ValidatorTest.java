@@ -13,9 +13,6 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * @author Alessandro Arosio - 08/04/2020 20:36
- */
 public class ValidatorTest {
 
     private Validator validator;

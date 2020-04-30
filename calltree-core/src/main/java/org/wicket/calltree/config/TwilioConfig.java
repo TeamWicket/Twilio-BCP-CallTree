@@ -6,9 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-/**
- * @author Alessandro Arosio - 03/04/2020 22:00
- */
 @Configuration
 @PropertySource("classpath:twilio.properties")
 @Getter

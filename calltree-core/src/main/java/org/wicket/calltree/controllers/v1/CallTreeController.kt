@@ -12,9 +12,6 @@ import org.wicket.calltree.models.BcpEvent
 import org.wicket.calltree.services.CallTreeService
 import javax.validation.Valid
 
-/**
- * @author Alessandro Arosio - 11/04/2020 13:14
- */
 @RestController
 @RequestMapping("/api/v1/events")
 class CallTreeController(private val service: CallTreeService) {
