@@ -23,18 +23,17 @@ public class ContactServiceImplIT {
     ContactService contactService;
 
     @Test
-    void testFindSelectedRole_ReturnOnlyContactsWithSelectedRole() {
+    void getAllSelectedRole_ReturnsOnlyContactsWithSelectedRole() {
         List<ContactDto> allSelectedRole = contactService.getAllSelectedRole(Role.LEADER);
 
         assertThat(allSelectedRole).hasSize(1);
         assertEquals("Ralph", allSelectedRole.get(0).getFirstName());
         assertEquals("Johnson", allSelectedRole.get(0).getLastName());
-        assertThat(allSelectedRole.get(0).getCallingOption()).hasSize(2);
         assertEquals(Role.LEADER, allSelectedRole.get(0).getRole());
     }
 
     @Test
-    void testGetAllTreeUntilRoleLeader_ReturnsAllUntilLeader() {
+    void getCalltreeUntilRole_ReturnsAllUntilLeader() {
         List<ContactDto> tree = contactService.getCalltreeUntilRole(Role.LEADER);
         List<ContactDto> reporters = contactService.getAllSelectedRole(Role.REPORTER);
 
@@ -46,14 +45,14 @@ public class ContactServiceImplIT {
     }
 
     @Test
-    void testFetchByPhoneNumber_ReturnsContactDto() {
+    void fetchContactByPhoneNumber_ReturnsContactDto() {
         ContactDto contactDto = contactService.fetchContactByPhoneNumber("+444");
 
         assertEquals("Vlissides", contactDto.getLastName());
     }
 
     @Test
-    void testFetchByPhoneNumber_ContactNotFound_WillThrowException() {
+    void fetchContactByPhoneNumber_ContactNotFound_WillThrowException() {
         assertThrows(ContactException.class, () -> contactService.fetchContactByPhoneNumber("+00000000000"));
     }
 }

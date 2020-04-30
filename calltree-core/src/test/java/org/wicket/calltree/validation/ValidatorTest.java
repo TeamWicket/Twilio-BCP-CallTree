@@ -1,16 +1,14 @@
-package org.wicket.calltree.services;
+package org.wicket.calltree.validation;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.wicket.calltree.dto.ContactDto;
-import org.wicket.calltree.enums.CallingOption;
 import org.wicket.calltree.enums.Role;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,7 +30,6 @@ public class ValidatorTest {
         dto.setFirstName("Alessandro");
         dto.setLastName("Arosio");
         dto.setPhoneNumber("+124");
-        dto.setCallingOption(List.of(CallingOption.SMS));
     }
 
     @Test

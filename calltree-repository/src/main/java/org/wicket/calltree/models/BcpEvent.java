@@ -1,6 +1,7 @@
 package org.wicket.calltree.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import java.time.ZonedDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BcpEvent {
 
     @Id
@@ -38,6 +40,10 @@ public class BcpEvent {
     @JoinColumn(name = "twilio_numbers")
     @NotNull
     private TwilioNumber twilioNumber;
+
+    @Column(name = "is_active")
+    @NotNull
+    private Boolean isActive;
 
     @Version
     private Long version;

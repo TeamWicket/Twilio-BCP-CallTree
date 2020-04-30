@@ -1,42 +1,29 @@
 package org.wicket.calltree.controllers.v1
 
 import io.swagger.v3.oas.annotations.Operation
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.wicket.calltree.dto.BcpEventDto
-import org.wicket.calltree.dto.TwilioNumberDto
-import org.wicket.calltree.model.BcpContactStats
 import org.wicket.calltree.model.BcpStartRequest
-import org.wicket.calltree.model.BcpStats
+import org.wicket.calltree.models.BcpEvent
 import org.wicket.calltree.services.CallTreeService
 import javax.validation.Valid
-import kotlin.math.min
 
 /**
  * @author Alessandro Arosio - 11/04/2020 13:14
  */
 @RestController
-@RequestMapping("/api/v1/calltree")
+@RequestMapping("/api/v1/events")
 class CallTreeController(private val service: CallTreeService) {
 
   @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
   @ResponseStatus(HttpStatus.OK)
-  @Operation(summary = "Initiate BCP calls")
-  fun startCalls(@RequestBody @Valid bcpStartRequest: BcpStartRequest) {
-    service.initiateCalls(bcpStartRequest)
-  }
-
-  @GetMapping("/stats/{number}", produces = [MediaType.APPLICATION_JSON_VALUE])
-  @Operation(summary = "Calculate stats")
-  fun getStats(@PathVariable number: TwilioNumberDto, @RequestParam minutes: Long): BcpStats {
-    return service.calculateStats(number, minutes)
-  }
-
-  @GetMapping("/stats/contacts/{number}", produces = [MediaType.APPLICATION_JSON_VALUE])
-  @Operation(summary = "Calculate individual stats for each Contact")
-  fun calculateContactsStats(@PathVariable number: String) : List<BcpContactStats> {
-    return service.contactsStats(number)
+  @Operation(summary = "Create and Initiate BCP event")
+  fun startCalls(@RequestBody @Valid bcpStartRequest: BcpStartRequest) : Long {
+    return service.initiateCalls(bcpStartRequest)
   }
 
   @PostMapping("/twilio", produces = [MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE])
@@ -45,22 +32,31 @@ class CallTreeController(private val service: CallTreeService) {
     return service.replyToSms(body)
   }
 
-  @GetMapping("/twilio-numbers", produces = [MediaType.APPLICATION_JSON_VALUE])
-  @Operation(summary = "Get all registered Twilio numbers")
-  fun getAllTwilioNumbers(): List<String> {
-    return service.fetchTwilioNumbers()
-  }
+  @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
+  @Operation(summary = "Get all events")
+  fun checkActiveEvents(@RequestParam _start: Int,
+                        @RequestParam _end: Int): ResponseEntity<List<BcpEvent>> {
+    val totalEvents = service.pagedEvents(_start, _end)
+    val map = HttpHeaders()
+    map["X-Total-Count"] = totalEvents.totalElements.toString()
 
-  @GetMapping("/twilio/events", produces = [MediaType.APPLICATION_JSON_VALUE])
-  @Operation(summary = "Get all active events")
-  fun checkActiveEvents(): List<BcpEventDto> {
-    return service.checkEvent()
+    return ResponseEntity<List<BcpEvent>>(totalEvents.content, map, HttpStatus.OK);
   }
 
   @GetMapping("/terminate/{twilioNumber}", produces = [MediaType.APPLICATION_JSON_VALUE])
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @Operation(summary = "Terminate a BCP event")
-  fun terminateCallTree(@PathVariable twilioNumber: TwilioNumberDto) {
-    service.endEvent(twilioNumber)
+  fun terminateCallTree(@PathVariable bcpEventDto: BcpEventDto) {
+    service.endEvent(bcpEventDto)
+  }
+
+  @GetMapping("/many", produces = [MediaType.APPLICATION_JSON_VALUE])
+  @Operation(summary = "Get many events by ID")
+  fun getMany(@RequestParam vararg id: Long): ResponseEntity<List<BcpEvent>> {
+    val totalEvents = service.pagedEvents(0, 20)
+    val map = HttpHeaders()
+    map["X-Total-Count"] = totalEvents.totalElements.toString()
+
+    return ResponseEntity<List<BcpEvent>>(totalEvents.content, map, HttpStatus.OK);
   }
 }

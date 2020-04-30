@@ -12,6 +12,7 @@ import org.wicket.calltree.models.Contact;
 import org.wicket.calltree.repository.ContactRepository;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -71,6 +72,11 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    public Integer getNumContacts() {
+        return repository.findAll().size();
+    }
+
+    @Override
     public List<ContactDto> getAllContacts(@Nullable String orderDirection, @Nullable String orderByValue,
                                            @Nullable Integer page, @Nullable Integer size) {
         List<Contact> contactList;
@@ -81,7 +87,9 @@ public class ContactServiceImpl implements ContactService {
             contactList = repository.findAll();
 
             // sorting is null, paging is NOT null
-        } else if ((orderDirection == null || orderByValue == null) &&
+        }
+
+/*        else if ((orderDirection == null || orderByValue == null) &&
                 (page != null && size != null)) {
             Page<Contact> result = repository.findAll(PageRequest.of(page, size));
             return result.getContent().stream().map(mapper::contactToDto).collect(Collectors.toList());
@@ -92,7 +100,9 @@ public class ContactServiceImpl implements ContactService {
             contactList = sortedlist(orderDirection, orderByValue);
 
             // all params are NOT null
-        } else {
+        } */
+
+        else {
             contactList = sortedPagedList(orderDirection, orderByValue, page, size);
         }
 
@@ -146,6 +156,20 @@ public class ContactServiceImpl implements ContactService {
         return mapper.contactToDto(contact.orElseThrow(ContactException::new));
     }
 
+    @Override
+    public List<ContactDto> fetchManyContactsById(long[] id) {
+        List<ContactDto> resultList = new ArrayList<>();
+
+        for (Long value : id) {
+            Optional<Contact> contact = repository.findById(value);
+            contact.ifPresent(c -> {
+                ContactDto dto = mapper.contactToDto(c);
+                resultList.add(dto);
+            });
+        }
+        return resultList;
+    }
+
     private List<Contact> sortedlist(String orderDirection, String orderValue) {
 
         if (orderDirection.equalsIgnoreCase(ASC) &&
@@ -167,14 +191,7 @@ public class ContactServiceImpl implements ContactService {
 
     private List<Contact> sortedPagedList(String orderDirection, String orderValue, Integer page, Integer size) {
 
-        if (orderDirection.equalsIgnoreCase(ASC) &&
-                orderValue.equalsIgnoreCase(LAST_NAME)) {
-            return repository.findAll(PageRequest.of(page, size, by(Direction.ASC, orderValue))).getContent();
-        } else if (orderDirection.equalsIgnoreCase(DESC)
-                && orderValue.equalsIgnoreCase(LAST_NAME)) {
-            return repository.findAll(PageRequest.of(page, size, by(Direction.DESC, orderValue))).getContent();
-        } else if (orderDirection.equalsIgnoreCase(ASC)
-                && orderValue.equalsIgnoreCase(FIRST_NAME)) {
+        if (orderDirection.equalsIgnoreCase(ASC)) {
             return repository.findAll(PageRequest.of(page, size, by(Direction.ASC, orderValue))).getContent();
         } else  {
             return repository.findAll(PageRequest.of(page, size, by(Direction.DESC, orderValue))).getContent();

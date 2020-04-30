@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BcpStats {
 
-    private Double average;
+    private Double totalAverage;
     private Integer messagesSent;
     private Integer messagesReceived;
     private Double replyPercentageWithinXMinutes;

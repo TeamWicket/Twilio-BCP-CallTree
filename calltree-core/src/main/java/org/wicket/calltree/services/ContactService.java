@@ -16,6 +16,8 @@ public interface ContactService {
 
     void deleteContact(Long id);
 
+    Integer getNumContacts();
+
     List<ContactDto> getAllContacts(@Nullable String orderDirection, @Nullable String orderByValue,
                                     @Nullable Integer page, @Nullable Integer size);
 
@@ -26,4 +28,6 @@ public interface ContactService {
     List<ContactDto> getCalltreeUntilRole(Role role);
 
     ContactDto fetchContactByPhoneNumber(String string);
+
+    List<ContactDto> fetchManyContactsById(long[] id);
 }

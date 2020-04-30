@@ -1,6 +1,7 @@
 package org.wicket.calltree.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import java.time.ZonedDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class BcpEventDto {
 
     @Nullable
@@ -30,6 +32,8 @@ public class BcpEventDto {
     @NotNull
     @NotBlank
     private TwilioNumberDto twilioNumber;
+
+    private Boolean isActive;
 
     @Nullable
     private Long version;
