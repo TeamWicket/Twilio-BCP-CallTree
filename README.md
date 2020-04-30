@@ -11,12 +11,12 @@ response time between outbound and inbound sms, % of replies within X minutes, a
 ![flow](https://i.ibb.co/H4qZ1v4/Initiation.png)
 
 There are four key roles in this Business Continuity Plan: CHAMPION, MANAGER, LEADER, REPORTER. <br />
-When the CHAMPION triggers a new event, the application will send SMS from the top-level of the tree to all the
-leaves below, as shown in the below diagram.
+When the CHAMPION triggers a new event, the application will send an SMS from the top-level of the tree to all the
+levels below, as shown in the below diagram.
 
 ![tree](https://i.ibb.co/kDyM1v6/role-tree.png)
 
-The event is considered close when the number of incoming SMS matches the outgoing SMS, or when the CHAMPION terminates it manually. <br />
+The event is considered closed when the number of incoming SMS matches the outgoing SMS, or when the CHAMPION terminates it manually. <br />
 The system collects data throughout the active event(s) for statistical purposes. It is possible to have a general overview
 of a particular event with the following information:
 * response time average (in minutes) of all received SMS
@@ -39,14 +39,22 @@ of a particular event with the following information:
 * Java 11 or higher
 * Kotlin 1.3.50 or higher
 * Maven 3.5 or higher
-* [TODO frontend]
+* NPM, Node JS, Yarn
 
-## How to use it
+## How to use the app:
 
+###Backend Setup
 1. Clone the repo: `git clone https://github.com/TeamWicket/Twilio-BCP-CallTree.git`
 2. Prepare a java executable using Maven: `mvn clean install` or using the wrapper `mvnw clean install`
 3. From the command line, navigate to the .jar file and run it using: `java -jar calltree-core-0.0.1-SNAPSHOT.jar`
-4. [TODO frontend]
+
+###Front end setup
+1. Navigate to the calltree-ui repo and use the commands:
+* `yarn install`
+* `yarn start`
+
+This will load the front end up in your browser
+###Running application details
 
 | Service | Address |
 |:--- | :--- |
@@ -64,15 +72,15 @@ Change the default values in the file `twilio.properties`
 You will need also a Twilio phone number - you can [get one here](https://www.twilio.com/console/phone-numbers/incoming)
 
 ***All the numbers in the applications must be in [E.164 format](https://en.wikipedia.org/wiki/E.164)***
-### Postgre settings
+### PostgreSQL settings
 
-By default the application runs off an in memory H2 database, however it is compliant with an external Postgre database to ensure persistance.  This can be done by:
+By default the application runs off an in memory H2 database, however it is compliant with an external PostgreSQL database to ensure persistance.  This can be done by:
 
-1.  Downloading a Postgre Database here: https://www.postgresql.org/
+1.  Downloading a PostgreSQL Database here: https://www.postgresql.org/
 2.  Modify the application-live.properties in the `calltree-core/src/main/resources/` folder
 3.  Set the following parameters:
-     *  `spring.datasource.url`:  set it to the url of your Postgre server e.g. jdbc:postgresql://localhost:5432/postgres
-     *  `spring.datasource.username`:  set this to the Postgre user.  NOTE, the schema will be automatically created in this user's database
+     *  `spring.datasource.url`:  set it to the url of your PostgreSQL server e.g. jdbc:postgresql://localhost:5432/postgres
+     *  `spring.datasource.username`:  set this to the PostgreSQL user.  NOTE, the schema will be automatically created in this user's database
      *  `spring.datasource.password`:  the user's password
 4.  Start the application with the extra parameter `-Dspring.profiles.active=live` so the full command would be:  
    `java -jar calltree-core-0.0.1-SNAPSHOT.jar -Dspring.profiles.active=live`
@@ -91,6 +99,12 @@ This template is open source and welcomes contributions. All contributions are s
 
 [Visit the project on GitHub](https://github.com/TeamWicket/Twilio-BCP-CallTree)
 
+
+##Shoutouts
+
+React-Admin - https://github.com/marmelab/react-admin
+
+The amazing work done by https://github.com/marmelab has allowed us to build a very nice functional front end.
 ## License
 
 [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
