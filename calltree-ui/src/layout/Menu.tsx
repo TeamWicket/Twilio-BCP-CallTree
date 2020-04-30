@@ -52,23 +52,6 @@ const Menu: FC<Props> = ({ onMenuClick, dense, logout }) => {
                 sidebarIsOpen={open}
                 dense={dense}
             />
-{/*             <SubMenu
-                handleToggle={() => handleToggle('menuContacts')}
-                isOpen={state.menuContacts}
-                sidebarIsOpen={open}
-                name="Contacts"
-                icon={<UserIcon />}
-                dense={dense}
-            >
-                <MenuItemLink
-                    to={`/contactsUpload`}
-                    primaryText={'Bulk Upload'}
-                    leftIcon={<UserIcon />}
-                    onClick={onMenuClick}
-                    sidebarIsOpen={open}
-                    dense={dense}
-                />
-            </SubMenu> */}
             <MenuItemLink
                 to={`/numbers`}
                 primaryText={'Numbers'}
