@@ -55,6 +55,16 @@ You will need also a Twilio phone number - you can [get one here](https://www.tw
 
 ***All the numbers in the applications must be in [E.164 format](https://en.wikipedia.org/wiki/E.164)***
 
+### Localhost Twilio config
+
+Download ngrok here: https://ngrok.com/download and extract the exe
+In a command shell run `ngrok http 8080`
+Copy the https Forwarding parameter (not the localHost part) e.g. https://b6231be3.ngrok.io and paste this into the request URL on Twilio.  Append `/api/v1/events/twilio` to the end of the URL
+
+
+
+
+
 ### Backend Setup
 1. Clone the repo: `git clone https://github.com/TeamWicket/Twilio-BCP-CallTree.git`
 2. Prepare a java executable using Maven: `mvn clean install` or using the wrapper `mvnw clean install`
