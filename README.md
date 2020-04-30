@@ -43,13 +43,25 @@ of a particular event with the following information:
 
 ## How to use the app:
 
+### Twilio settings
+Change the default values in the file `calltree-core\src\main\resources\twilio.properties`
+
+| Config&nbsp;Value | Description                                                                                                                                                  |
+| :---------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Account&nbsp;Sid  | Your primary Twilio account identifier - find this [in the Console](https://www.twilio.com/console).                                                         |
+| Auth&nbsp;Token   | Used to authenticate - [just like the above, you'll find this here](https://www.twilio.com/console).                                                         |
+
+You will need also a Twilio phone number - you can [get one here](https://www.twilio.com/console/phone-numbers/incoming).  Afterwards the Twilio phone number can be added into the application using the UI.
+
+***All the numbers in the applications must be in [E.164 format](https://en.wikipedia.org/wiki/E.164)***
+
 ###Backend Setup
 1. Clone the repo: `git clone https://github.com/TeamWicket/Twilio-BCP-CallTree.git`
 2. Prepare a java executable using Maven: `mvn clean install` or using the wrapper `mvnw clean install`
-3. From the command line, navigate to the .jar file and run it using: `java -jar calltree-core-0.0.1-SNAPSHOT.jar`
+3. From the command line, navigate to the .jar file at `calltree-core\target` and run it using: `java -jar calltree-core-0.0.1-SNAPSHOT.jar`
 
 ###Front end setup
-1. Navigate to the calltree-ui repo and use the commands:
+1. Navigate to the `calltree-ui` repo and use the commands:
 * `yarn install`
 * `yarn start`
 
@@ -61,17 +73,6 @@ This will load the front end up in your browser
 | Backend | http://localhost:8080 |
 | Frontend | http://localhost:3000 |
 
-### Twilio settings
-Change the default values in the file `twilio.properties`
-
-| Config&nbsp;Value | Description                                                                                                                                                  |
-| :---------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Account&nbsp;Sid  | Your primary Twilio account identifier - find this [in the Console](https://www.twilio.com/console).                                                         |
-| Auth&nbsp;Token   | Used to authenticate - [just like the above, you'll find this here](https://www.twilio.com/console).                                                         |
-
-You will need also a Twilio phone number - you can [get one here](https://www.twilio.com/console/phone-numbers/incoming)
-
-***All the numbers in the applications must be in [E.164 format](https://en.wikipedia.org/wiki/E.164)***
 ### PostgreSQL settings
 
 By default the application runs off an in memory H2 database, however it is compliant with an external PostgreSQL database to ensure persistance.  This can be done by:
