@@ -11,9 +11,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 
-/**
- * @author Alessandro Arosio - 15/04/2020 22:44
- */
 @Entity
 @Table(name = "bcp_event")
 @Data

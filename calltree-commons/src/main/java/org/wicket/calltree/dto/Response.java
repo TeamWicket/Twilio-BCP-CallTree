@@ -8,9 +8,6 @@ import org.wicket.calltree.enums.SmsStatus;
 
 import java.util.Currency;
 
-/**
- * @author Alessandro Arosio - 11/04/2020 16:37
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

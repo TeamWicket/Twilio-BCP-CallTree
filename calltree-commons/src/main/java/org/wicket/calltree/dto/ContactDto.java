@@ -10,9 +10,6 @@ import org.wicket.calltree.validators.NotNullForNonChampion;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 
-/**
- * @author Alessandro Arosio - 04/04/2020 09:48
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

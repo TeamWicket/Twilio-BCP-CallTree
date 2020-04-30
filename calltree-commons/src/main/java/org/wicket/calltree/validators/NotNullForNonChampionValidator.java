@@ -1,6 +1,5 @@
 package org.wicket.calltree.validators;
 
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.wicket.calltree.enums.Role;
 
@@ -8,9 +7,6 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.lang.reflect.InvocationTargetException;
 
-/**
- * @author Alessandro Arosio - 08/04/2020 19:42
- */
 public class NotNullForNonChampionValidator implements ConstraintValidator<NotNullForNonChampion, Object> {
 
     private String fieldName;

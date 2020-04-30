@@ -13,9 +13,6 @@ import org.wicket.calltree.models.TwilioNumber
 import org.wicket.calltree.repository.TwilioNumberRepository
 import kotlin.test.assertEquals
 
-/**
- * @author Alessandro Arosio - 20/04/2020 17:38
- */
 @SpringBootTest
 @TestMethodOrder(OrderAnnotation::class)
 internal class BcpEventServiceImplIT {

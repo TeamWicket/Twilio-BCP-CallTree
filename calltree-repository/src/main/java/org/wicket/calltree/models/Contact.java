@@ -10,9 +10,6 @@ import org.wicket.calltree.enums.Role;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-/**
- * @author Alessandro Arosio - 05/04/2020 14:19
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

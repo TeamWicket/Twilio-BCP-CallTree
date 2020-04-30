@@ -25,9 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * @author Alessandro Arosio - 10/04/2020 08:05
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 class ContactControllerIT {

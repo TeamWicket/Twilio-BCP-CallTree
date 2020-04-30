@@ -9,9 +9,6 @@ import org.wicket.calltree.enums.SmsStatus;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-/**
- * @author Alessandro Arosio - 13/04/2020 22:24
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
