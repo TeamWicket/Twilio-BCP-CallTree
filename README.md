@@ -55,18 +55,18 @@ You will need also a Twilio phone number - you can [get one here](https://www.tw
 
 ***All the numbers in the applications must be in [E.164 format](https://en.wikipedia.org/wiki/E.164)***
 
-###Backend Setup
+### Backend Setup
 1. Clone the repo: `git clone https://github.com/TeamWicket/Twilio-BCP-CallTree.git`
 2. Prepare a java executable using Maven: `mvn clean install` or using the wrapper `mvnw clean install`
 3. From the command line, navigate to the .jar file at `calltree-core\target` and run it using: `java -jar calltree-core-0.0.1-SNAPSHOT.jar`
 
-###Front end setup
+### Front end setup
 1. Navigate to the `calltree-ui` repo and use the commands:
 * `yarn install`
 * `yarn start`
 
 This will load the front end up in your browser
-###Running application details
+### Running application details
 
 | Service | Address |
 |:--- | :--- |
@@ -78,7 +78,7 @@ This will load the front end up in your browser
 By default the application runs off an in memory H2 database, however it is compliant with an external PostgreSQL database to ensure persistance.  This can be done by:
 
 1.  Downloading a PostgreSQL Database here: https://www.postgresql.org/
-2.  Modify the application-live.properties in the `calltree-core/src/main/resources/` folder
+2.  Modify the `application-live.properties` in the `calltree-core/src/main/resources/` folder
 3.  Set the following parameters:
      *  `spring.datasource.url`:  set it to the url of your PostgreSQL server e.g. jdbc:postgresql://localhost:5432/postgres
      *  `spring.datasource.username`:  set this to the PostgreSQL user.  NOTE, the schema will be automatically created in this user's database
