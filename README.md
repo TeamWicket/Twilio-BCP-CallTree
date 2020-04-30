@@ -15,48 +15,48 @@ At what point do we say, we need a system in place?
 **Manual versus Automated**
 Take a simple scenario with an incident and informing employees not to come to the office.  
 
-**Manual**
+**Manual**  
 You have to inform your employees. Have you got all of their phone numbers?  
 What happens if you have over 1000 employees – the process of contacting everyone will take even longer. Also the message may become lost in translation along the way.
 
-**Automated**
+**Automated**  
 Using an automated tool, you can reach a large amount of people within a short space of time, and you can send the message exactly when it is needed. Employees can be kept informed and updated of the situation as the incident plays out. You can also get a response from people to show they have recieved the message.  
 
 What we need to do is look at ways to communicate with people via a mass broadcast. In the first cycle of communications you want to try and reach everybody. Maybe you will get to 70 - 80% of people. The next step is to then focus on those people that didn’t respond the first time to check that everybody is OK. This focuses your attention on those people that might need help.
 
-**Conclusion**
+**Conclusion**  
 When trying to reach more than a handful of people, gathering a response and reporting back using a manual calling tree really is an old fashioned way of doing things. In this day and age with the technologies available, utilising a notification system really is the only practical way of staying in command and controlling any issue.
 
 ## How it works
 
-This application sends messages to a list of contacts, for example employees, to notify them quickly of critical business information. <br />
-With few clicks the administrator (CHAMPION) can initiate a call tree and collect statistical information such as overall
-response time between outbound and inbound sms, % of replies within X minutes, also detailed stats for each recipient.
+This application sends a broadcast message to a list of contacts, for example employees, to notify them quickly of critical business information. <br />
+With a few clicks the administrator (BCP Champion) can initiate a call tree and collect statistical information such as overall
+response time between outbound and inbound sms, % of replies within X number of minutes and also detailed stats for each recipient.
 
 ![flow](https://i.ibb.co/H4qZ1v4/Initiation.png)
 
-There are four key roles in this Business Continuity Plan: CHAMPION, MANAGER, LEADER, REPORTER. <br />
+There are four key roles in this Business Continuity Plan application: CHAMPION, MANAGER, LEADER, REPORTER. <br />
 When the CHAMPION triggers a new event, the application will send an SMS from the top-level of the tree to all the
-levels below, as shown in the below diagram.
+levels below, as shown in the diagram below.
 
 ![tree](https://i.ibb.co/kDyM1v6/role-tree.png)
 
-The event is considered closed when the number of incoming SMS matches the outgoing SMS, or when the CHAMPION terminates it manually. <br />
+The event is then considered closed when everyone responds to their SMS message, or when the CHAMPION terminates it manually. <br />
 The system collects data throughout the active event(s) for statistical purposes. It is possible to have a general overview
 of a particular event with the following information:
-* response time average (in minutes) of all received SMS
+* response time average (in minutes) of all received SMS messages
 * total number of outgoing SMS
 * total number of incoming SMS
 * percentage of replies within X minutes (defined by the CHAMPION)
 
-## Features
+## Tech Stack
 - Backend in Java and Kotlin
 - Spring Boot / Data JPA / WEB
-- H2 enabled (also available for integration tests)
-- PostgreSQL ready
-- Frontend in React (JavaScript / TypeScript)
-- OpenAPI v3 (SpringDoc / Swagger)
-- Maven building tool
+- H2 enabled DB (also available for integration tests)
+- PostgreSQL ready application for data persistence
+- Modern Frontend in React (JavaScript / TypeScript)
+- OpenAPI v3 (SpringDoc / Swagger) for full REST endpoint mapping
+- Maven build tool
 - CircleCI for continuous integration
 
 ## Requirements
@@ -64,12 +64,14 @@ of a particular event with the following information:
 * Java 11 or higher
 * Kotlin 1.3.50 or higher
 * Maven 3.5 or higher
-* NPM, Node JS, Yarn
+* NPM, Node JS, Yarn to run the UI
 
 ## How to use the app:
 
 ### Twilio settings
-Change the default values in the file `calltree-core\src\main\resources\twilio.properties`
+In order for the app to connect to Twilio you will need to setup your twilio account information as shown below  
+
+Change the default values in the file `calltree-core\src\main\resources\twilio.properties` to include your twilio account details  
 
 | Config&nbsp;Value | Description                                                                                                                                                  |
 | :---------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
