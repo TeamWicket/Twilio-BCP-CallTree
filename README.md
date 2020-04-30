@@ -1,6 +1,28 @@
-# BCP Calltree
+# Business Continuity Plan Calltree
+This is a Calltree based application to provide an automatic way to broadcast important SMS messages and also record when people have responded and how long it took.
 
 [![CircleCI](https://circleci.com/gh/TeamWicket/Twilio-BCP-CallTree.svg?style=svg)](https://circleci.com/gh/TeamWicket/Twilio-BCP-CallTree)
+
+## Motivation
+During a crisis – what do you need to do?
+Inform your staff/volunteers/contacts – of what?
+Account for your staff/volunteers/contacts – how are you going to find out if everyone is OK?
+Respond to queries – how are you going to manage queries, what contact info will you give people?
+With a manual based calling tree, you can pick up the phone and have a conversation with someone, but what happens if they haven’t got all of the information they need? You will need to call them back and the calls can become challenging and time consuming especially working your way through a big list.
+At what point do we say, we need a system in place? At what point do we say a manual calling tree isn’t working anymore?
+Manual versus Automated
+Take a simple scenario with an incident and informing employees not to come to the office.  
+
+Manual
+You have to inform your employees. Have you got all of their phone numbers? You pick up the phone a couple of times, to get through to them which is time consuming. What happens if you have over 1000 employees – the process of contacting everyone will take even longer. Also the message may become lost in translation along the way.
+
+Automated 
+Using an automated tool, you can reach a large targeted amount of people within a short space of time, and you can send the message exactly when it is needed. Employees can be kept informed and updated of the situation as the incident plays out. You can also get a response from people to show they have recieved the message. Anyone not responding can have precious time and resource dedicated to them immediately to try and get in contact with them.
+
+What we need to do is look at ways to communicate with people via multiple paths and with a mass broadcast. In the first cycle of communications you want to try and reach everybody. Maybe you will get to 80% of employees. The next step is to then focus on those people that didn’t respond the first time to check that everybody is OK. This focuses your attention on those people that might need help.
+
+Conclusion
+When trying to reach more than a handful of people, gathering a response and reporting back using a manual calling tree really is an old school way of doing things. In this day and age with the technologies available, utilising a notification system really is the only practical way of staying in command and controlling any issue.
 
 ## How it works
 
