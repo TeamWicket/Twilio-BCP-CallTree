@@ -64,6 +64,20 @@ Change the default values in the file `twilio.properties`
 You will need also a Twilio phone number - you can [get one here](https://www.twilio.com/console/phone-numbers/incoming)
 
 ***All the numbers in the applications must be in [E.164 format](https://en.wikipedia.org/wiki/E.164)***
+### Postgre settings
+
+By default the application runs off an in memory H2 database, however it is compliant with an external Postgre database to ensure persistance.  This can be done by:
+
+1.  Downloading a Postgre Database here: https://www.postgresql.org/
+2.  Modify the application-live.properties in the `calltree-core/src/main/resources/` folder
+3.  Set the following parameters:
+     *  `spring.datasource.url`:  set it to the url of your Postgre server e.g. jdbc:postgresql://localhost:5432/postgres
+     *  `spring.datasource.username`:  set this to the Postgre user.  NOTE, the schema will be automatically created in this user's database
+     *  `spring.datasource.password`:  the user's password
+4.  Start the application with the extra parameter `-Dspring.profiles.active=live` so the full command would be:  
+   `java -jar calltree-core-0.0.1-SNAPSHOT.jar -Dspring.profiles.active=live`
+
+When starting, the application will check whether the schema and tables exist and if not automatically create these in the provided user's database under the schema `call_tree`. 
 
 ## Contributing
 
