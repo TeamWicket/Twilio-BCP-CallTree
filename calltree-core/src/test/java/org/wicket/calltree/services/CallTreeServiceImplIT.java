@@ -28,7 +28,6 @@ class CallTreeServiceImplIT {
     @Autowired
     CallTreeService callTreeService;
 
-
     @BeforeAll
     static void setUp(@Autowired TwilioNumberRepository twilioNumberRepository, @Autowired ContactRepository contactRepository,
                       @Autowired BcpEventRepository bcpEventRepository, @Autowired BcpMessageRepository bcpMessageRepository) {

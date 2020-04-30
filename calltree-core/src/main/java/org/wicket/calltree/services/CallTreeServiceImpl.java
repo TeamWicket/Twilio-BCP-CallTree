@@ -17,7 +17,6 @@ import org.wicket.calltree.service.TwilioService;
 import org.wicket.calltree.services.utils.MessageMapper;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -96,12 +95,6 @@ public class CallTreeServiceImpl implements CallTreeService {
 
     @NotNull
     @Override
-    public List<BcpEventDto> checkEvent() {
-        return bcpEventService.getAllEvents();
-    }
-
-    @NotNull
-    @Override
     public Page<BcpEvent> pagedEvents(int page, int size) {
         return bcpEventService.getPagedEvents(page, size);
     }
@@ -114,7 +107,7 @@ public class CallTreeServiceImpl implements CallTreeService {
         String fromPhone = StringUtils.substringBetween(body, "From=", "&").replace("%2B", "+");
         String toPhone = StringUtils.substringBetween(body, "To=", "&").replace("%2B", "+");
         if (StringUtils.isEmpty(fromPhone) || StringUtils.isEmpty(toPhone)) {
-            throw new RuntimeException(String.format("Message to/from unidentified number"));
+            throw new RuntimeException("Message to/from unidentified number");
         }
 
         BcpMessageDto message = bcpMessageService.findActiveMessagesByRecipientNumber(fromPhone, toPhone);

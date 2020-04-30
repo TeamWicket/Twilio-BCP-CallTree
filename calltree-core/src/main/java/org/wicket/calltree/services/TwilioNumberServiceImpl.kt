@@ -41,7 +41,7 @@ class TwilioNumberServiceImpl(private val numberRepository: TwilioNumberReposito
         number.get().let { return twilioNumberMapper.entityToDto(it) }
     }
 
-    override fun getManyNums(active: Boolean, @NotNull vararg id: Long): List<TwilioNumberDto> {
+    override fun getManyNumbers(active: Boolean, @NotNull vararg id: Long): List<TwilioNumberDto> {
         val allAvailable = numberRepository.findAll()
         return allAvailable
             .filter { id.contains(it.id!!) }
