@@ -1,5 +1,7 @@
 # Business Continuity Plan Calltree
-This is a Calltree based application to provide an automatic way to broadcast important SMS messages and also record when people have responded and how long it took.
+This is a Calltree based communication application to provide a quick and easy way  
+to broadcast important SMS messages to contacts and also record stats such as when    
+people have responded and how long it took them.
 
 [![CircleCI](https://circleci.com/gh/TeamWicket/Twilio-BCP-CallTree.svg?style=svg)](https://circleci.com/gh/TeamWicket/Twilio-BCP-CallTree)
 
