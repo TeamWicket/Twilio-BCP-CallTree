@@ -15,7 +15,6 @@ import org.wicket.calltree.service.TwilioService;
 import org.wicket.calltree.services.utils.MessageMapper;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -118,12 +117,5 @@ class CallTreeServiceImplTest {
 
         verify(bcpEventService, atMostOnce()).saveEvent(eventDto);
         verify(numberService, atMostOnce()).saveNumber(twilioNumberDto);
-    }
-
-    @Test
-    void checkEvent_ReturnsResultsOfBcpEventService() {
-        List<BcpEventDto> events = callTreeServiceImpl.checkEvent();
-
-        assertThat(events).contains(eventDto);
     }
 }

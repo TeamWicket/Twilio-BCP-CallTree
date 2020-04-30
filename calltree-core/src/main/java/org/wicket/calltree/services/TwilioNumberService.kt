@@ -10,5 +10,5 @@ interface TwilioNumberService {
     fun deleteNumber(numberDto: Long)
     fun getAvailableNumbers(): List<TwilioNumberDto>
     fun getNumberById(id: Long): TwilioNumberDto
-    fun getManyNums(active: Boolean, id: LongArray): List<TwilioNumberDto>
+    fun getManyNumbers(active: Boolean, id: LongArray): List<TwilioNumberDto>
 }

@@ -8,13 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.wicket.calltree.model.Recipient;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @author Alessandro Arosio - 11/04/2020 14:10
- */
 @Service
 public class TwilioServiceImpl implements TwilioService {
 
@@ -23,9 +19,6 @@ public class TwilioServiceImpl implements TwilioService {
 
     @Value("${auth.token}")
     private String authToken;
-
-    @Value("${twilio.numbers}")
-    private String[] twilioNumbers;
 
     @Override
     public List<Message> sendSms(List<Recipient> recipients) {
@@ -53,10 +46,5 @@ public class TwilioServiceImpl implements TwilioService {
                 .message(sms)
                 .build();
         return twiml.toXml();
-    }
-
-    @Override
-    public List<String> getTwilioNumbers() {
-        return Arrays.asList(twilioNumbers);
     }
 }
