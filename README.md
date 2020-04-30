@@ -78,15 +78,20 @@ Change the default values in the file `calltree-core\src\main\resources\twilio.p
 | Account&nbsp;Sid  | Your primary Twilio account identifier - find this [in the Console](https://www.twilio.com/console).                                                         |
 | Auth&nbsp;Token   | Used to authenticate - [just like the above, you'll find this here](https://www.twilio.com/console).                                                         |
 
-You will need also a Twilio phone number - you can [get one here](https://www.twilio.com/console/phone-numbers/incoming).  Afterwards the Twilio phone number can be added into the application using the UI.
+You will also need a Twilio phone number setup - you can [get one here](https://www.twilio.com/console/phone-numbers/incoming).  Afterwards the Twilio phone number can be added into the application later using the UI.
 
 ***All the numbers in the applications must be in [E.164 format](https://en.wikipedia.org/wiki/E.164)***
 
 ### Localhost Twilio config
 
-Download ngrok here: https://ngrok.com/download and extract the exe
-In a command shell run `ngrok http 8080`
-Copy the https Forwarding parameter (not the localHost part) e.g. https://b6231be3.ngrok.io and paste this into the request URL on Twilio.  Append `/api/v1/events/twilio` to the end of the URL
+In order to get full functionality if you are running this application in LocalHost then you must enable a way for Twilio to contact your localhost endpoint.  
+
+You can do this by downloading and running `ngrok` or an alternative tunnelling software.  
+
+Download ngrok here: https://ngrok.com/download and extract the .exe somewhere locally  
+In a command shell from the same directory as the .exe run `ngrok http 8080`  
+
+Copy the https Forwarding parameter e.g. https://b6231be3.ngrok.io (this is mock data) and paste this into the request URL on Twilio.   Then append `/api/v1/events/twilio` to the end of the URL so Twilio can reach this endpoint locally to send stats when people reply to a message.  
 
 ![ngrok](https://i.ibb.co/pWqyvPq/ngrok.png)
 ![twilio-settings](https://i.ibb.co/KGBP6Pt/twilio-settings.png)
