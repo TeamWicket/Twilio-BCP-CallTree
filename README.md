@@ -92,9 +92,10 @@ Download ngrok here: https://ngrok.com/download and extract the .exe somewhere l
 In a command shell from the same directory as the .exe run `ngrok http 8080`  
 
 Copy the https Forwarding parameter e.g. https://b6231be3.ngrok.io (this is mock data) and paste this into the request URL on Twilio.   Then append `/api/v1/events/twilio` to the end of the URL so Twilio can reach this endpoint locally to send stats when people reply to a message.  
+  
+![ngrok](https://i.ibb.co/pWqyvPq/ngrok.png)  
 
-![ngrok](https://i.ibb.co/pWqyvPq/ngrok.png)
-![twilio-settings](https://i.ibb.co/KGBP6Pt/twilio-settings.png)
+![twilio-settings](https://i.ibb.co/KGBP6Pt/twilio-settings.png)  
 
 
 
@@ -102,13 +103,14 @@ Copy the https Forwarding parameter e.g. https://b6231be3.ngrok.io (this is mock
 1. Clone the repo: `git clone https://github.com/TeamWicket/Twilio-BCP-CallTree.git`
 2. Prepare a java executable using Maven: `mvn clean install` or using the wrapper `mvnw clean install`
 3. From the command line, navigate to the .jar file at `calltree-core\target` and run it using: `java -jar calltree-core-0.0.1-SNAPSHOT.jar`
+4. The backend will now be running as a standalone Spring Boot application  
 
 ### Front end setup
 1. Navigate to the `calltree-ui` repo and use the commands:
 * `yarn install`
 * `yarn start`
+2. This will then load the front end up in your browser  
 
-This will load the front end up in your browser
 ### Running application details
 
 | Service | Address |
@@ -116,26 +118,40 @@ This will load the front end up in your browser
 | Backend | http://localhost:8080 |
 | Frontend | http://localhost:3000 |
 
-### UI Overview
+### UI Overview  
 
-![dashboard](https://i.ibb.co/zQnwfgQ/dashboard.png)
+When you first load the application up you will get your high level dashboard that can display an overview of your application setup  
 
-![contacts](https://i.ibb.co/SK0799Y/contacts.png)
+![dashboard](https://i.ibb.co/zQnwfgQ/dashboard.png)  
 
-![create-contact](https://i.ibb.co/fD3tpxL/create-contact.png)
+If you then navigate to the `Contacts` menu option this will give you the ability to add contacts, the first contact must be marked as the `Champion`, you can then add more contacts. Please note whoever each persons `point of contact` is will be the name and number they are instructed to contact in the event they have any questions once they reply to the initial BCP event message.  
 
-![number](https://i.ibb.co/ZH0CKW7/number.png)
+![contacts](https://i.ibb.co/SK0799Y/contacts.png)  
 
-![add-number](https://i.ibb.co/PNZtCWh/new-number.png)
+![create-contact](https://i.ibb.co/fD3tpxL/create-contact.png)  
 
-![events](https://i.ibb.co/WWpDBcb/events.png)
+The following screen is where you can add your Twilio number that you assigned earlier, note you must have an active twilio number available in order to create an event.  
 
-![new-event](https://i.ibb.co/4T16zsc/new-event.png)
+![number](https://i.ibb.co/ZH0CKW7/number.png)  
+
+![add-number](https://i.ibb.co/PNZtCWh/new-number.png)  
+
+Finally when you are ready to send some messages you can go to the `events` screen and create a new event  
+
+![events](https://i.ibb.co/WWpDBcb/events.png)  
+
+Enter the Text you wish to be sent in the message, Select which roles you wish to send this message to (note this is hierarchical so if you wish to send to EVERYONE then select `reporter` as this will go up the chain. If you wish for `Leaders` and everyone above then select this and so forth. The Champion will not recieve a message as they will kick off the event.  
+
+![new-event](https://i.ibb.co/4T16zsc/new-event.png)  
+
+Finally click the start event button and this will send your messages.  
+
+If you wish to see the stats just now you can do so by using the Swagger endpoints for the Stats Controller or by looking in the database table for the call event information.  
 
 
 ### PostgreSQL settings
 
-By default the application runs off an in memory H2 database, however it is compliant with an external PostgreSQL database to ensure persistance.  This can be done by:
+By default the application runs off an in memory H2 database, however it is compliant with an external PostgreSQL database to ensure persistance longer term and outside of a demo.  This can be done by:  
 
 1.  Downloading a PostgreSQL Database here: https://www.postgresql.org/
 2.  Modify the `application-live.properties` in the `calltree-core/src/main/resources/` folder
@@ -150,7 +166,7 @@ When starting, the application will check whether the schema and tables exist an
 
 ## Contributing
 
-This template is open source and welcomes contributions. All contributions are subject to our [Code of Conduct](https://github.com/TeamWicket/Twilio-BCP-CallTree/blob/master/CODE_OF_CONDUCT.md).
+This template is open source and welcomes contributions from the community. All contributions are subject to our [Code of Conduct](https://github.com/TeamWicket/Twilio-BCP-CallTree/blob/master/CODE_OF_CONDUCT.md).
 
 ## Contributors
 [Team Wicket](https://github.com/TeamWicket/Twilio-BCP-CallTree/graphs/contributors)
@@ -165,7 +181,8 @@ This template is open source and welcomes contributions. All contributions are s
 
 React-Admin - https://github.com/marmelab/react-admin
 
-The amazing work done by https://github.com/marmelab has allowed us to build a very nice functional front end.
+The amazing work done by https://github.com/marmelab has allowed us to build a very nice functional front end.  
+
 ## License
 
 [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
