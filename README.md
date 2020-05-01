@@ -121,6 +121,8 @@ Copy the https Forwarding parameter e.g. https://b6231be3.ngrok.io (this is mock
 ### UI Overview  
 
 When you first load the application up you will get your high level dashboard that can display an overview of your application setup  
+Note: If you wish to switch to a cool `dark mode` then click on the profile button in the top right and select configuration and change your theme.  
+You can also `log out` of the app and it will return you to a login screen, this can be forked and your own auth implementation can be added in here, for the purposes of our demo its only there to show what can be done but you can `login` again by typing in anything here and hitting enter. For your own implementation you will need to define your own authorisation using the Auth component.  
 
 ![dashboard](https://i.ibb.co/zQnwfgQ/dashboard.png)  
 
@@ -134,13 +136,15 @@ The following screen is where you can add your Twilio number that you assigned e
 
 ![number](https://i.ibb.co/ZH0CKW7/number.png)  
 
+You must setup your number as `Is available` for it to be used as part of your event.  
+
 ![add-number](https://i.ibb.co/PNZtCWh/new-number.png)  
 
 Finally when you are ready to send some messages you can go to the `events` screen and create a new event  
 
 ![events](https://i.ibb.co/WWpDBcb/events.png)  
 
-Enter the Text you wish to be sent in the message, Select which roles you wish to send this message to (note this is hierarchical so if you wish to send to EVERYONE then select `reporter` as this will go up the chain. If you wish for `Leaders` and everyone above then select this and so forth. The Champion will not recieve a message as they will kick off the event.  
+Enter the mesage you wish to be sent in the text field, Select which roles you wish to send this message to (note this is hierarchical so if you wish to send to EVERYONE then select `reporter` as this will go up the chain. If you wish for `Leaders` and everyone above then select this and so forth. The Champion will not recieve a message as they will kick off the event.  
 
 ![new-event](https://i.ibb.co/4T16zsc/new-event.png)  
 
@@ -151,7 +155,7 @@ If you wish to see the stats just now you can do so by using the Swagger endpoin
 
 ### PostgreSQL settings
 
-By default the application runs off an in memory H2 database, however it is compliant with an external PostgreSQL database to ensure persistance longer term and outside of a demo.  This can be done by:  
+By default the application runs off an in memory H2 database, however it is compliant with an external PostgreSQL database to ensure persistance longer term and outside of a demo environment.  This can be done by:  
 
 1.  Downloading a PostgreSQL Database here: https://www.postgresql.org/
 2.  Modify the `application-live.properties` in the `calltree-core/src/main/resources/` folder
@@ -174,10 +178,10 @@ This template is open source and welcomes contributions from the community. All 
 * John Hanna: [Github](https://github.com/jhanna60) - [LinkedIn](https://www.linkedin.com/in/john-hanna-87123080/)
 * Malcolm Watt: [Github](https://github.com/malc54)
 
-[Visit the project on GitHub](https://github.com/TeamWicket/Twilio-BCP-CallTree)
+[Visit the project on GitHub](https://github.com/TeamWicket/Twilio-BCP-CallTree)  
 
 
-##Shoutouts
+## Shoutouts
 
 React-Admin - https://github.com/marmelab/react-admin
 
@@ -185,8 +189,8 @@ The amazing work done by https://github.com/marmelab has allowed us to build a v
 
 ## License
 
-[Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+[Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)  
 
 ## Disclaimer
 
-No warranty expressed or implied. Software is as is.
+No warranty expressed or implied. Software is as is.  
