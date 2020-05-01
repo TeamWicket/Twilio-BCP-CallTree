@@ -55,8 +55,9 @@ of a particular event with the following information:
 - H2 enabled DB (also available for integration tests)
 - PostgreSQL ready application for data persistence
 - Modern Frontend in React (JavaScript / TypeScript)
-- OpenAPI v3 (SpringDoc / Swagger) for full REST endpoint mapping
+- OpenAPI v3 (SpringDoc / Swagger) for full REST endpoint mapping - localhost:8080/swagger-ui.html
 - Maven build tool
+- Full suite of Automated tests and Integration tests
 - CircleCI for continuous integration
 
 ## Requirements
