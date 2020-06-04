@@ -2,13 +2,13 @@ import React, { FC } from 'react';
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import DialpadIcon from '@material-ui/icons/Dialpad';
 
 import CardIcon from './CardIcon';
 
 interface Props {
     serverStats?: {
-        totalContacts: number
+        status: number
     };
 }
 
@@ -17,7 +17,7 @@ const useStyles = makeStyles({
         flex: '1',
         marginTop: 20,
         minWidth: '30%',
-        marginRight: '1rem',
+        // marginLeft: '5%'
     },
     card: {
         overflow: 'inherit',
@@ -29,29 +29,30 @@ const useStyles = makeStyles({
         fontWeight: 'bold',
     },
     paragraph: {
+        // fontWeight: 'bold',
         textAlign: 'right',
         fontSize: 'x-large',
     }
 });
 
-const ContactsCard: FC<Props> = ({ serverStats }) => {
+const StatusCard: FC<Props> = ({ serverStats }) => {
     const classes = useStyles();
     return (
-        <div className={classes.main} >
-            <CardIcon Icon={PeopleAltIcon} bgColor="#9003fc" />
+        <div className={classes.main}>
+            <CardIcon Icon={DialpadIcon} bgColor="#20bab5" />
             <Card className={classes.card}>
                 <Typography className={classes.title} color="textSecondary">
-                    {"Total Contacts"}
+                    {"Service status"}
                 </Typography>
                 <br/>
                 <br/>
                 <br/>
                 <Typography className={classes.paragraph} component="h2">
-                    {serverStats?.totalContacts}
+                    {serverStats?.status}
                 </Typography>
             </Card>
         </div>
     );
 };
 
-export default ContactsCard;
+export default StatusCard;

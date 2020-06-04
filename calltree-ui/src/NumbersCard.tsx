@@ -7,35 +7,48 @@ import DialpadIcon from '@material-ui/icons/Dialpad';
 import CardIcon from './CardIcon';
 
 interface Props {
-    value?: number;
+    serverStats?: {
+        twilioNumbers: number
+    };
 }
 
 const useStyles = makeStyles({
     main: {
         flex: '1',
-        marginLeft: '1em',
         marginTop: 20,
+        minWidth: '30%',
+        marginRight: '1rem',
     },
     card: {
         overflow: 'inherit',
         textAlign: 'right',
         padding: 16,
-        minHeight: 52,
+        minHeight: 140,
     },
-    title: {},
+    title: {
+        fontWeight: 'bold',
+    },
+    paragraph: {
+        // fontWeight: 'bold',
+        textAlign: 'right',
+        fontSize: 'x-large',
+    }
 });
 
-const NumbersCard: FC<Props> = ({ value }) => {
+const NumbersCard: FC<Props> = ({ serverStats }) => {
     const classes = useStyles();
     return (
         <div className={classes.main}>
-            <CardIcon Icon={DialpadIcon} bgColor="#31708f" />
+            <CardIcon Icon={DialpadIcon} bgColor="#114cf0" />
             <Card className={classes.card}>
                 <Typography className={classes.title} color="textSecondary">
-                    {"Total Twilio Numbers"}
+                    {"Services numbers"}
                 </Typography>
-                <Typography variant="h5" component="h2">
-                    {value}
+                <br/>
+                <br/>
+                <br/>
+                <Typography className={classes.paragraph} component="h2">
+                    {serverStats?.twilioNumbers}
                 </Typography>
             </Card>
         </div>

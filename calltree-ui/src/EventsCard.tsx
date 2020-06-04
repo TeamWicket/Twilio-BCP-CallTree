@@ -7,35 +7,52 @@ import Typography from '@material-ui/core/Typography';
 import CardIcon from './CardIcon';
 
 interface Props {
-    value?: number;
+    serverStats?: {
+        activeEvents: number,
+        terminatedEvents: number
+    };
 }
 
 const useStyles = makeStyles({
     main: {
         flex: '1',
-        marginRight: '1em',
         marginTop: 20,
+        marginBottom: 20,
+        minWidth: '30%'
     },
     card: {
         overflow: 'inherit',
         textAlign: 'right',
         padding: 16,
-        minHeight: 52,
+        minHeight: 140
     },
-    title: {},
+    title: {
+        fontWeight: 'bold',
+    },
+    paragraph: {
+        // fontWeight: 'bold',
+        textAlign: 'right',
+        fontSize: 'large',
+    }
 });
 
-const EventsCard: FC<Props> = ({ value }) => {
+const EventsCard: FC<Props> = ({ serverStats }) => {
     const classes = useStyles();
     return (
         <div className={classes.main}>
-            <CardIcon Icon={EventIcon} bgColor="#31708f" />
+            <CardIcon Icon={EventIcon} bgColor="#ff9800" />
             <Card className={classes.card}>
                 <Typography className={classes.title} color="textSecondary">
                     {"Total Active Events"}
                 </Typography>
-                <Typography variant="h5" component="h2">
-                    {value}
+                <br/>
+                <br/>
+                <br/>
+                <Typography className={classes.paragraph} component="h2">
+                    {"Active events: " + serverStats?.activeEvents}
+                </Typography>
+                <Typography className={classes.paragraph} component="h2">
+                    {"Terminated events: " + serverStats?.terminatedEvents}
                 </Typography>
             </Card>
         </div>

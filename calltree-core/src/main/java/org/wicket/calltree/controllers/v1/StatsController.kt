@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.wicket.calltree.model.BcpContactStats
 import org.wicket.calltree.model.BcpStats
+import org.wicket.calltree.model.DashboardInfo
 import org.wicket.calltree.services.StatsService
 
 @RestController
@@ -33,6 +34,11 @@ class StatsController(private val statsService: StatsService) {
     map["X-Total-Count"] = stats.totalElements.toString()
 
     return ResponseEntity(stats.statsList, map, HttpStatus.OK)
+  }
 
+  @GetMapping("/dash", produces = [MediaType.APPLICATION_JSON_VALUE])
+  @Operation(summary = "Calculate stats")
+  fun getDash(): DashboardInfo {
+    return DashboardInfo("Hot summer day", 5, 3, "01/01/2020", 0, 300, 7500.45, "Up", 15, 2)
   }
 }

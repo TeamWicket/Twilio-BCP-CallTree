@@ -2,13 +2,13 @@ import React, { FC } from 'react';
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
 import CardIcon from './CardIcon';
 
 interface Props {
     serverStats?: {
-        totalContacts: number
+        balance: number
     };
 }
 
@@ -29,29 +29,30 @@ const useStyles = makeStyles({
         fontWeight: 'bold',
     },
     paragraph: {
+        // fontWeight: 'bold',
         textAlign: 'right',
         fontSize: 'x-large',
     }
 });
 
-const ContactsCard: FC<Props> = ({ serverStats }) => {
+const BalanceCard: FC<Props> = ({ serverStats }) => {
     const classes = useStyles();
     return (
-        <div className={classes.main} >
-            <CardIcon Icon={PeopleAltIcon} bgColor="#9003fc" />
+        <div className={classes.main}>
+            <CardIcon Icon={AttachMoneyIcon} bgColor="#f70b02" />
             <Card className={classes.card}>
                 <Typography className={classes.title} color="textSecondary">
-                    {"Total Contacts"}
+                    {"Account balance"}
                 </Typography>
                 <br/>
                 <br/>
                 <br/>
                 <Typography className={classes.paragraph} component="h2">
-                    {serverStats?.totalContacts}
+                    {serverStats?.balance}
                 </Typography>
             </Card>
         </div>
     );
 };
 
-export default ContactsCard;
+export default BalanceCard;
