@@ -144,6 +144,11 @@ public class ContactServiceImpl implements ContactService {
         return resultList;
     }
 
+    @Override
+    public Long countContacts() {
+        return repository.count();
+    }
+
     private List<Contact> sortedPagedList(String orderDirection, String orderValue, Integer page, Integer size) {
 
         if (orderDirection.equalsIgnoreCase(ASC)) {

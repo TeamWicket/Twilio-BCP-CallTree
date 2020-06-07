@@ -48,4 +48,13 @@ class TwilioNumberServiceImpl(private val numberRepository: TwilioNumberReposito
             .map { twilioNumberMapper.entityToDto(it) }
             .toList()
     }
+
+    override fun getAllNumbers(): Int {
+        val allNumbers = numberRepository.findAll()
+        return allNumbers
+//            .filter { it.deactivated == false } TODO: to add after issue #72
+            .map { twilioNumberMapper.entityToDto(it) }
+            .toList()
+            .count()
+    }
 }

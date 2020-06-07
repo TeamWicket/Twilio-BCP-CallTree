@@ -17,4 +17,6 @@ interface BcpEventService {
 
   fun getPagedEvents(page: Int, size: Int): Page<BcpEvent>
 
+  fun findLastEvent(): BcpEventDto
+
 }

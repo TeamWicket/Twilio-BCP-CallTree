@@ -36,9 +36,9 @@ class StatsController(private val statsService: StatsService) {
     return ResponseEntity(stats.statsList, map, HttpStatus.OK)
   }
 
-  @GetMapping("/dash", produces = [MediaType.APPLICATION_JSON_VALUE])
+  @GetMapping("/dashboard", produces = [MediaType.APPLICATION_JSON_VALUE])
   @Operation(summary = "Calculate stats")
   fun getDash(): DashboardInfo {
-    return DashboardInfo("Hot summer day", 5, 3, "01/01/2020", 0, 300, 7500.45, "Up", 15, 2)
+    return statsService.dashboardStats()
   }
 }

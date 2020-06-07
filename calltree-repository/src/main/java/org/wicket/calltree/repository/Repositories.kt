@@ -20,6 +20,7 @@ interface BcpMessageRepository : JpaRepository<BcpMessage, Long> {
 
 interface BcpEventRepository : JpaRepository<BcpEvent, Long> {
     fun findByTwilioNumber_Id(twilioNumberId: Long): Optional<BcpEvent>
+    fun findTopByOrderByIdDesc(): Optional<BcpEvent>
 }
 
 interface TwilioNumberRepository : JpaRepository<TwilioNumber, Long> {

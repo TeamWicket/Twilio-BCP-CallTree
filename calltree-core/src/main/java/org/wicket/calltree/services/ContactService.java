@@ -27,4 +27,6 @@ public interface ContactService {
     ContactDto fetchContactByPhoneNumber(String string);
 
     List<ContactDto> fetchManyContactsById(long[] id);
+
+    Long countContacts();
 }

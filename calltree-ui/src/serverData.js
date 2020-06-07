@@ -26,7 +26,7 @@ class ServerData extends Component {
   };
 
   componentDidMount() {
-    fetch('http://localhost:8080/api/v1/stats/dash')
+    fetch('http://localhost:8080/api/v1/stats/dashboard')
       .then(res => res.json())
       .then((data) => {
         this.setState({stats: data})

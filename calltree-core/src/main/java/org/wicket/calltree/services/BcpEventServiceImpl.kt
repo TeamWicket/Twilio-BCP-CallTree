@@ -43,4 +43,9 @@ class BcpEventServiceImpl(private val bcpEventRepo: BcpEventRepository,
   override fun getPagedEvents(page: Int, size: Int): Page<BcpEvent> {
     return bcpEventRepo.findAll(PageRequest.of(page, size))
   }
+
+  override fun findLastEvent(): BcpEventDto {
+    val event = bcpEventRepo.findTopByOrderByIdDesc()
+    return bcpEventMapper.entityToDto(event.orElseThrow() { BcpEventException("No events found") })
+  }
 }

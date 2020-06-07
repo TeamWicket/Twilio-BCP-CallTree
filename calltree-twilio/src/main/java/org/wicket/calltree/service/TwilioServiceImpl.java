@@ -1,6 +1,7 @@
 package org.wicket.calltree.service;
 
 import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Balance;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.twiml.MessagingResponse;
 import com.twilio.twiml.messaging.Body;
@@ -46,5 +47,12 @@ public class TwilioServiceImpl implements TwilioService {
                 .message(sms)
                 .build();
         return twiml.toXml();
+    }
+
+    @Override
+    public Double getBalance() {
+        Twilio.init(accountSid, authToken);
+        Balance balance = Balance.fetcher(accountSid).fetch();
+        return Double.valueOf(balance.getBalance());
     }
 }
