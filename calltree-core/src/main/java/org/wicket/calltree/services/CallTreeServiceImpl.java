@@ -16,6 +16,8 @@ import org.wicket.calltree.models.BcpEvent;
 import org.wicket.calltree.service.TwilioService;
 import org.wicket.calltree.services.utils.MessageMapper;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -116,7 +118,7 @@ public class CallTreeServiceImpl implements CallTreeService {
         }
 
         message.setSmsStatus(SmsStatus.RECEIVED);
-        message.setRecipientMessage(StringUtils.substringBetween(body, "Body=", "&"));
+        message.setRecipientMessage(URLDecoder.decode(StringUtils.substringBetween(body, "Body=", "&"), StandardCharsets.UTF_8));
         message.setRecipientCountry(StringUtils.substringBetween(body, "FromCountry=", "&"));
         message.setRecipientTimestamp(ZonedDateTime.now().toString());
 
