@@ -37,7 +37,7 @@ class StatsController(private val statsService: StatsService) {
   }
 
   @GetMapping("/dashboard", produces = [MediaType.APPLICATION_JSON_VALUE])
-  @Operation(summary = "Calculate stats")
+  @Operation(summary = "Dashboard info")
   fun getDash(): DashboardInfo {
     return statsService.dashboardStats()
   }
