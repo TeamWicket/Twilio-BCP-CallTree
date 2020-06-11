@@ -55,6 +55,7 @@ abstract class AbstractEventMapperTest {
         twilioNumber = TwilioNumber.builder().id(NUMBER_ID)
                 .twilioNumber(NUMBER)
                 .isAvailable(true)
+                .active(true)
                 .build();
 
         bcpEvent = BcpEvent.builder().id(EVENT_ID)

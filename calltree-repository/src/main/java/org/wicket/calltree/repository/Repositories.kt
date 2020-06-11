@@ -3,7 +3,6 @@ package org.wicket.calltree.repository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.jpa.repository.Query
 import org.wicket.calltree.models.BcpEvent
 import org.wicket.calltree.models.BcpMessage
 import org.wicket.calltree.models.TwilioNumber
@@ -23,5 +22,9 @@ interface BcpEventRepository : JpaRepository<BcpEvent, Long> {
 }
 
 interface TwilioNumberRepository : JpaRepository<TwilioNumber, Long> {
-    fun findAllByIsAvailable(isAvailable: @NotNull Boolean): List<TwilioNumber>
+    fun findAllByIsAvailableIsTrueAndActiveIsTrue(): List<TwilioNumber>
+    fun findAllByActiveIsTrue(pageable: Pageable): Page<TwilioNumber>
+    fun findAllByActiveIsTrue(): List<TwilioNumber>
+    fun findByIdAndActiveIsTrue(@NotNull id:Long): Optional<TwilioNumber>
+    fun findFirstByTwilioNumber(@NotNull number:String): Optional<TwilioNumber>
 }

@@ -26,8 +26,8 @@ class TwilioNumberController(private val numberService: TwilioNumberService, pri
         val map = HttpHeaders()
 
         if (_getAvail){
-            map["X-Total-Count"] = repo.findAllByIsAvailable(true).count().toString()
-            return ResponseEntity<List<TwilioNumber>>(repo.findAllByIsAvailable(true), map, HttpStatus.OK)
+            map["X-Total-Count"] = repo.findAllByIsAvailableIsTrueAndActiveIsTrue().count().toString()
+            return ResponseEntity<List<TwilioNumber>>(repo.findAllByIsAvailableIsTrueAndActiveIsTrue(), map, HttpStatus.OK)
         }
         else{
             result = numberService.getAllNumbers(_start, _end)

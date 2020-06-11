@@ -68,7 +68,7 @@ public class Bootstrap {
                 .map(mapper::dtoToContact)
                 .collect(Collectors.toList()));
 
-        TwilioNumber twilioNumber = new TwilioNumber(null, TWILIO_NUMBER, true);
+        TwilioNumber twilioNumber = new TwilioNumber(null, TWILIO_NUMBER, true, true);
         TwilioNumber persistedNumber = twilioNumberRepository.save(twilioNumber);
 
         BcpEvent bcpEvent = new BcpEvent(null, "TEST-EVENT",

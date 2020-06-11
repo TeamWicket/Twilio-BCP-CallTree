@@ -30,4 +30,8 @@ public class TwilioNumber {
     @Column(name = "is_available")
     @NotNull
     private Boolean isAvailable;
+
+    @Column(name = "active")
+    @NotNull
+    private Boolean active;
 }
