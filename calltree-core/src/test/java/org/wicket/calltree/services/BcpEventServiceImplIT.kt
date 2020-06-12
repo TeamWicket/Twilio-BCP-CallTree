@@ -30,7 +30,7 @@ internal class BcpEventServiceImplIT {
 
     @BeforeAll
     internal fun beforeAll() {
-        val twilioNumber = TwilioNumber(null, "+0987", true)
+        val twilioNumber = TwilioNumber(null, "+0987", true, true)
         persistedNumber = twilioNumberRepository.save(twilioNumber)
         twilioNumberDto = twilioNumberMapper.entityToDto(persistedNumber)
     }
