@@ -46,7 +46,7 @@ public class CallTreeServiceImpl implements CallTreeService {
         BcpEventDto event = saveNewEvent(bcpStartRequest);
 
         var recipientList = contactService.getCalltreeUntilRole(bcpStartRequest.getToRoles()).stream()
-                .map(c -> new Recipient(new PhoneNumber(c.getPhoneNumber()), bcpStartRequest.getText()))
+                .map(c -> new Recipient(new PhoneNumber(c.getPhoneNumber()), bcpStartRequest.getText(), new PhoneNumber(numberDto.getTwilioNumber())))
                 .collect(Collectors.toList());
 
         var messages = twilioService.sendSms(recipientList);
