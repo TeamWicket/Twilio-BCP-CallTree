@@ -69,8 +69,68 @@ of a particular event with the following information:
 
 ## How to use the app:
 
+### Twilio Setup
+To test out events you are going to need a Twilio phone number setup - you can [get one here](https://www.twilio.com/console/phone-numbers/incoming).  Afterwards the Twilio phone number can be added into the application later using the UI.
+
+***All the numbers in the applications must be in [E.164 format](https://en.wikipedia.org/wiki/E.164)***
+
+#### Setting up a new trial account  
+
+First create a new account and sign in, once you do you will be greeted with the following screen 
+
+![twilio-get-trial-number](https://i.ibb.co/4ZSywfT/get-trial-number.png)  
+
+Press the big red `Get a Trial Number` button  
+
+![twilio-assign-a-number](https://i.ibb.co/vHdn2St/choose-number.png)  
+
+Then either accept the offered number,  or press `Search for a different number`, to pick one in another country
+  
+***Make sure the number you pick can send and receive SMS***
+
+Now you have a valid number to use during testing.  
+ 
+However if you are planning on running this application in Localhost, then in order to get full functionality you must enable a way for Twilio to contact your localhost endpoint.
+
+#### Localhost Twilio config
+
+First lets create and setup `Programmable Messaging`  
+
+Select `Programmable Messaging` from the menu, which can be accessed via the `...` icon  
+
+![twilio-programmable-menu](https://i.ibb.co/SXWpgNb/programmable-messaging.png)  
+
+Then pressing `Create Messaging Service`  
+
+![twilio-create-message-service](https://i.ibb.co/LzdNQsd/Create-messaging-service.png)  
+
+Then pressing `Add Senders` and set sender type to `Phone Number` 
+
+![twilio-add-senders](https://i.ibb.co/z70ypTy/add-senders.png)  
+
+Select the trial number you just created, and press `save` at the bottom of the screen   
+
+![twilio-select-number](https://i.ibb.co/Sx6StYW/select-number.png)  
+
+Now select the `Integration` sub menu  
+
+Now you will need to download and run `ngrok` or an alternative tunnelling software.  
+
+Download ngrok [here](https://ngrok.com/download) and extract the .exe somewhere locally  
+In a command shell from the same directory as the .exe run `ngrok http 8080`  
+
+Copy the https Forwarding parameter e.g. https://b6231be3.ngrok.io (this is mock data) and paste this into the request URL on Twilio.   Then append `/api/v1/events/twilio` to the end of the URL so Twilio can reach this endpoint locally to send stats when people reply to a message.  
+  
+***Make sure the behaviour is set to `Send a webhook`*** 
+  
+![ngrok](https://i.ibb.co/pWqyvPq/ngrok.png)  
+
+![twilio-integration-setup](https://i.ibb.co/tPTb41K/integration-setup.png)  
+
 ### Twilio settings
-In order for the app to connect to Twilio you will need to setup your twilio account information as shown below  
+In order for the app to connect to Twilio you will need to set up your twilio account information as shown below 
+ 
+![twilio-account-details](https://i.ibb.co/1vpQJxP/auth-info.png)  
 
 Change the default values in the file `calltree-core\src\main\resources\twilio.properties` to include your twilio account details  
 
@@ -78,26 +138,6 @@ Change the default values in the file `calltree-core\src\main\resources\twilio.p
 | :---------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Account&nbsp;Sid  | Your primary Twilio account identifier - find this [in the Console](https://www.twilio.com/console).                                                         |
 | Auth&nbsp;Token   | Used to authenticate - [just like the above, you'll find this here](https://www.twilio.com/console).                                                         |
-
-You will also need a Twilio phone number setup - you can [get one here](https://www.twilio.com/console/phone-numbers/incoming).  Afterwards the Twilio phone number can be added into the application later using the UI.
-
-***All the numbers in the applications must be in [E.164 format](https://en.wikipedia.org/wiki/E.164)***
-
-### Localhost Twilio config
-
-In order to get full functionality if you are running this application in LocalHost then you must enable a way for Twilio to contact your localhost endpoint.  
-
-You can do this by downloading and running `ngrok` or an alternative tunnelling software.  
-
-Download ngrok here: https://ngrok.com/download and extract the .exe somewhere locally  
-In a command shell from the same directory as the .exe run `ngrok http 8080`  
-
-Copy the https Forwarding parameter e.g. https://b6231be3.ngrok.io (this is mock data) and paste this into the request URL on Twilio.   Then append `/api/v1/events/twilio` to the end of the URL so Twilio can reach this endpoint locally to send stats when people reply to a message.  
-  
-![ngrok](https://i.ibb.co/pWqyvPq/ngrok.png)  
-
-![twilio-settings](https://i.ibb.co/KGBP6Pt/twilio-settings.png)  
-
 
 
 ### Backend Setup
@@ -107,6 +147,8 @@ Copy the https Forwarding parameter e.g. https://b6231be3.ngrok.io (this is mock
 4. The backend will now be running as a standalone Spring Boot application  
 
 ### Front end setup
+Make sure `yarn` is installed  via `yarn -version`, if it's missing it can be installed via `npm install -g yarn`.  
+On Windows you will also need to add it to PATH, it's default installation is in `C:\Users\<user>\AppData\Roaming\npm`.
 1. Navigate to the `calltree-ui` repo and use the commands:
 * `yarn install`
 * `yarn start`
