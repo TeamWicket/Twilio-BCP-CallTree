@@ -10,8 +10,7 @@ import org.wicket.calltree.exceptions.ContactException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class ContactServiceImplIT {
@@ -23,10 +22,16 @@ public class ContactServiceImplIT {
     void getAllSelectedRole_ReturnsOnlyContactsWithSelectedRole() {
         List<ContactDto> allSelectedRole = contactService.getAllSelectedRole(Role.LEADER);
 
-        assertThat(allSelectedRole).hasSize(1);
+        /**
+         * Due to other tests adding entities to the contactService,
+         * the test fails when compiled locally iff
+         * ContactServiceImplIT is ran before this.
+         */
+        for (ContactDto contact : allSelectedRole) {
+            assertEquals(Role.LEADER, contact.getRole());
+        }
         assertEquals("Ralph", allSelectedRole.get(0).getFirstName());
         assertEquals("Johnson", allSelectedRole.get(0).getLastName());
-        assertEquals(Role.LEADER, allSelectedRole.get(0).getRole());
     }
 
     @Test
@@ -39,6 +44,32 @@ public class ContactServiceImplIT {
 
         assertThat(tree).hasSize(2);
         assertThat(tree).doesNotContain(reporters.get(0));
+    }
+
+    @Test
+    void contactServiceGetNumContacts_ReturnsProperValue() {
+        assertEquals(4, contactService.getNumContacts());
+    }
+
+    @Test
+    void getCalltreeUntilRole_ReturnsEmptyForChampion() {
+        List<ContactDto> tree = contactService.getCalltreeUntilRole(Role.CHAMPION);
+
+        assertThat(tree).isEmpty();
+    }
+
+    @Test
+    void getCalltreeUntilRole_ReporterReturnsAllExceptForChampion() {
+        List<ContactDto> tree = contactService.getCalltreeUntilRole(Role.REPORTER);
+
+        for (ContactDto c : tree) assertNotEquals(Role.CHAMPION, c.getRole());
+    }
+
+    @Test
+    void getCalltreeUntilRole_Manager() {
+        List<ContactDto> tree = contactService.getCalltreeUntilRole(Role.MANAGER);
+
+        assertThat(tree).hasSize(1);
     }
 
     @Test

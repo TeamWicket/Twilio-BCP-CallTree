@@ -15,6 +15,7 @@ import kotlin.test.assertEquals
 
 @SpringBootTest
 @TestMethodOrder(OrderAnnotation::class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class BcpEventServiceImplIT {
     lateinit var twilioNumberDto: TwilioNumberDto
     lateinit var persistedNumber: TwilioNumber
