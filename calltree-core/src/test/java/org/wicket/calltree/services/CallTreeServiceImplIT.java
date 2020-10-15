@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.enums.SmsStatus;
 import org.wicket.calltree.models.BcpEvent;
@@ -18,6 +19,7 @@ import org.wicket.calltree.repository.TwilioNumberRepository;
 import java.time.ZonedDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class CallTreeServiceImplIT {
@@ -81,5 +83,14 @@ class CallTreeServiceImplIT {
 
         assertThat(updatedMessage.getRecipientMessage()).isEqualTo(resposne);
         assertThat(updatedMessage.getSmsStatus()).isEqualTo(SmsStatus.RECEIVED);
+    }
+
+
+
+    @Test
+    void getPagedEventsTest() {
+        Page<BcpEvent> page = callTreeService.pagedEvents(0, 2);
+
+        assertEquals(2, page.getSize());
     }
 }

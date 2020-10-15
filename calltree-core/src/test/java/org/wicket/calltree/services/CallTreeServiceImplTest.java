@@ -6,11 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.Page;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.wicket.calltree.dto.*;
 import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.model.BcpStartRequest;
+import org.wicket.calltree.models.BcpEvent;
 import org.wicket.calltree.service.TwilioService;
 import org.wicket.calltree.services.utils.MessageMapper;
 
@@ -18,6 +20,8 @@ import java.time.ZonedDateTime;
 
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -114,5 +118,12 @@ class CallTreeServiceImplTest {
 
         verify(bcpEventService, atMostOnce()).saveEvent(eventDto);
         verify(numberService, atMostOnce()).saveNumber(twilioNumberDto);
+    }
+
+    @Test
+    void nullSmsBody_ThrowsRuntimeException() {
+        assertThatThrownBy(() -> {
+            callTreeServiceImpl.replyToSms(null);
+        }).isInstanceOf(RuntimeException.class);
     }
 }
