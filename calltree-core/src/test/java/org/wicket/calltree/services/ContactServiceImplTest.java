@@ -7,6 +7,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.wicket.calltree.dto.ContactDto;
 import org.wicket.calltree.enums.Role;
@@ -149,6 +150,15 @@ class ContactServiceImplTest {
         ContactDto contact = contactService.getContact(7L);
 
         assertEquals(dto.getId(), contact.getId());
+    }
+
+    @Test
+    void fetchManyContactsByID_WillReturnContacts() {
+        List<ContactDto> contacts = contactService.fetchManyContactsById(new long[]{2L});
+
+        when(repository.findById(anyLong())).thenReturn(Optional.of(new Contact()));
+
+        assertEquals(repository.findAll(), contacts);
     }
 
     @Test
