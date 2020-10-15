@@ -8,6 +8,7 @@ import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.exceptions.ContactException;
 
 import java.util.List;
+import org.wicket.calltree.models.Contact;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -71,6 +72,13 @@ public class ContactServiceImplIT {
 
         assertThat(tree).hasSize(1);
     }
+    @Test
+    void getCalltreeUntilRole_UnassignedThrowsException() {
+        assertThrows(
+                ContactException.class,
+                () ->{ contactService.getCalltreeUntilRole(Role.DUMMY); }
+        );
+    }
 
     @Test
     void fetchContactByPhoneNumber_ReturnsContactDto() {
@@ -82,5 +90,12 @@ public class ContactServiceImplIT {
     @Test
     void fetchContactByPhoneNumber_ContactNotFound_WillThrowException() {
         assertThrows(ContactException.class, () -> contactService.fetchContactByPhoneNumber("+00000000000"));
+    }
+
+    @Test
+    void getSortedPagedListTest() {
+        List<ContactDto> contacts = contactService.getAllContacts("ASC", "id", 1, 2);
+
+        assertEquals(2, contacts.size());
     }
 }
