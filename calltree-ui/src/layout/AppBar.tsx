@@ -16,7 +16,7 @@ const useStyles = makeStyles({
     },
 });
 
-const ConfigurationMenu = forwardRef<any, any>((props, ref) => {
+export const ConfigurationMenu = forwardRef<any, any>((props, ref) => {
     return (
         <MenuItemLink
             ref={ref}
@@ -28,7 +28,7 @@ const ConfigurationMenu = forwardRef<any, any>((props, ref) => {
     );
 });
 
-const CustomUserMenu = (props: any) => (
+export const CustomUserMenu = (props: any) => (
     <UserMenu {...props}>
         <ConfigurationMenu />
     </UserMenu>

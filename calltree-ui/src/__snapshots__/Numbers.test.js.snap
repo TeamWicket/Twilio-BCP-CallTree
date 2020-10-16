@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Number Component should match snapshot of Number Create Component 1`] = `ShallowWrapper {}`;
+
+exports[`Number Component should match snapshot of Number List Component 1`] = `ShallowWrapper {}`;
+
+exports[`Number Component should match snapshot of NumberEdit Component 1`] = `ShallowWrapper {}`;

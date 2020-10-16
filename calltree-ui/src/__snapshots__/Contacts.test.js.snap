@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Contacts should match snapshot of ContactCreate 1`] = `ShallowWrapper {}`;
+
+exports[`Contacts should match snapshot of ContactEdit 1`] = `ShallowWrapper {}`;
+
+exports[`Contacts should match snapshot of ContactList 1`] = `ShallowWrapper {}`;

@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App bar should match snapshot of ConfigurationMenu 1`] = `ShallowWrapper {}`;
+
+exports[`App bar should match snapshot of Custom AppBar 1`] = `ShallowWrapper {}`;
+
+exports[`App bar should match snapshot of Custom User Menu 1`] = `ShallowWrapper {}`;
