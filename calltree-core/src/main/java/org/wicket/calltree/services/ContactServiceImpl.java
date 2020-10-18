@@ -145,11 +145,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     private List<Contact> sortedPagedList(String orderDirection, String orderValue, Integer page, Integer size) {
-
-        if (orderDirection.equalsIgnoreCase(ASC)) {
-            return repository.findAll(PageRequest.of(page, size, by(Direction.ASC, orderValue))).getContent();
-        } else  {
-            return repository.findAll(PageRequest.of(page, size, by(Direction.DESC, orderValue))).getContent();
-        }
+        Direction dir = orderDirection.equalsIgnoreCase(ASC)? Direction.ASC: Direction.DESC;
+        return repository.findAll(PageRequest.of(page, size, by(dir, orderValue))).getContent();
     }
 }
