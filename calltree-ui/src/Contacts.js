@@ -7,7 +7,7 @@ import { List, Edit, Datagrid, TextField,
 
 const validateNumber = [required(),regex(/\+[0-9]/, 'Must be in format +9999999')];
 
-const FullNameField = ({ record = {} }) => <span>{record.firstName} {record.lastName}</span>;
+export const FullNameField = ({ record = {} }) => <span>{record.firstName} {record.lastName}</span>;
 FullNameField.defaultProps = { label: 'Name' };
 
 export const ContactList = props => (

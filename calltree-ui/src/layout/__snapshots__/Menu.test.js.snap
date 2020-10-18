@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Menu should match snapshot of ConfigurationMenu 1`] = `ShallowWrapper {}`;

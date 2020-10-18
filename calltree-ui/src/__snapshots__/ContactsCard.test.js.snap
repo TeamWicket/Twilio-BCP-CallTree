@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Contracts Card should match snapshot of Contracts Card Component 1`] = `ShallowWrapper {}`;

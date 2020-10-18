@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Events should match snapshot of EventCreate Component 1`] = `ShallowWrapper {}`;
+
+exports[`Events should match snapshot of EventList Component 1`] = `ShallowWrapper {}`;

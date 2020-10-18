@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SubMenu should match snapshot of SubMenu 1`] = `ShallowWrapper {}`;
