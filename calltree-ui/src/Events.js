@@ -6,6 +6,36 @@ import { List, Datagrid, TextField,
     Toolbar, SaveButton, ReferenceInput} from 'react-admin';
 import {Step, StepLabel, Button, Typography, Stepper} from '@material-ui/core/';
 
+
+const EventCreateToolbar = props => (
+    <Toolbar {...props} >
+        <SaveButton
+            label="Start Event"
+            redirect="list"
+            submitOnEnter={true}
+        />
+    </Toolbar>
+);
+
+export const EventList = props => (
+    <List {...props}>
+        <Datagrid rowClick="edit">
+            <TextField source="eventName" />
+            <DateField source="timestamp" />
+            <ReferenceField source="twilioNumber.id" label="Twilio Number" reference="numbers"><TextField source="twilioNumber" /></ReferenceField>
+            <BooleanField source="isActive" />
+        </Datagrid>
+    </List>
+);
+
+export const EventCreate = props => (
+    <Create {...props}>
+        <SimpleForm toolbar={<EventCreateToolbar />} redirect ="list">
+            <Breadcrumb {...props} />
+        </SimpleForm>
+    </Create>
+)
+
 const Breadcrumb = props => {
     const [activeStep, setActiveStep] = React.useState(0);
     const steps = getSteps();
@@ -108,33 +138,3 @@ function getStepContent(stepIndex) {
         return 'Unknown stepIndex';
     }
 }
-
-
-const EventCreateToolbar = props => (
-    <Toolbar {...props} >
-        <SaveButton
-            label="Start Event"
-            redirect="list"
-            submitOnEnter={true}
-        />
-    </Toolbar>
-);
-
-export const EventList = props => (
-    <List {...props}>
-        <Datagrid rowClick="edit">
-            <TextField source="eventName" />
-            <DateField source="timestamp" />
-            <ReferenceField source="twilioNumber.id" label="Twilio Number" reference="numbers"><TextField source="twilioNumber" /></ReferenceField>
-            <BooleanField source="isActive" />
-        </Datagrid>
-    </List>
-);
-
-export const EventCreate = props => (
-    <Create {...props}>
-        <SimpleForm toolbar={<EventCreateToolbar />} redirect ="list">
-            <Breadcrumb {...props} />
-        </SimpleForm>
-    </Create>
-)
