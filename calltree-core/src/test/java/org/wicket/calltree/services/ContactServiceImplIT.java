@@ -94,8 +94,29 @@ public class ContactServiceImplIT {
 
     @Test
     void getSortedPagedListTest() {
-        List<ContactDto> contacts = contactService.getAllContacts("ASC", "id", 1, 2);
+        List<ContactDto> contacts = contactService.getAllContacts("ASC", "id", 0, 3);
 
+        assertEquals(3, contacts.size());
+    }
+
+    @Test
+    void checkValidOrderTest() {
+        List<ContactDto> contacts = contactService.getAllContacts(null, null, null, null);
+
+        assertEquals(4, contacts.size());
+        assertEquals("Erich", contacts.get(0).getFirstName());
+        assertEquals("Richard", contacts.get(1).getFirstName());
+        assertEquals("Ralph", contacts.get(2).getFirstName());
+        assertEquals("John", contacts.get(3).getFirstName());
+
+    }
+
+    @Test
+    void getSortedPagedList_InCorrectOrderTest() {
+        List<ContactDto> contacts = contactService.getAllContacts("DESC", "id", 1, 2);
+        System.out.println(contacts);
         assertEquals(2, contacts.size());
+        assertEquals(2, contacts.get(0).getId());
+        assertEquals(1, contacts.get(1).getId());
     }
 }
