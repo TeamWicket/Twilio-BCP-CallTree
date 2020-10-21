@@ -119,4 +119,43 @@ public class ContactServiceImplIT {
         assertEquals(2, contacts.get(0).getId());
         assertEquals(1, contacts.get(1).getId());
     }
+
+    @Test
+    void getContact_ReturnsSuccessfullyForCorrectID() {
+        var contacts = contactService.getAllContacts(null, null, null, null);
+        var erich = contacts.get(0);
+        var erichById = contactService.getContact(erich.getId());
+        assertEquals(erich.getId(), erichById.getId());
+        assertEquals(erich.getFirstName(), erichById.getFirstName());
+        assertEquals(erich.getLastName(), erichById.getLastName());
+        assertEquals(erich.getPhoneNumber(), erichById.getPhoneNumber());
+        assertEquals(erich.getRole(), erichById.getRole());
+    }
+
+    @Test
+    void getContact_IdNotFound_WillThrowException() {
+        assertThrows(
+                ContactException.class,
+                () -> contactService.getContact(Long.MIN_VALUE)
+        );
+    }
+
+    @Test
+    void deleteContact_SuccessfulDeleteReducesCountByOne() {
+        var original = contactService.getAllContacts(null, null, null, null);
+        var id = original
+                .get(0)
+                .getId();
+        contactService.deleteContact(id);
+        var deleted = contactService.getAllContacts(null, null, null, null);
+        assertEquals(original.size() - 1, deleted.size());
+    }
+
+    @Test
+    void deleteContact_IdNotFound_NothingHappens() {
+        var original = contactService.getAllContacts(null, null, null, null);
+        contactService.deleteContact(Long.MIN_VALUE);
+        var deleted = contactService.getAllContacts(null, null, null, null);
+        assertEquals(original.size(), deleted.size());
+    }
 }
