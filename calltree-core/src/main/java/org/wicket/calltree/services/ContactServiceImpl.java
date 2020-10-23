@@ -11,10 +11,7 @@ import org.wicket.calltree.models.Contact;
 import org.wicket.calltree.repository.ContactRepository;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.domain.Sort.Direction;
@@ -132,16 +129,15 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public List<ContactDto> fetchManyContactsById(long[] id) {
-        List<ContactDto> resultList = new ArrayList<>();
+        var idList = Arrays
+                .stream(id)
+                .boxed()
+                .collect(Collectors.toList());
 
-        for (Long value : id) {
-            Optional<Contact> contact = repository.findById(value);
-            contact.ifPresent(c -> {
-                ContactDto dto = mapper.contactToDto(c);
-                resultList.add(dto);
-            });
-        }
-        return resultList;
+        return repository.findAllContactsByIdIn(idList)
+                .stream()
+                .map(mapper::contactToDto)
+                .collect(Collectors.toList());
     }
 
     private List<Contact> sortedPagedList(String orderDirection, String orderValue, Integer page, Integer size) {
