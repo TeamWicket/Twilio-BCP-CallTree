@@ -11,7 +11,10 @@ import org.wicket.calltree.models.Contact;
 import org.wicket.calltree.repository.ContactRepository;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.domain.Sort.Direction;
