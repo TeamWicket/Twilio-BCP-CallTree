@@ -8,6 +8,9 @@ import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.exceptions.ContactException;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.wicket.calltree.models.Contact;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -118,5 +121,147 @@ public class ContactServiceImplIT {
         assertEquals(2, contacts.size());
         assertEquals(2, contacts.get(0).getId());
         assertEquals(1, contacts.get(1).getId());
+    }
+
+    @Test
+    void getContact_ReturnsSuccessfullyForCorrectID() {
+        var contacts = contactService.getAllContacts(null, null, null, null);
+        var erich = contacts.get(0);
+        var erichById = contactService.getContact(erich.getId());
+        assertEquals(erich.getId(), erichById.getId());
+        assertEquals(erich.getFirstName(), erichById.getFirstName());
+        assertEquals(erich.getLastName(), erichById.getLastName());
+        assertEquals(erich.getPhoneNumber(), erichById.getPhoneNumber());
+        assertEquals(erich.getRole(), erichById.getRole());
+    }
+
+    @Test
+    void getContact_IdNotFound_WillThrowException() {
+        assertThrows(
+                ContactException.class,
+                () -> contactService.getContact(Long.MIN_VALUE)
+        );
+    }
+
+    @Test
+    void deleteContact_SuccessfulDeleteReducesCountByOne() {
+        var original = contactService.getAllContacts(null, null, null, null);
+        var id = original
+                .get(0)
+                .getId();
+        contactService.deleteContact(id);
+        var deleted = contactService.getAllContacts(null, null, null, null);
+        assertEquals(original.size() - 1, deleted.size());
+    }
+
+    @Test
+    void deleteContact_IdNotFound_NothingHappens() {
+        var original = contactService.getAllContacts(null, null, null, null);
+        contactService.deleteContact(Long.MIN_VALUE);
+        var deleted = contactService.getAllContacts(null, null, null, null);
+        assertEquals(original.size(), deleted.size());
+    }
+
+    @Test
+    void saveOrUpdate_ContactFound_UpdateSuccessfully() {
+        var aContact = contactService.getContact(0L);
+        var newFirstName = aContact.getFirstName() + '$';
+        aContact.setFirstName(newFirstName);
+        contactService.saveOrUpdate(aContact);
+        aContact = contactService.getContact(0L);
+        assertEquals(newFirstName, aContact.getFirstName());
+    }
+
+    @Test
+    void saveOrUpdate_NewContact_SaveSuccessfully() {
+        var phoneNumber = "+555";
+        ContactDto contact = new ContactDto();
+        contact.setFirstName("Kelsey");
+        contact.setLastName("HighTower");
+        contact.setPhoneNumber(phoneNumber);
+        contact.setRole(Role.REPORTER);
+        contact.setPointOfContactId(3L);
+        assertThrows(
+                ContactException.class,
+                () -> contactService.fetchContactByPhoneNumber(phoneNumber));
+        var kelsey = contactService.saveOrUpdate(contact);
+        assertEquals(
+                kelsey.getId(),
+                contactService.getContact(
+                    kelsey.getId()
+                ).getId()
+        );
+    }
+
+    @Test
+    void saveOrUpdate_Null_NothingHappensReturnsNull() {
+        var originalSize = contactService
+                .getAllContacts(null, null, null, null)
+                .size();
+        var result = contactService.saveOrUpdate(null);
+
+        assertEquals(null, result);
+
+        var newSize = contactService
+                .getAllContacts(null, null, null, null)
+                .size();
+
+        assertEquals(originalSize, newSize);
+    }
+
+    @Test
+    void saveList_OnlyIncludedAreSaved() {
+        var before = contactService.getAllContacts(null, null, null, null);
+        var kelsey = new ContactDto();
+        var phoneNumber = "+555";
+        kelsey.setFirstName("Kelsey");
+        kelsey.setLastName("HighTower");
+        kelsey.setPhoneNumber(phoneNumber);
+        kelsey.setRole(Role.REPORTER);
+        kelsey.setPointOfContactId(3L);
+        var first = before.get(0);
+        var second = before.get(1);
+        first.setFirstName("First");
+        second.setFirstName("Second");
+        var modified = List.of(first, second, kelsey);
+        assertThrows(
+                ContactException.class,
+                () -> contactService.fetchContactByPhoneNumber(phoneNumber)
+        );
+
+        contactService.saveList(modified);
+
+        var after = contactService.getAllContacts(null, null, null, null);
+        assertEquals(before.size() + 1, after);
+        assertEquals("First", after.get(0).getFirstName());
+        assertEquals("Second", after.get(0).getFirstName());
+        assertEquals("Kelsey", contactService.fetchContactByPhoneNumber(phoneNumber));
+    }
+
+    @Test
+    public void saveList_NullList_NothingHappens() {
+        var before = contactService.getAllContacts(null, null, null, null);
+        contactService.saveList(null);
+        var after = contactService.getAllContacts(null, null, null, null);
+        assertEquals(before.size(), after.size());
+    }
+
+    @Test
+    public void fetchManyContactsById_ReturnsAsExpected() {
+        var all = contactService.getAllContacts(null, null, null, null);
+        var retrieved = contactService.fetchManyContactsById(
+                new long[]{
+                        all.get(0).getId(),
+                        all.get(1).getId(),
+                        Long.MIN_VALUE
+                });
+        assertEquals(2, retrieved.size());
+        var ids = retrieved
+                .stream()
+                .map(dto -> dto.getId())
+                .collect(Collectors.toSet());
+        assertTrue(ids.containsAll(
+                Set.of(all.get(0).getId(), all.get(1).getId())
+        ));
     }
 }
