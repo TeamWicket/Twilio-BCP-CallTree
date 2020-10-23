@@ -158,4 +158,88 @@ public class ContactServiceImplIT {
         var deleted = contactService.getAllContacts(null, null, null, null);
         assertEquals(original.size(), deleted.size());
     }
+
+    @Test
+    void saveOrUpdate_ContactFound_UpdateSuccessfully() {
+        var aContact = contactService.getContact(0L);
+        var newFirstName = aContact.getFirstName() + '$';
+        aContact.setFirstName(newFirstName);
+        contactService.saveOrUpdate(aContact);
+        aContact = contactService.getContact(0L);
+        assertEquals(newFirstName, aContact.getFirstName());
+    }
+
+    @Test
+    void saveOrUpdate_NewContact_SaveSuccessfully() {
+        var phoneNumber = "+555";
+        ContactDto contact = new ContactDto();
+        contact.setFirstName("Kelsey");
+        contact.setLastName("HighTower");
+        contact.setPhoneNumber(phoneNumber);
+        contact.setRole(Role.REPORTER);
+        contact.setPointOfContactId(3L);
+        assertThrows(
+                ContactException.class,
+                () -> contactService.fetchContactByPhoneNumber(phoneNumber));
+        var kelsey = contactService.saveOrUpdate(contact);
+        assertEquals(
+                kelsey.getId(),
+                contactService.getContact(
+                    kelsey.getId()
+                ).getId()
+        );
+    }
+
+    @Test
+    void saveOrUpdate_Null_NothingHappensReturnsNull() {
+        var originalSize = contactService
+                .getAllContacts(null, null, null, null)
+                .size();
+        var result = contactService.saveOrUpdate(null);
+
+        assertEquals(null, result);
+
+        var newSize = contactService
+                .getAllContacts(null, null, null, null)
+                .size();
+
+        assertEquals(originalSize, newSize);
+    }
+
+    @Test
+    void saveList_OnlyIncludedAreSaved() {
+        var before = contactService.getAllContacts(null, null, null, null);
+        var kelsey = new ContactDto();
+        var phoneNumber = "+555";
+        kelsey.setFirstName("Kelsey");
+        kelsey.setLastName("HighTower");
+        kelsey.setPhoneNumber(phoneNumber);
+        kelsey.setRole(Role.REPORTER);
+        kelsey.setPointOfContactId(3L);
+        var first = before.get(0);
+        var second = before.get(1);
+        first.setFirstName("First");
+        second.setFirstName("Second");
+        var modified = List.of(first, second, kelsey);
+        assertThrows(
+                ContactException.class,
+                () -> contactService.fetchContactByPhoneNumber(phoneNumber)
+        );
+
+        contactService.saveList(modified);
+
+        var after = contactService.getAllContacts(null, null, null, null);
+        assertEquals(before.size() + 1, after);
+        assertEquals("First", after.get(0).getFirstName());
+        assertEquals("Second", after.get(0).getFirstName());
+        assertEquals("Kelsey", contactService.fetchContactByPhoneNumber(phoneNumber));
+    }
+
+    @Test
+    public void saveList_NullList_NothingHappens() {
+        var before = contactService.getAllContacts(null, null, null, null);
+        contactService.saveList(null);
+        var after = contactService.getAllContacts(null, null, null, null);
+        assertEquals(before.size(), after.size());
+    }
 }
