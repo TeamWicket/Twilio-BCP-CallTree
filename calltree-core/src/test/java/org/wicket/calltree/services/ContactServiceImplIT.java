@@ -8,6 +8,9 @@ import org.wicket.calltree.enums.Role;
 import org.wicket.calltree.exceptions.ContactException;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.wicket.calltree.models.Contact;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -241,5 +244,24 @@ public class ContactServiceImplIT {
         contactService.saveList(null);
         var after = contactService.getAllContacts(null, null, null, null);
         assertEquals(before.size(), after.size());
+    }
+
+    @Test
+    public void fetchManyContactsById_ReturnsAsExpected() {
+        var all = contactService.getAllContacts(null, null, null, null);
+        var retrieved = contactService.fetchManyContactsById(
+                new long[]{
+                        all.get(0).getId(),
+                        all.get(1).getId(),
+                        Long.MIN_VALUE
+                });
+        assertEquals(2, retrieved.size());
+        var ids = retrieved
+                .stream()
+                .map(dto -> dto.getId())
+                .collect(Collectors.toSet());
+        assertTrue(ids.containsAll(
+                Set.of(all.get(0).getId(), all.get(1).getId())
+        ));
     }
 }
